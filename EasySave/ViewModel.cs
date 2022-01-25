@@ -12,9 +12,15 @@ namespace EasySave
             model = new Model();
         }
 
-        public void CreateSaveWork(string name, string sourcePath, string targetPath)
+        public void CreateSaveWork(string name, string sourcePath, string targetPath, Type type)
         {
-
+            if (model.GetSaveWorkList().Count < 5)
+            {
+                model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, type));
+            } else
+            {
+                view.AfficherText(model.GetErrorList()[0]);
+            }
         }
 
         public void UpdateSaveState(SaveState saveState)
