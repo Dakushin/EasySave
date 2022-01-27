@@ -20,7 +20,6 @@ namespace EasySave
             this.targetPath = targetPath;
             this.type = type;
         }
-<<<<<<< HEAD
 
         public string GetName()
         {
@@ -46,7 +45,5 @@ namespace EasySave
         {
             return type;
         }
-=======
->>>>>>> origin/main
     }
 }

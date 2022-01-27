@@ -33,7 +33,6 @@ namespace EasySave
         {
             return errorMessage;
         }
-<<<<<<< HEAD
 
         public SaveWork FindbyName(string name)
         {
@@ -46,7 +45,5 @@ namespace EasySave
             }
             return null;
         }
-=======
->>>>>>> origin/main
     }
 }

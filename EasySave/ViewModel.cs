@@ -18,7 +18,6 @@ namespace EasySave
         {
             if (model.GetSaveWorkList().Count < 5)
             {
-<<<<<<< HEAD
                 if (model.FindbyName(name) == null)
                 {
                     model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, type));
@@ -28,17 +27,8 @@ namespace EasySave
                 {
                     view.AfficherText(model.GetErrorList()[2]);
                 }
-=======
                 model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, type));
->>>>>>> origin/main
-            } else
-            {
-                view.AfficherText(model.GetErrorList()[0]);
             }
-<<<<<<< HEAD
-            
-=======
->>>>>>> origin/main
         }
 
         public void UpdateSaveState(SaveState saveState)
