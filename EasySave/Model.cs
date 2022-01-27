@@ -15,8 +15,12 @@ namespace EasySave
             logPath = "";
             saveStatePath = "";
             saveWorkList = new List<SaveWork>(5);
-            errorMessage = new List<string>() { "Error, you have already 5 savework, please delete one and retry",
-                                                ""};
+            errorMessage = new List<string>() { 
+                "Error, you have already 5 savework, please delete one and retry",
+                "Error, Does not find the name of the work you want to delete ",
+                "Error, Savework with this name already exist",
+                "Error, You can't rename you Savework with name you already given",
+            };
             workInProgress = false;
         }
 
@@ -29,5 +33,20 @@ namespace EasySave
         {
             return errorMessage;
         }
+<<<<<<< HEAD
+
+        public SaveWork FindbyName(string name)
+        {
+            foreach (SaveWork sv in saveWorkList)
+            {
+                if (sv.GetName() == name)
+                {
+                    return sv;
+                }
+            }
+            return null;
+        }
+=======
+>>>>>>> origin/main
     }
 }
