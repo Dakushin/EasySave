@@ -54,9 +54,17 @@ namespace EasySave
 
         }
 
-        public void ExecAllSaveWork()
+        public void ExecSaveWork(string name)
         {
 
+        }
+
+        public void ExecAllSaveWork()
+        {
+            foreach (SaveWork sw in model.saveWorklist)
+            {
+                ExecSaveWork(sw.getName());                
+            }
         }
 
         public void RenameSaveWork(string name, string rename)

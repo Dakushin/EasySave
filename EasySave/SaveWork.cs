@@ -20,30 +20,5 @@ namespace EasySave
             this.targetPath = targetPath;
             this.type = type;
         }
-
-        public string GetName()
-        {
-            return name;
-        }
-
-        public void SetName(string n)
-        {
-            name = n;
-        }
-
-        public string GetSourcePath()
-        {
-            return sourcePath;
-        }
-
-        public string GetTargetPath()
-        {
-            return targetPath;
-        }
-
-        public Type Gettype()
-        {
-            return type;
-        }
     }
 }
