@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
+                xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Console_Ask_Valid_Choice" xml:space="preserve">
+        <value>Please, enter a valid choice between 1 and 7</value>
+    </data>
+    <data name="Create_Backup" xml:space="preserve">
+        <value>Create a save work</value>
+    </data>
+    <data name="Rename_Backup" xml:space="preserve">
+        <value>Rename a save work</value>
+    </data>
+    <data name="Delete_Backup" xml:space="preserve">
+        <value>Delete a save work</value>
+    </data>
+    <data name="Change_Language" xml:space="preserve">
+        <value>Change the language</value>
+    </data>
+    <data name="Exit_App" xml:space="preserve">
+        <value>Exit the application</value>
+    </data>
+    <data name="Ask_Backup_Name" xml:space="preserve">
+        <value>Give the name of the save work : </value>
+    </data>
+    <data name="Ask_Backup_Source_Path" xml:space="preserve">
+        <value>Give the source path directory : </value>
+    </data>
+    <data name="Ask_Backup_Target_Path" xml:space="preserve">
+        <value>Give the target path directory : </value>
+    </data>
+    <data name="Ask_Backup_Type" xml:space="preserve">
+        <value>Give the type [d = differential / c =complete]: </value>
+    </data>
+    <data name="Ask_Valid_Input" xml:space="preserve">
+        <value>Please, enter a valid input</value>
+    </data>
+    <data name="Ask_Backup_Name_Delete" xml:space="preserve">
+        <value>Give the name of the work you want to delete : </value>
+    </data>
+    <data name="Ask_Backup_Name_Rename" xml:space="preserve">
+        <value>Give the name of the work you want to rename : </value>
+    </data>
+    <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
+        <value>Give the new name of the work</value>
+    </data>
+    <data name="Ask_Language" xml:space="preserve">
+        <value>Which language do you want ? [fr/en] : </value>
+    </data>
+    <data name="Show_Backups" xml:space="preserve">
+        <value>Display all backups</value>
+    </data>
+    <data name="Execute_All_Backups" xml:space="preserve">
+        <value>Execute all save works</value>
+    </data>
+</root>

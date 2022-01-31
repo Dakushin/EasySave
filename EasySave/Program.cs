@@ -1,13 +1,11 @@
-﻿using System.IO;
+﻿using Console = EasySave.view.Console;
 
-namespace EasySave
+namespace EasySave;
+
+internal class Program
 {
-    internal class Program
+    private static void Main()
     {
-        static void Main(string[] args)
-        {
-            View view = new Console();
-            view.Afficher();
-        }
+        var view = new Console();
     }
 }
