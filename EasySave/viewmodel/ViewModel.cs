@@ -23,18 +23,18 @@ internal class ViewModel
             if (_model.FindbyName(name) == null)
             {
                 _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                _view.DisplayText("Succesfull");
+                _view.DisplayText(strings.Success);
             }
             else
             {
-                _view.DisplayText(_model.GetErrorList()[2]);
+                _view.DisplayText(strings.Error_Backup_Already_Exists);
             }
 
             _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
         }
         else
         {
-            _view.DisplayText(_model.GetErrorList()[0]);
+            _view.DisplayText(strings.Error_Too_Many_Backups);
         }
     }
 
@@ -69,7 +69,7 @@ internal class ViewModel
         if (sv != null)
             _model.GetSaveWorkList().Remove(sv);
         else
-            _view.DisplayText(_model.GetErrorList()[1]);
+            _view.DisplayText(strings.Error_Backup_Not_Found);
     }
 
     public void TryRecupFromSaveStatePath()
@@ -201,7 +201,7 @@ internal class ViewModel
             foreach (var sw in _model.GetSaveWorkList())
                 ExecSaveWork(sw.GetName());
         else
-            _view.DisplayText("no sw");
+            _view.DisplayText(strings.Info_No_Backup);
     }
 
     public void RenameSaveWork(string name, string rename)
@@ -213,11 +213,11 @@ internal class ViewModel
             if (sv2 == null)
                 sv.SetName(rename);
             else
-                _view.DisplayText(_model.GetErrorList()[3]);
+                _view.DisplayText(strings.Error_Backup_Already_Exists);
         }
         else
         {
-            _view.DisplayText(_model.GetErrorList()[1]);
+            _view.DisplayText(strings.Error_Backup_Not_Found);
         }
     }
 
@@ -225,19 +225,19 @@ internal class ViewModel
     {
         foreach (var sv in _model.GetSaveWorkList())
         {
-            _view.DisplayText("Name : " + sv.GetName());
-            _view.DisplayText("Source Path : " + sv.GetSourcePath());
-            _view.DisplayText("Source Path : " + sv.GetTargetPath());
+            _view.DisplayText($"{strings.Name}: {sv.GetName()}");
+            _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
+            _view.DisplayText($"{strings.Target_Path}: {sv.GetTargetPath()}");
             switch (sv.Gettype())
             {
                 case SaveType.Complete:
                 {
-                    _view.DisplayText("Type : Complet");
+                    _view.DisplayText(strings.Type_Complete);
                     break;
                 }
                 case SaveType.Differential:
                 {
-                    _view.DisplayText("Type : Differential");
+                    _view.DisplayText(strings.Type_Differential);
                     break;
                 }
             }

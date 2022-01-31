@@ -66,4 +66,37 @@
     <data name="Execute_All_Backups" xml:space="preserve">
         <value>Exécuter tous les travaux de sauvegarde</value>
     </data>
+    <data name="Error_Too_Many_Backups" xml:space="preserve">
+        <value>Erreur : vous avez déjà 5 travaux de sauvegarde, supprimez en un et réesseyez</value>
+    </data>
+    <data name="Error_Backup_Not_Found" xml:space="preserve">
+        <value>Erreur : il n'y a pas de travail de sauvegarde avec ce nom</value>
+    </data>
+    <data name="Error_Backup_Already_Exists" xml:space="preserve">
+        <value>Erreur : un travail de sauvegarde porte déjà ce nom</value>
+    </data>
+    <data name="Error_Rename_Same_Name" xml:space="preserve">
+        <value>Erreur : le travail de sauvegarde porte déjà ce nom</value>
+    </data>
+    <data name="Type_Complete" xml:space="preserve">
+        <value>Type : complet</value>
+    </data>
+    <data name="Type_Differential" xml:space="preserve">
+        <value>Type : différentiel</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Nom</value>
+    </data>
+    <data name="Source_Path" xml:space="preserve">
+        <value>Chemin source</value>
+    </data>
+    <data name="Target_Path" xml:space="preserve">
+        <value>Chemin ciblé</value>
+    </data>
+    <data name="Success" xml:space="preserve">
+        <value>Succès</value>
+    </data>
+    <data name="Info_No_Backup" xml:space="preserve">
+        <value>Aucun travail de sauvegarde trouvé</value>
+    </data>
 </root>

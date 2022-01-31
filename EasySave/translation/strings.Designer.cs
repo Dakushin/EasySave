@@ -61,7 +61,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give the name of the save work : .
+        ///   Looks up a localized string similar to Give the name of the backup : .
         /// </summary>
         internal static string Ask_Backup_Name {
             get {
@@ -70,7 +70,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give the name of the work you want to delete : .
+        ///   Looks up a localized string similar to Give the name of the backup you want to delete : .
         /// </summary>
         internal static string Ask_Backup_Name_Delete {
             get {
@@ -79,7 +79,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give the name of the work you want to rename : .
+        ///   Looks up a localized string similar to Give the name of the backup you want to rename : .
         /// </summary>
         internal static string Ask_Backup_Name_Rename {
             get {
@@ -88,7 +88,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give the new name of the work.
+        ///   Looks up a localized string similar to Give the new name of the backup.
         /// </summary>
         internal static string Ask_Backup_New_Name_Rename {
             get {
@@ -160,7 +160,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a save work.
+        ///   Looks up a localized string similar to Create a backup.
         /// </summary>
         internal static string Create_Backup {
             get {
@@ -169,7 +169,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete a save work.
+        ///   Looks up a localized string similar to Delete a backup.
         /// </summary>
         internal static string Delete_Backup {
             get {
@@ -178,7 +178,43 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute all save works.
+        ///   Looks up a localized string similar to Error : a backup with this name already exists.
+        /// </summary>
+        internal static string Error_Backup_Already_Exists {
+            get {
+                return ResourceManager.GetString("Error_Backup_Already_Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error : there is no backup with this name.
+        /// </summary>
+        internal static string Error_Backup_Not_Found {
+            get {
+                return ResourceManager.GetString("Error_Backup_Not_Found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error : you can&apos;t rename you backup with the same name.
+        /// </summary>
+        internal static string Error_Rename_Same_Name {
+            get {
+                return ResourceManager.GetString("Error_Rename_Same_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error : you have already 5 backups, please delete one and retry.
+        /// </summary>
+        internal static string Error_Too_Many_Backups {
+            get {
+                return ResourceManager.GetString("Error_Too_Many_Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Execute all backups.
         /// </summary>
         internal static string Execute_All_Backups {
             get {
@@ -196,7 +232,25 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename a save work.
+        ///   Looks up a localized string similar to No backup found.
+        /// </summary>
+        internal static string Info_No_Backup {
+            get {
+                return ResourceManager.GetString("Info_No_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename a backup.
         /// </summary>
         internal static string Rename_Backup {
             get {
@@ -210,6 +264,51 @@ namespace EasySave {
         internal static string Show_Backups {
             get {
                 return ResourceManager.GetString("Show_Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source path.
+        /// </summary>
+        internal static string Source_Path {
+            get {
+                return ResourceManager.GetString("Source_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target path.
+        /// </summary>
+        internal static string Target_Path {
+            get {
+                return ResourceManager.GetString("Target_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type : complete.
+        /// </summary>
+        internal static string Type_Complete {
+            get {
+                return ResourceManager.GetString("Type_Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type : differential.
+        /// </summary>
+        internal static string Type_Differential {
+            get {
+                return ResourceManager.GetString("Type_Differential", resourceCulture);
             }
         }
     }

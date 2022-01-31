@@ -28,13 +28,13 @@
         <value>Please, enter a valid choice between 1 and 7</value>
     </data>
     <data name="Create_Backup" xml:space="preserve">
-        <value>Create a save work</value>
+        <value>Create a backup</value>
     </data>
     <data name="Rename_Backup" xml:space="preserve">
-        <value>Rename a save work</value>
+        <value>Rename a backup</value>
     </data>
     <data name="Delete_Backup" xml:space="preserve">
-        <value>Delete a save work</value>
+        <value>Delete a backup</value>
     </data>
     <data name="Change_Language" xml:space="preserve">
         <value>Change the language</value>
@@ -43,7 +43,7 @@
         <value>Exit the application</value>
     </data>
     <data name="Ask_Backup_Name" xml:space="preserve">
-        <value>Give the name of the save work : </value>
+        <value>Give the name of the backup : </value>
     </data>
     <data name="Ask_Backup_Source_Path" xml:space="preserve">
         <value>Give the source path directory : </value>
@@ -58,13 +58,13 @@
         <value>Please, enter a valid input</value>
     </data>
     <data name="Ask_Backup_Name_Delete" xml:space="preserve">
-        <value>Give the name of the work you want to delete : </value>
+        <value>Give the name of the backup you want to delete : </value>
     </data>
     <data name="Ask_Backup_Name_Rename" xml:space="preserve">
-        <value>Give the name of the work you want to rename : </value>
+        <value>Give the name of the backup you want to rename : </value>
     </data>
     <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
-        <value>Give the new name of the work</value>
+        <value>Give the new name of the backup</value>
     </data>
     <data name="Ask_Language" xml:space="preserve">
         <value>Which language do you want ? [fr/en] : </value>
@@ -73,6 +73,39 @@
         <value>Display all backups</value>
     </data>
     <data name="Execute_All_Backups" xml:space="preserve">
-        <value>Execute all save works</value>
+        <value>Execute all backups</value>
+    </data>
+    <data name="Error_Too_Many_Backups" xml:space="preserve">
+        <value>Error : you have already 5 backups, please delete one and retry</value>
+    </data>
+    <data name="Error_Backup_Not_Found" xml:space="preserve">
+        <value>Error : there is no backup with this name</value>
+    </data>
+    <data name="Error_Backup_Already_Exists" xml:space="preserve">
+        <value>Error : a backup with this name already exists</value>
+    </data>
+    <data name="Error_Rename_Same_Name" xml:space="preserve">
+        <value>Error : you can't rename you backup with the same name</value>
+    </data>
+    <data name="Type_Complete" xml:space="preserve">
+        <value>Type : complete</value>
+    </data>
+    <data name="Type_Differential" xml:space="preserve">
+        <value>Type : differential</value>
+    </data>
+    <data name="Source_Path" xml:space="preserve">
+        <value>Source path</value>
+    </data>
+    <data name="Target_Path" xml:space="preserve">
+        <value>Target path</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="Success" xml:space="preserve">
+        <value>Success</value>
+    </data>
+    <data name="Info_No_Backup" xml:space="preserve">
+        <value>No backup found</value>
     </data>
 </root>
