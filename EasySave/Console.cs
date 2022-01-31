@@ -1,4 +1,4 @@
-﻿
+﻿using System.IO;
 
 namespace EasySave
 {
@@ -77,6 +77,11 @@ namespace EasySave
 
                             break;
                         }
+                    case "5":
+                        {
+                            viewModel.ExecAllSaveWork();
+                            break;
+                        }
                     case "123465789": isRunning = false; break;
                     default:
                         System.Console.WriteLine("Veuillez rentrer une info valide");
@@ -97,7 +102,7 @@ namespace EasySave
                                      "##### 1 - Create Save Work  #####\n" +
                                      "##### 2 - Delete Save Work  #####\n" +
                                      "##### 2 - Rename Save Work  #####\n" +
-                                     "##### 2 - Show All SaveWork #####\n" +
+                                     "##### 4 - Change Language   #####\n" +
                                      "##### 2 - Info              #####\n" +
                                      "#################################");
             string valeurretour = System.Console.ReadLine();

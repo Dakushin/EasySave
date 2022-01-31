@@ -11,7 +11,7 @@ namespace EasySave
         private string name;
         private string sourcePath;
         private string targetPath;
-        Type type;
+        private Type type;
 
         public SaveWork(string name, string sourcePath, string targetPath, Type type)
         {

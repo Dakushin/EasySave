@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace EasySave
 {
@@ -12,8 +13,8 @@ namespace EasySave
 
         public Model()
         {
-            logPath = "";
-            saveStatePath = "";
+            logPath = Path.GetFullPath(@"..\..\..\log.json");
+            saveStatePath = Path.GetFullPath(@"..\..\..\state.json"); ;
             saveWorkList = new List<SaveWork>(5);
             errorMessage = new List<string>() { 
                 "Error, you have already 5 savework, please delete one and retry",
@@ -23,7 +24,15 @@ namespace EasySave
             };
             workInProgress = false;
         }
+        public string GetLogPath()
+        {
+            return logPath;
+        }
 
+        public string GetSaveStatePath()
+        {
+            return saveStatePath;
+        }
         public List<SaveWork> GetSaveWorkList()
         {
             return saveWorkList;
@@ -33,7 +42,7 @@ namespace EasySave
         {
             return errorMessage;
         }
-        
+
         public SaveWork FindbyName(string name)
         {
             foreach (SaveWork sv in saveWorkList)
@@ -45,5 +54,6 @@ namespace EasySave
             }
             return null;
         }
+
     }
 }
