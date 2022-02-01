@@ -78,7 +78,10 @@ internal class ViewModel
     {
         var sv = _model.FindbyName(name);
         if (sv != null)
-            _model.GetSaveWorkList().Remove(sv);
+        { 
+        _model.GetSaveWorkList().Remove(sv);
+        _view.DisplaySuccess(strings.Success);
+        }
         else
             _view.DisplayError(strings.Error_Backup_Not_Found);
     }
@@ -140,6 +143,7 @@ internal class ViewModel
                 saveState.SetTotalFilesToCopy(files.Count);
                 var FileLeftToDo = files.Count;
                 var Progression = 0f;
+                CalculFillProgress(Progression);
                 foreach (var file in files)
                 {
                     var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
@@ -150,9 +154,9 @@ internal class ViewModel
                     DateTime datetime = DateTime.Now;
                     File.Copy(file, targetPath, true);
                     TimeSpan time = DateTime.Now.Subtract(datetime);
-                    Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
-                    CalculFillProgress(Progression);
                     FileLeftToDo--;
+                    Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                    CalculFillProgress(Progression);
                     saveState.SetTotalFilesLeftToDo(FileLeftToDo);
                     var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
                     (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
@@ -177,6 +181,7 @@ internal class ViewModel
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
                     var Progression = 0f;
+                    CalculFillProgress(Progression);
                     if (File.Exists(targetPath)) //try to know if the file exist, to check if he was modified
                     {
                         var fs1 = new FileStream(file, FileMode.Open);
@@ -220,9 +225,10 @@ internal class ViewModel
                                
                         }
 
-                            Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
-                            CalculFillProgress(Progression);
                             FileLeftToDo--;
+                            Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                            CalculFillProgress(Progression);
+                            
 
 
                     } else //if the file doesn't existe it will be create
@@ -237,9 +243,10 @@ internal class ViewModel
                                 File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                             log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                             UpdateSaveState(saveState);
-                            Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
-                            CalculFillProgress(Progression);
                             FileLeftToDo--;
+                            Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                            CalculFillProgress(Progression);
+                            
 
                     }
 
@@ -256,12 +263,12 @@ internal class ViewModel
     private void CalculFillProgress(float progress) //Calcul the fill progress of the progress bar
     {
         string stringReturn = "[";
-        int nbDiez = (int)(progress % 2.5f);
-        for(int i = 0; i < nbDiez; i++)
+        float nbDiez = progress / 2.5f;
+        for(int i = 0; i < (int)nbDiez; i++)
         {
             stringReturn += '#';
         }
-        for(int i = 0; i < 40; i++)
+        for(int i = (int) nbDiez; i < 40; i++)
         {
             stringReturn += '~';
         }
@@ -306,7 +313,10 @@ internal class ViewModel
         {
             var sv2 = _model.FindbyName(rename);
             if (sv2 == null)
+            {
                 sv.SetName(rename);
+                _view.DisplaySuccess(strings.Success);
+            }
             else
                 _view.DisplayError(strings.Error_Backup_Already_Exists);
         }
@@ -346,7 +356,7 @@ internal class ViewModel
         }
     }
 
-    public static void ChangeLanguage(Language language) //Function to change language
+    public void ChangeLanguage(Language language) //Function to change language
     {
         CultureInfo.CurrentUICulture = language switch
         {
@@ -354,5 +364,6 @@ internal class ViewModel
             Language.French => CultureInfo.GetCultureInfo("fr"),
             _ => CultureInfo.CurrentUICulture
         };
+        _view.DisplaySuccess(strings.Success);
     }
 }

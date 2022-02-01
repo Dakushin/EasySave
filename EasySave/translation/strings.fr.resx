@@ -202,7 +202,7 @@
     <value>Aucun travail de sauvegarde trouvé</value>
   </data>
   <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
-    <value>Entre le nom du travail de sauvegarde que vous voulez lancer :</value>
+    <value>Entre le nom du travail de sauvegarde que vous voulez lancer : </value>
   </data>
   <data name="Execute_Backup" xml:space="preserve">
     <value>Executer un travail de sauvegarde</value>

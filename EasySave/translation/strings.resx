@@ -202,7 +202,7 @@
     <value>No backup found</value>
   </data>
   <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
-    <value>Give the name of the save work to execute:</value>
+    <value>Give the name of the save work to execute : </value>
   </data>
   <data name="Execute_Backup" xml:space="preserve">
     <value>Execute a save work</value>

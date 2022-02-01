@@ -177,7 +177,9 @@ internal class Console : View
         } 
         else
         {
-            SetCursorPosition(CursorLeft, CursorTop + 3);
+
+            for (int i = 0; i < 3; i++)
+                WriteLine("");
         }
     }
 
