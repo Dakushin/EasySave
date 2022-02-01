@@ -13,6 +13,7 @@ internal class Console : View
     public Console()
     {
         _isRunning = true;
+        ViewModel.OnProgresseUpdate += DisplayProgressBar;
         Display();
     }
 
@@ -22,7 +23,7 @@ internal class Console : View
             switch (GetUserChoice())
             {
                 case UserChoice.ShowAllSaveWork:
-                    WriteLine("TODO");
+                    ViewModel.AfficherAllSaveWork();
                     break;
                 case UserChoice.CreateSaveWork:
                 {
@@ -53,12 +54,25 @@ internal class Console : View
                     ViewModel.ChangeLanguage(language);
                     break;
                 }
+                case UserChoice.ExecuteSaveWork:
+                {
+                    var name = AskForNametoExecute();
+                    ViewModel.ExecSaveWork(name);
+                    break;
+                }
                 case UserChoice.Exit:
                     _isRunning = false;
                     break;
             }
     }
 
+    private static string AskForNametoExecute()
+    {
+        Write(strings.Ask_Backup_Name_ToExecute);
+        var name = ReadLineNoEmpty();
+
+        return name;
+    }
     private static Language AskForChangingLanguage()
     {
         string language;
@@ -136,6 +150,23 @@ internal class Console : View
         ResetColor();
     }
 
+    public void DisplayProgressBar(object sender, string s)
+    {
+        if (s != null)
+        {
+            WriteLine(" ========================================");
+            WriteLine(s);
+            WriteLine(" ========================================");
+            SetCursorPosition(CursorLeft, CursorTop - 3);
+            CursorVisible = false;
+        } 
+        else
+        {
+            SetCursorPosition(CursorLeft, CursorTop + 3);
+            WriteLine(strings.Success);
+        }
+    }
+
     private static UserChoice GetUserChoice()
     {
         while (true)
@@ -143,12 +174,13 @@ internal class Console : View
             WriteLine(
                 "##########################################\n"
                 + $"1 - {strings.Show_Backups}\n"
-                + $"2 - {strings.Create_Backup}\n"
-                + $"3 - {strings.Rename_Backup}\n"
+                + $"2 - {strings.Execute_Backup}\n"
+                + $"3 - {strings.Create_Backup}\n"
                 + $"4 - {strings.Delete_Backup}\n"
-                + $"5 - {strings.Execute_All_Backups}\n"
-                + $"6 - {strings.Change_Language}\n"
-                + $"7 - {strings.Exit_App}\n"
+                + $"5 - {strings.Rename_Backup}\n"
+                + $"6 - {strings.Execute_All_Backups}\n"
+                + $"7 - {strings.Change_Language}\n"
+                + $"8 - {strings.Exit_App}\n"
                 + "##########################################"
             );
 
@@ -166,6 +198,7 @@ internal class Console : View
     private enum UserChoice
     {
         ShowAllSaveWork,
+        ExecuteSaveWork,
         CreateSaveWork,
         RenameSaveWork,
         DeleteSaveWork,

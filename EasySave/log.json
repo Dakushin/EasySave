@@ -1,0 +1,92 @@
+[
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\Nouveau document texte.txt",
+    "FileTarget": "z:\\test\\Nouveau document texte.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 3.0,
+    "time": "31/01/2022 21:31:25"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\Nouveau document texte.txt",
+    "FileTarget": "z:\\test\\Nouveau document texte.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 3.0,
+    "time": "31/01/2022 21:36:21"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.docx",
+    "FileTarget": "z:\\test\\test.docx",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 0.0,
+    "time": "31/01/2022 21:37:49"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.txt",
+    "FileTarget": "z:\\test\\test.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 178.0,
+    "time": "31/01/2022 21:37:51"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\Nouveau document texte.txt",
+    "FileTarget": "z:\\test\\Nouveau document texte.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": -743.0,
+    "time": "31/01/2022 21:40:16"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.docx",
+    "FileTarget": "z:\\test\\test.docx",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 364.0,
+    "time": "31/01/2022 21:40:37"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.txt",
+    "FileTarget": "z:\\test\\test.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 427.0,
+    "time": "31/01/2022 21:40:49"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\Nouveau document texte.txt",
+    "FileTarget": "z:\\test\\Nouveau document texte.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": -543.0,
+    "time": "01/02/2022 00:25:08"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.docx",
+    "FileTarget": "z:\\test\\test.docx",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 395.3452,
+    "time": "01/02/2022 00:31:10"
+  },
+  {
+    "Name": "test",
+    "FileSource": "z:\\Nouveau dossier\\test.txt",
+    "FileTarget": "z:\\test\\test.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 0.525,
+    "time": "01/02/2022 00:31:10"
+  }
+]

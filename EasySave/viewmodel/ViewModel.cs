@@ -9,11 +9,13 @@ internal class ViewModel
 {
     private readonly Model _model;
     private readonly View _view;
+    public event EventHandler<string> OnProgresseUpdate;
 
     public ViewModel(View v)
     {
         _view = v;
         _model = new Model();
+        TryRecupFromSaveStatePath();
     }
 
     public void CreateSaveWork(string name, string sourcePath, string targetPath, SaveType saveType)
@@ -22,15 +24,20 @@ internal class ViewModel
         {
             if (_model.FindbyName(name) == null)
             {
-                _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                _view.DisplaySuccess(strings.Success);
+                if (Directory.Exists(sourcePath) || File.Exists(sourcePath))
+                {
+                    _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
+                    _view.DisplayText(strings.Success);
+                }
+                else
+                {
+                    _view.DisplayText(strings.Error_Wrong_SourcePath);
+                }
             }
             else
             {
-                _view.DisplayError(strings.Error_Backup_Already_Exists);
+                _view.DisplayText(strings.Error_Backup_Already_Exists);
             }
-
-            _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
         }
         else
         {
@@ -74,105 +81,176 @@ internal class ViewModel
 
     public void TryRecupFromSaveStatePath()
     {
+        FileFormat fileFormat = new Json();
+        List<SaveState> saveStates;
+        saveStates = fileFormat.UnSerialize<SaveState>(_model.GetSaveStatePath());
+        foreach (var sv in saveStates)
+        {
+            if (sv.GetNbFilesLeftToDo() > 0)
+            {
+                List<string> listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
+                List<string> listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
+                bool sameDirectory = false;
+                while (!sameDirectory && listDirectorySource.Any() && listDirectoryTarget.Any())
+                {
+                    if(listDirectorySource.Last<string>() == listDirectoryTarget.Last<string>())
+                    {
+                        listDirectorySource.Remove(listDirectorySource.Last<string>());
+                        listDirectoryTarget.Remove(listDirectoryTarget.Last<string>());
+                    }else
+                    {
+                        sameDirectory = true;
+                    }
+                }
+                string sourcePath = string.Join(Path.DirectorySeparatorChar, listDirectorySource);
+                string targetPath = string.Join(Path.DirectorySeparatorChar, listDirectoryTarget);
+                _model.GetSaveWorkList().Add(new SaveWork(sv.GetName(), sourcePath, targetPath, SaveType.Differential));
+            }
+        }
     }
 
     public void ExecSaveWork(string name)
     {
         var sv = _model.FindbyName(name);
-        if (Directory.Exists(sv.GetSourcePath()) || File.Exists(sv.GetSourcePath()))
-        {
-            if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
+        if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
 
-            var files = new List<string>();
-            files.AddRange(Directory.EnumerateFiles(sv.GetSourcePath()));
-            GetAllFileFromDirectory(Directory.GetDirectories(sv.GetSourcePath()), files);
-            var saveState = new SaveState(sv.GetName(), "ACTIVE", new Json());
-            switch (sv.Gettype())
+        var files = new List<string>();
+        files.AddRange(Directory.EnumerateFiles(sv.GetSourcePath()));
+        GetAllFileFromDirectory(Directory.GetDirectories(sv.GetSourcePath()), files);
+        var saveState = new SaveState(sv.GetName(), "ACTIVE", new Json());
+        switch (sv.Gettype())
+        {
+            case SaveType.Complete:
             {
-                case SaveType.Complete:
+                saveState.SetTotalFilesToCopy(files.Count);
+                var FileLeftToDo = files.Count;
+                var Progression = 0f;
+                foreach (var file in files)
                 {
-                    saveState.SetTotalFilesToCopy(files.Count);
-                    var FileLeftToDo = files.Count;
-                    foreach (var file in files)
+                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    if (File.Exists(targetPath))
                     {
-                        var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                        var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
                         saveState.SetSourceFilePath(file);
                         saveState.SetTargetFilePath(targetPath);
 
-                        float time = DateTime.Now.Millisecond;
+                        DateTime datetime = DateTime.Now;
                         File.Copy(file, targetPath, true);
-                        time = DateTime.Now.Millisecond - time;
+                        TimeSpan time = DateTime.Now.Subtract(datetime);
+                        Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
+                        CalculFillProgress(Progression);
                         FileLeftToDo--;
                         saveState.SetTotalFilesLeftToDo(FileLeftToDo);
                         var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
-                            time, DateTime.Now.ToString(), new Json());
+                        (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                         log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                         UpdateSaveState(saveState);
-                    }
-
-                    EndSaveWork(saveState);
-                    break;
-                }
-                case SaveType.Differential:
-                {
-                    saveState.SetTotalFilesToCopy(files.Count);
-                    var FileLeftToDo = files.Count;
-                    foreach (var file in files)
-                    {
-                        var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                        var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
-                        saveState.SetSourceFilePath(file);
-                        saveState.SetTargetFilePath(targetPath);
-                        if (File.Exists(targetPath))
-                        {
-                            var fs1 = new FileStream(file, FileMode.Open);
-                            var fs2 = new FileStream(targetPath, FileMode.Open);
-
-                            var same = true;
-                            if (fs1.Length == fs2.Length)
-                            {
-                                var fb1 = fs1.ReadByte();
-                                var fb2 = fs2.ReadByte();
-
-                                while (fb1 != -1 && same)
-                                {
-                                    if (fb1 == fb2)
-                                        same = true;
-                                    else
-                                        same = false;
-                                    fb1 = fs1.ReadByte();
-                                    fb2 = fs2.ReadByte();
-                                }
-
-                                // Close the file
-                                fs1.Close();
-                                fs2.Close();
-
-                                if (!same)
-                                {
-                                    float time = DateTime.Now.Millisecond;
-                                    File.Copy(file, targetPath, true);
-                                    time = DateTime.Now.Millisecond - time;
-                                    FileLeftToDo--;
-                                    saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                                    var log = new Log(sv.GetName(), file, targetPath, string.Empty,
-                                        File.ReadAllBytes(file).Length, time, DateTime.Now.ToString(), new Json());
-                                    log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
-                                    UpdateSaveState(saveState);
-                                }
-
-                                EndSaveWork(saveState);
-                            }
                         }
+                }
+
+                EndSaveWork(saveState);
+                break;
+            }
+            case SaveType.Differential:
+            {
+                saveState.SetTotalFilesToCopy(files.Count);
+                var FileLeftToDo = files.Count;
+                foreach (var file in files)
+                {
+                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    saveState.SetSourceFilePath(file);
+                    saveState.SetTargetFilePath(targetPath);
+                    var Progression = 0f;
+                    if (File.Exists(targetPath))
+                    {
+                        var fs1 = new FileStream(file, FileMode.Open);
+                        var fs2 = new FileStream(targetPath, FileMode.Open);
+                            
+                        var same = true;
+                        if (fs1.Length == fs2.Length)
+                        {
+                            var fb1 = fs1.ReadByte();
+                            var fb2 = fs2.ReadByte();
+
+                            while (fb1 != -1 && same)
+                            {
+                                if (fb1 == fb2)
+                                    same = true;
+                                else
+                                    same = false;
+                                fb1 = fs1.ReadByte();
+                                fb2 = fs2.ReadByte();
+                            }
+
+                            // Close the file
+                            fs1.Close();
+                            fs2.Close();
+
+                            if (!same)
+                            {
+                                DateTime datetime = DateTime.Now;
+                                File.Copy(file, targetPath, true);
+                                TimeSpan time = DateTime.Now.Subtract(datetime);
+
+
+                                saveState.SetTotalFilesLeftToDo(FileLeftToDo);
+                                var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                    File.ReadAllBytes(file).Length,(float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
+                                log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
+                                UpdateSaveState(saveState);
+                            }
+                                
+                               
+                               
+                        }
+
+                            Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
+                            CalculFillProgress(Progression);
+                            FileLeftToDo--;
+
+
+                    } else
+                    {
+                            DateTime datetime = DateTime.Now;
+                            File.Copy(file, targetPath, true);
+                            TimeSpan time = DateTime.Now.Subtract(datetime);
+
+
+                            saveState.SetTotalFilesLeftToDo(FileLeftToDo);
+                            var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
+                            log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
+                            UpdateSaveState(saveState);
+                            Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
+                            CalculFillProgress(Progression);
+                            FileLeftToDo--;
+
                     }
 
-                    break;
+                        
                 }
+                EndSaveWork(saveState);
+                break;
             }
         }
     }
 
+    private void CalculFillProgress(float progress)
+    {
+        string stringReturn = "[";
+        int nbDiez = (int)(progress % 2.5f);
+        for(int i = 0; i < nbDiez; i++)
+        {
+            stringReturn += '#';
+        }
+        for(int i = 0; i < 40; i++)
+        {
+            stringReturn += '~';
+        }
+        stringReturn += ']';
+        OnProgresseUpdate?.Invoke(this, stringReturn);
+    }
     private void EndSaveWork(SaveState saveState)
     {
         saveState.SetSourceFilePath("");
@@ -223,24 +301,31 @@ internal class ViewModel
 
     public void AfficherAllSaveWork()
     {
-        foreach (var sv in _model.GetSaveWorkList())
+        if (_model.GetSaveWorkList().Count == 0)
         {
-            _view.DisplayText($"{strings.Name}: {sv.GetName()}");
-            _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
-            _view.DisplayText($"{strings.Target_Path}: {sv.GetTargetPath()}");
-            switch (sv.Gettype())
+            foreach (var sv in _model.GetSaveWorkList())
             {
-                case SaveType.Complete:
+                _view.DisplayText($"{strings.Name}: {sv.GetName()}");
+                _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
+                _view.DisplayText($"{strings.Target_Path}: {sv.GetTargetPath()}");
+                switch (sv.Gettype())
                 {
-                    _view.DisplayText(strings.Type_Complete);
-                    break;
-                }
-                case SaveType.Differential:
-                {
-                    _view.DisplayText(strings.Type_Differential);
-                    break;
+                    case SaveType.Complete:
+                        {
+                            _view.DisplayText(strings.Type_Complete);
+                            break;
+                        }
+                    case SaveType.Differential:
+                        {
+                            _view.DisplayText(strings.Type_Differential);
+                            break;
+                        }
                 }
             }
+        }
+        else
+        {
+            _view.DisplayText(strings.Error_NoSaveWork);
         }
     }
 
