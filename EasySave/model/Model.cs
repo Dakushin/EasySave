@@ -11,8 +11,8 @@ internal class Model
     //CONSTRUCTOR
     public Model()
     {
-        _logPath = Path.GetFullPath(@"..\..\..\log.json");
-        _saveStatePath = Path.GetFullPath(@"..\..\..\state.json");
+        _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
+        _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\state.json";
         _saveWorkList = new List<SaveWork>(5);
         _workInProgress = false;
     }

@@ -178,7 +178,6 @@ internal class Console : View
         else
         {
             SetCursorPosition(CursorLeft, CursorTop + 3);
-            WriteLine(strings.Success);
         }
     }
 

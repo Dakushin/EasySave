@@ -88,5 +88,14 @@
     "FileSize": 0,
     "FileTransferTime": 0.525,
     "time": "01/02/2022 00:31:10"
+  },
+  {
+    "Name": "test",
+    "FileSource": "C:\\Users\\sacha\\Desktop\\en\\test.txt",
+    "FileTarget": "C:\\Users\\sacha\\Desktop\\fr\\test.txt",
+    "destPath": "",
+    "FileSize": 0,
+    "FileTransferTime": 2.2737,
+    "time": "2/1/2022 3:11:21 PM"
   }
 ]

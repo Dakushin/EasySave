@@ -85,6 +85,8 @@ internal class ViewModel
 
     public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
     {
+        if (!File.Exists(_model.GetSaveStatePath())) return;
+
         FileFormat fileFormat = new Json();
         List<SaveState> saveStates;
         if (!File.Exists(_model.GetSaveStatePath())) return;
