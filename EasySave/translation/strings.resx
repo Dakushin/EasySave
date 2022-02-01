@@ -64,7 +64,7 @@
         <value>Give the name of the backup you want to rename : </value>
     </data>
     <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
-        <value>Give the new name of the backup</value>
+        <value>Give the new name of the backup :</value>
     </data>
     <data name="Ask_Language" xml:space="preserve">
         <value>Which language do you want ? [fr/en] : </value>

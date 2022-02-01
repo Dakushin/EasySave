@@ -88,7 +88,7 @@ namespace EasySave {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give the new name of the backup.
+        ///   Looks up a localized string similar to Give the new name of the backup :.
         /// </summary>
         internal static string Ask_Backup_New_Name_Rename {
             get {

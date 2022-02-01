@@ -23,18 +23,18 @@ internal class ViewModel
             if (_model.FindbyName(name) == null)
             {
                 _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                _view.DisplayText(strings.Success);
+                _view.DisplaySuccess(strings.Success);
             }
             else
             {
-                _view.DisplayText(strings.Error_Backup_Already_Exists);
+                _view.DisplayError(strings.Error_Backup_Already_Exists);
             }
 
             _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
         }
         else
         {
-            _view.DisplayText(strings.Error_Too_Many_Backups);
+            _view.DisplayError(strings.Error_Too_Many_Backups);
         }
     }
 
@@ -69,7 +69,7 @@ internal class ViewModel
         if (sv != null)
             _model.GetSaveWorkList().Remove(sv);
         else
-            _view.DisplayText(strings.Error_Backup_Not_Found);
+            _view.DisplayError(strings.Error_Backup_Not_Found);
     }
 
     public void TryRecupFromSaveStatePath()
@@ -213,11 +213,11 @@ internal class ViewModel
             if (sv2 == null)
                 sv.SetName(rename);
             else
-                _view.DisplayText(strings.Error_Backup_Already_Exists);
+                _view.DisplayError(strings.Error_Backup_Already_Exists);
         }
         else
         {
-            _view.DisplayText(strings.Error_Backup_Not_Found);
+            _view.DisplayError(strings.Error_Backup_Not_Found);
         }
     }
 

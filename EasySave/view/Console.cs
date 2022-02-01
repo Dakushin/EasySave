@@ -121,6 +121,20 @@ internal class Console : View
     {
         WriteLine(text);
     }
+    
+    public override void DisplayError(string text)
+    {
+        ForegroundColor = ConsoleColor.DarkRed;
+        WriteLine(text);
+        ResetColor();
+    }
+    
+    public override void DisplaySuccess(string text)
+    {
+        ForegroundColor = ConsoleColor.Green;
+        WriteLine(text);
+        ResetColor();
+    }
 
     private static UserChoice GetUserChoice()
     {
@@ -153,8 +167,8 @@ internal class Console : View
     {
         ShowAllSaveWork,
         CreateSaveWork,
-        DeleteSaveWork,
         RenameSaveWork,
+        DeleteSaveWork,
         ExecuteAllSaveWork,
         ChangeLanguage,
         Exit

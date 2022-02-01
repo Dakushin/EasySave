@@ -11,5 +11,9 @@ internal abstract class View
         ViewModel = new ViewModel(this);
     }
 
-    public abstract void DisplayText(string s);
+    public abstract void DisplayText(string text);
+
+    public abstract void DisplayError(string text);
+
+    public abstract void DisplaySuccess(string text);
 }
