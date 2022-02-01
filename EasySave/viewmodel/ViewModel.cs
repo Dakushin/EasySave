@@ -29,17 +29,18 @@ internal class ViewModel
             {
                 if (Directory.Exists(sourcePath) || File.Exists(sourcePath)) // check if source path is good
                 {
+                    targetPath = Path.GetFullPath(targetPath);
                     _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                    _view.DisplayText(strings.Success);
+                    _view.DisplaySuccess(strings.Success);
                 }
                 else
                 {
-                    _view.DisplayText(strings.Error_Wrong_SourcePath);
+                    _view.DisplayError(strings.Error_Wrong_SourcePath);
                 }
             }
             else
             {
-                _view.DisplayText(strings.Error_Backup_Already_Exists);
+                _view.DisplayError(strings.Error_Backup_Already_Exists);
             }
         }
         else
@@ -119,6 +120,11 @@ internal class ViewModel
     public void ExecSaveWork(string name) //Function to do the action of copie-past in a save directory
     {
         var sv = _model.FindbyName(name);
+        if (sv == null)
+        {
+            _view.DisplayError(strings.Error_NoSaveWorkOfThisName);
+            return;
+        }
         if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
 
         var files = new List<string>();
@@ -136,27 +142,26 @@ internal class ViewModel
                 {
                     var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
                     var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
-                    if (File.Exists(targetPath))
-                    {
-                        saveState.SetSourceFilePath(file);
-                        saveState.SetTargetFilePath(targetPath);
+                    saveState.SetSourceFilePath(file);
+                    saveState.SetTargetFilePath(targetPath);
 
-                        DateTime datetime = DateTime.Now;
-                        File.Copy(file, targetPath, true);
-                        TimeSpan time = DateTime.Now.Subtract(datetime);
-                        Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
-                        CalculFillProgress(Progression);
-                        FileLeftToDo--;
-                        saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                        var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
-                        (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
-                        log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
-                        UpdateSaveState(saveState);
-                        }
+                    DateTime datetime = DateTime.Now;
+                    File.Copy(file, targetPath, true);
+                    TimeSpan time = DateTime.Now.Subtract(datetime);
+                    Progression = (files.Count - FileLeftToDo) / files.Count * 100f;
+                    CalculFillProgress(Progression);
+                    FileLeftToDo--;
+                    saveState.SetTotalFilesLeftToDo(FileLeftToDo);
+                    var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
+                    (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
+                    log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
+                    UpdateSaveState(saveState);
+                    
                 }
 
                 EndSaveWork(saveState);
                 OnProgresseUpdate.Invoke(this, null);
+                _view.DisplaySuccess(strings.Success);
                 break;
             }
             case SaveType.Differential:
@@ -240,6 +245,7 @@ internal class ViewModel
                 }
                 EndSaveWork(saveState);
                 OnProgresseUpdate.Invoke(this, null);
+                _view.DisplaySuccess(strings.Success);
                 break;
             }
         }
@@ -310,7 +316,7 @@ internal class ViewModel
 
     public void DisplayAllSaveWork() //Display all savework
     {
-        if (_model.GetSaveWorkList().Count == 0)
+        if (_model.GetSaveWorkList().Count != 0 || _model.GetSaveWorkList == null)
         {
             foreach (var sv in _model.GetSaveWorkList()) //loop through each Savework
             {
@@ -334,7 +340,7 @@ internal class ViewModel
         }
         else
         {
-            _view.DisplayText(strings.Error_NoSaveWork);
+            _view.DisplayError(strings.Error_NoSaveWork);
         }
     }
 

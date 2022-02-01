@@ -215,8 +215,8 @@ internal class Console : View
         ShowAllSaveWork,
         ExecuteSaveWork,
         CreateSaveWork,
-        RenameSaveWork,
         DeleteSaveWork,
+        RenameSaveWork,
         ExecuteAllSaveWork,
         ChangeLanguage,
         Exit

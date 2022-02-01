@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Console_Ask_Valid_Choice" xml:space="preserve">
-    <value>Please, enter a valid choice between 1 and 7</value>
+    <value>Please, enter a valid choice between 1 and 8</value>
   </data>
   <data name="Create_Backup" xml:space="preserve">
     <value>Create a backup</value>
@@ -212,5 +212,8 @@
   </data>
   <data name="Error_Wrong_SourcePath" xml:space="preserve">
     <value>Error : The source path you enter doesn't exist</value>
+  </data>
+  <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
+    <value>Error : Error : No save work of that name</value>
   </data>
 </root>

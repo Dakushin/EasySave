@@ -145,7 +145,7 @@
     <value>Modifier la langue d'affichage</value>
   </data>
   <data name="Console_Ask_Valid_Choice" xml:space="preserve">
-    <value>Veuillez choisir un choix valide entre 1 et 7</value>
+    <value>Veuillez choisir un choix valide entre 1 et 8</value>
   </data>
   <data name="Create_Backup" xml:space="preserve">
     <value>Créer un travail de sauvegarde</value>
@@ -209,6 +209,9 @@
   </data>
   <data name="Error_NoSaveWork" xml:space="preserve">
     <value>Erreur : Il n'existe pas de travaux de sauvegrade</value>
+  </data>
+  <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
+    <value>Erreur : Il n'existe pas de travaux de sauvegrade de ce nom</value>
   </data>
   <data name="Error_Wrong_SourcePath" xml:space="preserve">
     <value>Erreur : Vous avez rentré un chemin source non valide</value>
