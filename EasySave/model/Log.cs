@@ -6,6 +6,7 @@ public class Log
 {
     private FileFormat _fileFormat;
 
+    //CONSTRUCTOR
     public Log(string saveName, string sourceFilePath, string targetFilePath, string destPath, int fileSize,
         float fileTransferTime, string currentTime, FileFormat fileFormat)
     {
@@ -19,6 +20,7 @@ public class Log
         _fileFormat = fileFormat;
     }
 
+    //JSON CONSTRUCTOR
     [JsonConstructor]
     public Log(string name, string fileSource, string fileTarget, string destPath, int fileSize, float fileTransferTime,
         string time)
@@ -47,7 +49,8 @@ public class Log
 
     public string time { get; private set; }
 
-    public int GetFileSize()
+    //GETTER AND SETTER
+    public int GetFileSize() 
     {
         return FileSize;
     }

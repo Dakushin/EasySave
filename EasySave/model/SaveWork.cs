@@ -1,6 +1,6 @@
 ﻿namespace EasySave.model;
 
-internal enum SaveType
+internal enum SaveType //Enum for the type
 {
     Complete,
     Differential
@@ -8,11 +8,13 @@ internal enum SaveType
 
 internal class SaveWork
 {
+    //Private member data
     private readonly SaveType _saveType;
     private readonly string _sourcePath;
     private readonly string _targetPath;
     private string _name;
 
+    //CONSTRUCTOR
     public SaveWork(string name, string sourcePath, string targetPath, SaveType saveType)
     {
         _name = name;
@@ -21,6 +23,7 @@ internal class SaveWork
         _saveType = saveType;
     }
 
+    //GETTER AND SETTER
     public string GetName()
     {
         return _name;

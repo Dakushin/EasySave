@@ -4,8 +4,10 @@ namespace EasySave.model;
 
 internal class SaveState
 {
+    //Private Variable 
     private readonly FileFormat _fileFormat;
 
+    //JSON CONSTRUCTOR
     [JsonConstructor]
     public SaveState(string name, string sourceFilePath, string targetFilePath, string state, int nbFilesToCopy,
         int totalFilesSize, int nbFilesLeftToDo, int progression)
@@ -20,6 +22,7 @@ internal class SaveState
         Progression = progression;
     }
 
+    //CONSTRUCTOR
     public SaveState(string name, string state, FileFormat fileFormat)
     {
         Name = name;
@@ -50,6 +53,7 @@ internal class SaveState
 
     public int Progression { get; set; }
 
+    //GETTER AND SETTER
     public string GetName()
     {
         return Name;

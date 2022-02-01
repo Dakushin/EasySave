@@ -8,8 +8,10 @@ namespace EasySave.view;
 
 internal class Console : View
 {
+    //PRIVATE VARIABLE
     private bool _isRunning;
 
+    //CONSTRUCTOR
     public Console()
     {
         _isRunning = true;
@@ -17,7 +19,8 @@ internal class Console : View
         Display();
     }
 
-    private void Display()
+
+    private void Display()//FIRST FUNCTION LAUNCH, Function that get user input option
     {
         while (_isRunning)
             switch (GetUserChoice())
@@ -66,6 +69,7 @@ internal class Console : View
             }
     }
 
+    //function that ask the name of the save work to execute
     private static string AskForNametoExecute()
     {
         Write(strings.Ask_Backup_Name_ToExecute);
@@ -73,6 +77,8 @@ internal class Console : View
 
         return name;
     }
+
+    //function that ask the name of the language you want
     private static Language AskForChangingLanguage()
     {
         string language;
@@ -85,6 +91,7 @@ internal class Console : View
         return language.Equals("en") ? Language.English : Language.French;
     }
 
+    //ask the name of the save work you want to rename and the rename
     private static (string, string) AskForRenamingSaveWork()
     {
         Write(strings.Ask_Backup_Name_Rename);
@@ -95,12 +102,15 @@ internal class Console : View
         return (name, newName);
     }
 
+    //Ask the name of the deleting savework
     private static string AskForDeletingSaveWork()
     {
         Write(strings.Ask_Backup_Name_Delete);
         return ReadLineNoEmpty();
     }
 
+
+    //ask info for the creation of a savework
     private static (string, string, string, SaveType) AskForCreatingSaveWork()
     {
         Write(strings.Ask_Backup_Name);
@@ -121,6 +131,7 @@ internal class Console : View
             backupType.StartsWith('c') ? SaveType.Complete : SaveType.Differential);
     }
 
+    //function that bully the user for a valid input
     private static string ReadLineNoEmpty()
     {
         while (true)
@@ -131,11 +142,13 @@ internal class Console : View
         }
     }
 
+    //function that display text, usualy use in ViewModel
     public override void DisplayText(string text)
     {
         WriteLine(text);
     }
     
+    //Display an Error
     public override void DisplayError(string text)
     {
         ForegroundColor = ConsoleColor.DarkRed;
@@ -143,6 +156,7 @@ internal class Console : View
         ResetColor();
     }
     
+    //Display Success Message
     public override void DisplaySuccess(string text)
     {
         ForegroundColor = ConsoleColor.Green;
@@ -150,6 +164,7 @@ internal class Console : View
         ResetColor();
     }
 
+    //Display the progress bar 
     public void DisplayProgressBar(object sender, string s)
     {
         if (s != null)

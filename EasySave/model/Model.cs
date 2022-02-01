@@ -2,11 +2,13 @@
 
 internal class Model
 {
+    //Private variable
     private readonly string _logPath;
     private readonly string _saveStatePath;
     private readonly List<SaveWork> _saveWorkList;
     private bool _workInProgress;
-
+    
+    //CONSTRUCTOR
     public Model()
     {
         _logPath = Path.GetFullPath(@"..\..\..\log.json");
@@ -15,6 +17,7 @@ internal class Model
         _workInProgress = false;
     }
 
+    //GETTER AND SETTER
     public string GetLogPath()
     {
         return _logPath;
@@ -30,6 +33,7 @@ internal class Model
         return _saveWorkList;
     }
 
+    //find Savework by name
     public SaveWork FindbyName(string name)
     {
         foreach (var sv in _saveWorkList)

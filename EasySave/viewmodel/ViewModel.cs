@@ -7,10 +7,13 @@ namespace EasySave.viewmodel;
 
 internal class ViewModel
 {
+    //PRIVATE VARIABLE
     private readonly Model _model;
     private readonly View _view;
+    //PUBLIC EVENT
     public event EventHandler<string> OnProgresseUpdate;
 
+    //CONSTRUCTOR
     public ViewModel(View v)
     {
         _view = v;
@@ -18,13 +21,13 @@ internal class ViewModel
         TryRecupFromSaveStatePath();
     }
 
-    public void CreateSaveWork(string name, string sourcePath, string targetPath, SaveType saveType)
+    public void CreateSaveWork(string name, string sourcePath, string targetPath, SaveType saveType) //Function that create savework
     {
-        if (_model.GetSaveWorkList().Count < 5)
+        if (_model.GetSaveWorkList().Count < 5) //check if we have more than 5 wavework
         {
-            if (_model.FindbyName(name) == null)
+            if (_model.FindbyName(name) == null) //check if already existe
             {
-                if (Directory.Exists(sourcePath) || File.Exists(sourcePath))
+                if (Directory.Exists(sourcePath) || File.Exists(sourcePath)) // check if source path is good
                 {
                     _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
                     _view.DisplayText(strings.Success);
@@ -45,7 +48,7 @@ internal class ViewModel
         }
     }
 
-    private void UpdateSaveState(SaveState saveState)
+    private void UpdateSaveState(SaveState saveState) //Update the Save state file
     {
         List<SaveState> states = null;
         if (File.Exists(_model.GetSaveStatePath()))
@@ -70,7 +73,7 @@ internal class ViewModel
         }
     }
 
-    public void DeleteSaveWork(string name)
+    public void DeleteSaveWork(string name) //function to delete a Savework by name
     {
         var sv = _model.FindbyName(name);
         if (sv != null)
@@ -83,6 +86,8 @@ internal class ViewModel
     {
         FileFormat fileFormat = new Json();
         List<SaveState> saveStates;
+        if (!File.Exists(_model.GetSaveStatePath())) return;
+        
         saveStates = fileFormat.UnSerialize<SaveState>(_model.GetSaveStatePath());
         foreach (var sv in saveStates)
         {
@@ -93,11 +98,12 @@ internal class ViewModel
                 bool sameDirectory = false;
                 while (!sameDirectory && listDirectorySource.Any() && listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
                 {
-                    if(listDirectorySource.Last<string>() == listDirectoryTarget.Last<string>())
+                    if (listDirectorySource.Last<string>() == listDirectoryTarget.Last<string>())
                     {
                         listDirectorySource.Remove(listDirectorySource.Last<string>());
                         listDirectoryTarget.Remove(listDirectoryTarget.Last<string>());
-                    }else
+                    }
+                    else
                     {
                         sameDirectory = true;
                     }
@@ -107,6 +113,7 @@ internal class ViewModel
                 _model.GetSaveWorkList().Add(new SaveWork(sv.GetName(), sourcePath, targetPath, SaveType.Differential));
             }
         }
+        
     }
 
     public void ExecSaveWork(string name) //Function to do the action of copie-past in a save directory
@@ -149,6 +156,7 @@ internal class ViewModel
                 }
 
                 EndSaveWork(saveState);
+                OnProgresseUpdate.Invoke(this, null);
                 break;
             }
             case SaveType.Differential:
@@ -230,7 +238,8 @@ internal class ViewModel
 
                         
                 }
-                EndSaveWork(saveState); 
+                EndSaveWork(saveState);
+                OnProgresseUpdate.Invoke(this, null);
                 break;
             }
         }
@@ -303,7 +312,7 @@ internal class ViewModel
     {
         if (_model.GetSaveWorkList().Count == 0)
         {
-            foreach (var sv in _model.GetSaveWorkList())
+            foreach (var sv in _model.GetSaveWorkList()) //loop through each Savework
             {
                 _view.DisplayText($"{strings.Name}: {sv.GetName()}");
                 _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
@@ -329,7 +338,7 @@ internal class ViewModel
         }
     }
 
-    public static void ChangeLanguage(Language language)
+    public static void ChangeLanguage(Language language) //Function to change language
     {
         CultureInfo.CurrentUICulture = language switch
         {
