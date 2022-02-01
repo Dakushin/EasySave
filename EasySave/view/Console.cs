@@ -23,7 +23,7 @@ internal class Console : View
             switch (GetUserChoice())
             {
                 case UserChoice.ShowAllSaveWork:
-                    ViewModel.AfficherAllSaveWork();
+                    ViewModel.DisplayAllSaveWork();
                     break;
                 case UserChoice.CreateSaveWork:
                 {

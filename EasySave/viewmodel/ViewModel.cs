@@ -79,7 +79,7 @@ internal class ViewModel
             _view.DisplayError(strings.Error_Backup_Not_Found);
     }
 
-    public void TryRecupFromSaveStatePath()
+    public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
     {
         FileFormat fileFormat = new Json();
         List<SaveState> saveStates;
@@ -91,7 +91,7 @@ internal class ViewModel
                 List<string> listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
                 List<string> listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
                 bool sameDirectory = false;
-                while (!sameDirectory && listDirectorySource.Any() && listDirectoryTarget.Any())
+                while (!sameDirectory && listDirectorySource.Any() && listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
                 {
                     if(listDirectorySource.Last<string>() == listDirectoryTarget.Last<string>())
                     {
@@ -109,7 +109,7 @@ internal class ViewModel
         }
     }
 
-    public void ExecSaveWork(string name)
+    public void ExecSaveWork(string name) //Function to do the action of copie-past in a save directory
     {
         var sv = _model.FindbyName(name);
         if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
@@ -118,7 +118,7 @@ internal class ViewModel
         files.AddRange(Directory.EnumerateFiles(sv.GetSourcePath()));
         GetAllFileFromDirectory(Directory.GetDirectories(sv.GetSourcePath()), files);
         var saveState = new SaveState(sv.GetName(), "ACTIVE", new Json());
-        switch (sv.Gettype())
+        switch (sv.Gettype()) //Do something diffrente in function of the type
         {
             case SaveType.Complete:
             {
@@ -162,7 +162,7 @@ internal class ViewModel
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
                     var Progression = 0f;
-                    if (File.Exists(targetPath))
+                    if (File.Exists(targetPath)) //try to know if the file exist, to check if he was modified
                     {
                         var fs1 = new FileStream(file, FileMode.Open);
                         var fs2 = new FileStream(targetPath, FileMode.Open);
@@ -173,7 +173,7 @@ internal class ViewModel
                             var fb1 = fs1.ReadByte();
                             var fb2 = fs2.ReadByte();
 
-                            while (fb1 != -1 && same)
+                            while (fb1 != -1 && same) //loop to check byte per byte the 2 files
                             {
                                 if (fb1 == fb2)
                                     same = true;
@@ -187,8 +187,8 @@ internal class ViewModel
                             fs1.Close();
                             fs2.Close();
 
-                            if (!same)
-                            {
+                            if (!same) //if the file wasn't the same, he do the copy
+                            { 
                                 DateTime datetime = DateTime.Now;
                                 File.Copy(file, targetPath, true);
                                 TimeSpan time = DateTime.Now.Subtract(datetime);
@@ -210,7 +210,7 @@ internal class ViewModel
                             FileLeftToDo--;
 
 
-                    } else
+                    } else //if the file doesn't existe it will be create
                     {
                             DateTime datetime = DateTime.Now;
                             File.Copy(file, targetPath, true);
@@ -230,13 +230,13 @@ internal class ViewModel
 
                         
                 }
-                EndSaveWork(saveState);
+                EndSaveWork(saveState); 
                 break;
             }
         }
     }
 
-    private void CalculFillProgress(float progress)
+    private void CalculFillProgress(float progress) //Calcul the fill progress of the progress bar
     {
         string stringReturn = "[";
         int nbDiez = (int)(progress % 2.5f);
@@ -251,7 +251,7 @@ internal class ViewModel
         stringReturn += ']';
         OnProgresseUpdate?.Invoke(this, stringReturn);
     }
-    private void EndSaveWork(SaveState saveState)
+    private void EndSaveWork(SaveState saveState) //Update SaveState to END
     {
         saveState.SetSourceFilePath("");
         saveState.SetTargetFilePath("");
@@ -262,7 +262,7 @@ internal class ViewModel
         UpdateSaveState(saveState);
     }
 
-    private void GetAllFileFromDirectory(string[] directories, List<string> files)
+    private void GetAllFileFromDirectory(string[] directories, List<string> files) //return all file in a directory
     {
         foreach (var directory in directories)
         {
@@ -273,7 +273,7 @@ internal class ViewModel
         }
     }
 
-    public void ExecAllSaveWork()
+    public void ExecAllSaveWork() //Execute all savework
     {
         if (_model.GetSaveWorkList().Count > 0)
             foreach (var sw in _model.GetSaveWorkList())
@@ -282,7 +282,7 @@ internal class ViewModel
             _view.DisplayText(strings.Info_No_Backup);
     }
 
-    public void RenameSaveWork(string name, string rename)
+    public void RenameSaveWork(string name, string rename) //Rename a Savework
     {
         var sv = _model.FindbyName(name);
         if (sv != null)
@@ -299,7 +299,7 @@ internal class ViewModel
         }
     }
 
-    public void AfficherAllSaveWork()
+    public void DisplayAllSaveWork() //Display all savework
     {
         if (_model.GetSaveWorkList().Count == 0)
         {
