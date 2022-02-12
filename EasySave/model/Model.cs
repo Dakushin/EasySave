@@ -1,4 +1,6 @@
-﻿namespace EasySave.model;
+﻿using System.IO;
+
+namespace EasySave.model;
 
 internal class Model
 {
