@@ -8,27 +8,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Update="translation\strings.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>strings.resx</DependentUpon>
-        </Compile>
-        <Compile Update="translation\strings.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>strings.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
         <EmbeddedResource Update="translation\strings.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>strings.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
+    
+    <ItemGroup>
+        <Compile Update="translation\strings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>strings.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
 </Project>
