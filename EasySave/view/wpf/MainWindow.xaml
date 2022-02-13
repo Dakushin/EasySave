@@ -5,8 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySave"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Height="600" Width="920"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+        
+        <Border Background="#272537"
+                CornerRadius="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="Elysian"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="20, 0, 0, 0"
+                           Foreground="White"
+                           FontSize="22"/>
+                
+                <StackPanel Grid.Row="1" Grid.Column="0">
+                    <RadioButton Content="Home"
+                                 Height="50"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Style="{StaticResource MenuButtonTheme}"/>
+                    
+                    <RadioButton Content="Discovery"
+                                 Height="50"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Style="{StaticResource MenuButtonTheme}"/>
+                    
+                    <RadioButton Content="Featured"
+                                 Height="50"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Style="{StaticResource MenuButtonTheme}"/>
+                </StackPanel>
+                
+                <TextBox Width="250"
+                         Height="40"
+                         VerticalContentAlignment="Center"
+                         HorizontalAlignment="Left"
+                         Margin="5"
+                         Style="{StaticResource ModernTextBox}"
+                         Grid.Row="0" Grid.Column="1"/>
+            </Grid>
+        </Border>
 </Window>

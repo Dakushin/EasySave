@@ -27,4 +27,9 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="view\wpf\fonts" />
+      <Folder Include="view\wpf\images" />
+    </ItemGroup>
+
 </Project>

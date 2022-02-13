@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:EasySave"
              StartupUri="view/wpf/MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="view/wpf/theme/MenuButtonTheme.xaml"></ResourceDictionary>
+                 <ResourceDictionary Source="view/wpf/theme/TextBoxTheme.xaml"></ResourceDictionary>
+             </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>
