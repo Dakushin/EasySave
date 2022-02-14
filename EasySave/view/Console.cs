@@ -15,7 +15,7 @@ internal class Console : View
     public Console()
     {
         _isRunning = true;
-        ViewModel.OnProgresseUpdate += DisplayProgressBar;
+        BackupsViewModel.OnProgressUpdate += DisplayProgressBar;
         Display();
     }
 
@@ -26,41 +26,41 @@ internal class Console : View
             switch (GetUserChoice())
             {
                 case UserChoice.ShowAllSaveWork:
-                    ViewModel.DisplayAllSaveWork();
+                    BackupsViewModel.DisplayAllSaveWork();
                     break;
                 case UserChoice.CreateSaveWork:
                 {
                     var (name, sourcePath, targetPath, backupType) = AskForCreatingSaveWork();
-                    ViewModel.CreateSaveWork(name, sourcePath, targetPath, backupType);
+                    BackupsViewModel.CreateSaveWork(name, sourcePath, targetPath, backupType);
                     break;
                 }
                 case UserChoice.DeleteSaveWork:
                 {
                     var name = AskForDeletingSaveWork();
-                    ViewModel.DeleteSaveWork(name);
+                    BackupsViewModel.DeleteSaveWork(name);
                     break;
                 }
                 case UserChoice.RenameSaveWork:
                 {
                     var (name, newName) = AskForRenamingSaveWork();
-                    ViewModel.RenameSaveWork(name, newName);
+                    BackupsViewModel.RenameSaveWork(name, newName);
                     break;
                 }
                 case UserChoice.ExecuteAllSaveWork:
                 {
-                    ViewModel.ExecAllSaveWork();
+                    BackupsViewModel.ExecAllSaveWork();
                     break;
                 }
                 case UserChoice.ChangeLanguage:
                 {
                     var language = AskForChangingLanguage();
-                    ViewModel.ChangeLanguage(language);
+                    BackupsViewModel.ChangeLanguage(language);
                     break;
                 }
                 case UserChoice.ExecuteSaveWork:
                 {
                     var name = AskForNametoExecute();
-                    ViewModel.ExecSaveWork(name);
+                    BackupsViewModel.ExecSaveWork(name);
                     break;
                 }
                 case UserChoice.Exit:

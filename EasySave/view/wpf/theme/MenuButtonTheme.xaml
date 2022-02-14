@@ -2,17 +2,26 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="MenuButtonTheme"
            BasedOn="{StaticResource {x:Type ToggleButton}}"
-           TargetType="{x:Type RadioButton}">
+           TargetType="RadioButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Grid VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch"
-                          Background="{TemplateBinding Background}">
+                          Background="{TemplateBinding Background}" Cursor="Hand">
                         
-                        <TextBlock Text="{TemplateBinding Content}"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Image Source="{Binding Path=Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                               Width="35"
+                               Height="35"></Image>
+                        
+                        <TextBlock Grid.Column="1" Text="{TemplateBinding Content}"
                                    VerticalAlignment="Center"
-                                   Margin="50, 0, 0, 0"/>
+                                   Margin="10, 0, 0, 0"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

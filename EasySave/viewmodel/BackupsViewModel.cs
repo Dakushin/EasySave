@@ -3,19 +3,20 @@ using System.IO;
 using EasySave.model;
 using EasySave.translation;
 using EasySave.view;
+using EasySave.view.wpf.core;
 
 namespace EasySave.viewmodel;
 
-internal class ViewModel
+public class BackupsViewModel : ViewModelBase
 {
     //PRIVATE VARIABLE
     private readonly Model _model;
     private readonly View _view;
     //PUBLIC EVENT
-    public event EventHandler<string> OnProgresseUpdate;
+    public event EventHandler<string> OnProgressUpdate;
 
     //CONSTRUCTOR
-    public ViewModel(View v)
+    public BackupsViewModel(View v)
     {
         _view = v;
         _model = new Model();
@@ -167,7 +168,7 @@ internal class ViewModel
                 }
 
                 EndSaveWork(saveState);
-                OnProgresseUpdate.Invoke(this, null);
+                OnProgressUpdate.Invoke(this, null);
                 _view.DisplaySuccess(strings.Success);
                 break;
             }
@@ -254,7 +255,7 @@ internal class ViewModel
                         
                 }
                 EndSaveWork(saveState);
-                OnProgresseUpdate.Invoke(this, null);
+                OnProgressUpdate.Invoke(this, null);
                 _view.DisplaySuccess(strings.Success);
                 break;
             }
@@ -274,7 +275,7 @@ internal class ViewModel
             stringReturn += '~';
         }
         stringReturn += ']';
-        OnProgresseUpdate?.Invoke(this, stringReturn);
+        OnProgressUpdate?.Invoke(this, stringReturn);
     }
     private void EndSaveWork(SaveState saveState) //Update SaveState to END
     {

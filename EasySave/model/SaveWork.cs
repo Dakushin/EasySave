@@ -1,6 +1,6 @@
 ﻿namespace EasySave.model;
 
-internal enum SaveType //Enum for the type
+public enum SaveType //Enum for the type
 {
     Complete,
     Differential

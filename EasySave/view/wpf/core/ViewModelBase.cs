@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace EasySave.view.wpf.core;
 
-public class ObservableObject : INotifyPropertyChanged
+public class ViewModelBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
 

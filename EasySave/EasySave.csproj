@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <EmbeddedResource Update="translation\strings.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
+            <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>strings.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
@@ -28,8 +28,27 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="view\wpf\fonts" />
-      <Folder Include="view\wpf\images" />
+      <None Remove="view\wpf\images\backups.png" />
+      <Resource Include="view\wpf\images\backups.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\images\logo.png" />
+      <Resource Include="view\wpf\images\logo.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\images\settings.png" />
+      <Resource Include="view\wpf\images\settings.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\fonts\Poppins-Regular.ttf" />
+      <None Remove="view\wpf\images\flag_en.png" />
+      <Resource Include="view\wpf\images\flag_en.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\images\flag_fr.png" />
+      <Resource Include="view\wpf\images\flag_fr.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>
