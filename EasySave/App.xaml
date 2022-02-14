@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              xmlns:view="clr-namespace:EasySave.view.wpf.windows"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="view/wpf/windows/MainWindow.xaml">
     <Application.Resources>
          <ResourceDictionary>
-         
              <ResourceDictionary.MergedDictionaries>
+                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Amber" />
+                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                  <ResourceDictionary Source="view/wpf/theme/MenuButtonTheme.xaml"></ResourceDictionary>
                  <ResourceDictionary Source="view/wpf/theme/TextBoxTheme.xaml"></ResourceDictionary>
              </ResourceDictionary.MergedDictionaries>

@@ -18,12 +18,28 @@ public class BackupsViewModel : ViewModelBase
 
     public ObservableCollection<SaveWork> Backups => _model.GetSaveWorkList();
 
+    public SaveWork SelectedSaveWork { get; set; }
+    public CommandHandler OnExecuteBackup { get; set; }
+    public CommandHandler OnDeleteBackup { get; set; }
+
+
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
         _view = v;
         _model = new Model();
+
         TryRecupFromSaveStatePath();
+    }
+
+    public void ExecuteSelectedBackup()
+    {
+        ExecSaveWork(SelectedSaveWork.Name);
+    }
+
+    public void DeleteSelectedBackup()
+    {
+        Backups.Remove(SelectedSaveWork);
     }
 
     public BackupsViewModel() : this(null) {}
@@ -173,8 +189,8 @@ public class BackupsViewModel : ViewModelBase
                 }
 
                 EndSaveWork(saveState);
-                OnProgressUpdate.Invoke(this, null);
-                _view.DisplaySuccess(strings.Success);
+                //OnProgressUpdate.Invoke(this, null);
+                //_view.DisplaySuccess(strings.Success);
                 break;
             }
             case SaveType.Differential:
@@ -280,7 +296,7 @@ public class BackupsViewModel : ViewModelBase
             stringReturn += '~';
         }
         stringReturn += ']';
-        OnProgressUpdate?.Invoke(this, stringReturn);
+        //OnProgressUpdate?.Invoke(this, stringReturn);
     }
     private void EndSaveWork(SaveState saveState) //Update SaveState to END
     {
