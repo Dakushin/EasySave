@@ -6,7 +6,7 @@
              xmlns:translation="clr-namespace:EasySave.translation"
              xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              mc:Ignorable="d"
-             d:DesignHeight="550" d:DesignWidth="1000">
+             d:DesignWidth="1000" d:DesignHeight="725">
     
     <UserControl.DataContext>
         <viewModel:SettingsViewModel></viewModel:SettingsViewModel>

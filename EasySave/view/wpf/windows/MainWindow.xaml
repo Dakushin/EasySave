@@ -6,7 +6,7 @@
         xmlns:translation="clr-namespace:EasySave.translation"
         xmlns:viewModel="clr-namespace:EasySave.viewmodel"
         mc:Ignorable="d"
-        Height="800" Width="1200"
+        Width="1200" Height="800" 
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         Background="Transparent"
@@ -63,14 +63,6 @@
                                  Command="{Binding OnNavigateToSettings}"/>
                     
                 </StackPanel>
-                
-                <TextBox Width="250"
-                         Height="40"
-                         VerticalContentAlignment="Center"
-                         HorizontalAlignment="Left"
-                         Margin="5"
-                         Style="{StaticResource ModernTextBox}"
-                         Grid.Row="0" Grid.Column="1"/>
                 
                 <ContentControl Grid.Row="1"
                                 Grid.Column="1"

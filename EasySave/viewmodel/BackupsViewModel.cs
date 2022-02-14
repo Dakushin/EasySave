@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using EasySave.model;
 using EasySave.translation;
@@ -15,6 +16,8 @@ public class BackupsViewModel : ViewModelBase
     //PUBLIC EVENT
     public event EventHandler<string> OnProgressUpdate;
 
+    public ObservableCollection<SaveWork> Backups => _model.GetSaveWorkList();
+
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
@@ -22,6 +25,8 @@ public class BackupsViewModel : ViewModelBase
         _model = new Model();
         TryRecupFromSaveStatePath();
     }
+
+    public BackupsViewModel() : this(null) {}
 
     public void CreateSaveWork(string name, string sourcePath, string targetPath, SaveType saveType) //Function that create savework
     {
@@ -132,13 +137,13 @@ public class BackupsViewModel : ViewModelBase
             _view.DisplayError(strings.Error_NoSaveWorkOfThisName);
             return;
         }
-        if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
+        if (!Directory.Exists(sv.TargetPath)) Directory.CreateDirectory(sv.TargetPath);
 
         var files = new List<string>();
-        files.AddRange(Directory.EnumerateFiles(sv.GetSourcePath()));
-        GetAllFileFromDirectory(Directory.GetDirectories(sv.GetSourcePath()), files);
-        var saveState = new SaveState(sv.GetName(), "ACTIVE", new Json());
-        switch (sv.Gettype()) //Do something diffrente in function of the type
+        files.AddRange(Directory.EnumerateFiles(sv.SourcePath));
+        GetAllFileFromDirectory(Directory.GetDirectories(sv.SourcePath), files);
+        var saveState = new SaveState(sv.Name, "ACTIVE", new Json());
+        switch (sv.SaveType) //Do something diffrente in function of the type
         {
             case SaveType.Complete:
             {
@@ -148,8 +153,8 @@ public class BackupsViewModel : ViewModelBase
                 CalculFillProgress(Progression);
                 foreach (var file in files)
                 {
-                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.TargetPath, filePath);
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
 
@@ -160,7 +165,7 @@ public class BackupsViewModel : ViewModelBase
                     Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
                     CalculFillProgress(Progression);
                     saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                    var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
+                    var log = new Log(sv.Name, file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
                     (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                     log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                     UpdateSaveState(saveState);
@@ -178,8 +183,8 @@ public class BackupsViewModel : ViewModelBase
                 var FileLeftToDo = files.Count;
                 foreach (var file in files)
                 {
-                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.TargetPath, filePath);
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
                     var Progression = 0f;
@@ -217,7 +222,7 @@ public class BackupsViewModel : ViewModelBase
 
 
                                 saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                                var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                var log = new Log(sv.Name, file, targetPath, string.Empty,
                                     File.ReadAllBytes(file).Length,(float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                                 log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                                 UpdateSaveState(saveState);
@@ -241,7 +246,7 @@ public class BackupsViewModel : ViewModelBase
 
 
                             saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                            var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                            var log = new Log(sv.Name, file, targetPath, string.Empty,
                                 File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                             log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                             UpdateSaveState(saveState);
@@ -303,7 +308,7 @@ public class BackupsViewModel : ViewModelBase
     {
         if (_model.GetSaveWorkList().Count > 0)
             foreach (var sw in _model.GetSaveWorkList())
-                ExecSaveWork(sw.GetName());
+                ExecSaveWork(sw.Name);
         else
             _view.DisplayText(strings.Info_No_Backup);
     }
@@ -316,7 +321,7 @@ public class BackupsViewModel : ViewModelBase
             var sv2 = _model.FindbyName(rename);
             if (sv2 == null)
             {
-                sv.SetName(rename);
+                sv.Name = rename;
                 _view.DisplaySuccess(strings.Success);
             }
             else
@@ -334,10 +339,10 @@ public class BackupsViewModel : ViewModelBase
         {
             foreach (var sv in _model.GetSaveWorkList()) //loop through each Savework
             {
-                _view.DisplayText($"{strings.Name}: {sv.GetName()}");
-                _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
-                _view.DisplayText($"{strings.Target_Path}: {sv.GetTargetPath()}");
-                switch (sv.Gettype())
+                _view.DisplayText($"{strings.Name}: {sv.Name}");
+                _view.DisplayText($"{strings.Source_Path}: {sv.SourcePath}");
+                _view.DisplayText($"{strings.Target_Path}: {sv.TargetPath}");
+                switch (sv.SaveType)
                 {
                     case SaveType.Complete:
                         {

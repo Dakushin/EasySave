@@ -3,25 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel Orientation="Horizontal">
-            <Border Width="400"
-                    Height="200">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 2">
-                        <GradientStop Color="#5bc3ff" Offset="0"></GradientStop>
-                        <GradientStop Color="#3aa0ff" Offset="1"></GradientStop>
-                    </LinearGradientBrush>
-                </Border.Background>
-                
-                <Border.Clip>
-                    <RectangleGeometry RadiusX="10"
-                                       RadiusY="10"
-                                       Rect="0, 0, 400, 200"></RectangleGeometry>
-                </Border.Clip>
-            </Border>
-        </StackPanel>
-    </Grid>
+             d:DesignWidth="1000" d:DesignHeight="725"
+             Background="#272537">
+    
+    <UserControl.DataContext>
+        <viewModel:BackupsViewModel></viewModel:BackupsViewModel>
+    </UserControl.DataContext>
+    
+    <StackPanel>
+        <TextBox Width="250"
+                 Height="40"
+                 VerticalContentAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Margin="0, 0, 0, 15"
+                 Style="{StaticResource ModernTextBox}" />
+        
+        <DataGrid ItemsSource="{Binding Backups}" AlternatingRowBackground="DimGray" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Backup&#x0a;(name)" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Source folder" Binding="{Binding SourcePath}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Target folder" Binding="{Binding TargetPath}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Type&#x0a;(differential/complete)" Binding="{Binding SaveType}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Actions">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Execute" Margin="5, 0"/>
+                                <Button Content="Delete" Margin="5, 0"/>
+                            </StackPanel>
+                        </DataTemplate> 
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </UserControl>
