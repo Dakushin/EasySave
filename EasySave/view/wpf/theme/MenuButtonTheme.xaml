@@ -8,7 +8,9 @@
                 <ControlTemplate TargetType="RadioButton">
                     <Grid VerticalAlignment="Stretch"
                           HorizontalAlignment="Stretch"
-                          Background="{TemplateBinding Background}" Cursor="Hand">
+                          Background="{TemplateBinding Background}" 
+                          Cursor="Hand"
+                          Margin="0, 10">
                         
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>

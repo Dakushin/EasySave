@@ -9,21 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Update="translation\strings.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>strings.Designer.cs</LastGenOutput>
+        <EmbeddedResource Update="Properties\Resources.resx">
+          <Generator>ResXFileCodeGenerator</Generator>
+          <LastGenOutput>Resources.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
     
     <ItemGroup>
-        <Compile Update="translation\strings.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>strings.resx</DependentUpon>
+        <Compile Update="Properties\Resources.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Gu.Wpf.Localization" Version="6.7.0" />
         <PackageReference Include="MaterialDesignThemes" Version="4.4.0-ci74" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
@@ -44,6 +45,18 @@
       <None Remove="view\wpf\fonts\Poppins-Regular.ttf" />
       <None Remove="view\wpf\images\flag_en.png" />
       <None Remove="view\wpf\images\flag_fr.png" />
+      <None Remove="view\wpf\images\homepage.png" />
+      <Resource Include="view\wpf\images\homepage.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\images\json.png" />
+      <Resource Include="view\wpf\images\json.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
+      <None Remove="view\wpf\images\xml.png" />
+      <Resource Include="view\wpf\images\xml.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
 </Project>

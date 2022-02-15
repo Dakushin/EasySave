@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:translation="clr-namespace:EasySave.translation"
+             xmlns:localize="http://gu.se/Localization"
+             xmlns:properties="clr-namespace:EasySave.Properties"
              xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
@@ -26,53 +27,39 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static translation:strings.Preferences}"
+        <TextBlock Text="{localize:Static properties:Resources.Preferences}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Left"
                    Margin="20, 0, 0, 0"
                    Foreground="White"
                    FontSize="30"/>
         
-       
-        
         <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="16">
                     <materialDesign:PackIcon Kind="Language" Height="64" Width="64"/>
-                    <TextBlock FontSize="24" Margin="15, 0">Language</TextBlock>
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}"></TextBlock>
                 </StackPanel>
                 
-                <StackPanel Orientation="Vertical" Margin="16">
-                    <ItemsControl>
-                        <RadioButton
-                            Content="English"
-                            Width="100"
-                            Height="30"
-                            Foreground="White"
-                            FontSize="14"
-                            IsChecked="True"
-                            Command="{Binding OnSelectEnglish}"/>
-        
-                        <RadioButton
-                            Content="Français"
-                            Width="100"
-                            Height="30"
-                            Foreground="White"
-                            FontSize="14"
-                            Command="{Binding OnSelectFrench}"/>
-                    </ItemsControl>
+                <StackPanel Margin="16" HorizontalAlignment="Center">
+                    <localize:LanguageSelector AutogenerateLanguages="True" />
                 </StackPanel>
             </StackPanel>
         </materialDesign:Card>
         
         <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
-            <StackPanel Orientation="Horizontal" Margin="16">
-                <materialDesign:PackIcon Kind="Xml" Height="64" Width="64"/>
-                <TextBlock FontSize="24" Margin="15, 0">Log format</TextBlock>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="16">
+                    <materialDesign:PackIcon Kind="Xml" Height="64" Width="64"/>
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Log_Format}"></TextBlock>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16">
+                    <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0" Style="{StaticResource ClickableRadioButton}" Width="64" Height="64"/>
+                    <RadioButton Content="../images/xml.png" Margin="10, 0" Style="{StaticResource ClickableRadioButton}" Width="64" Height="64"/>
+                </StackPanel>
             </StackPanel>
         </materialDesign:Card>
-        
-       
         
     </Grid>
 </UserControl>

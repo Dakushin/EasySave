@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:localize="http://gu.se/Localization"
+             xmlns:properties="clr-namespace:EasySave.Properties"
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
              Background="#272537">
@@ -23,9 +25,9 @@
                   InitializingNewItem="DataGrid_OnInitializingNewItem">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="Backup&#x0a;(name)" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="150" Header="{localize:Static properties:Resources.Backup_Name}" Binding="{Binding Name}"></DataGridTextColumn>
                 
-                <DataGridTemplateColumn Width="3*" Header="Source folder">
+                <DataGridTemplateColumn Width="3*" Header="{localize:Static properties:Resources.Source_Path}">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate>
                             <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
@@ -36,7 +38,7 @@
                         </DataTemplate> 
                     </DataGridTemplateColumn.CellTemplate> 
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="3*" Header="Target folder">
+                <DataGridTemplateColumn Width="3*" Header="{localize:Static properties:Resources.Target_Path}">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate>
                             <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
@@ -50,12 +52,18 @@
                 
                 <DataGridTextColumn Width="2*" Header="Type" Binding="{Binding SaveType}"></DataGridTextColumn>
                 
-                <DataGridTemplateColumn Width="200" Header="Actions">
+                <DataGridTemplateColumn Width="230" Header="{localize:Static properties:Resources.Actions}">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Click="OnExecuteBackup" Content="Execute" Margin="5, 0"/>
-                                <Button Click="OnDeleteBackup" Background="IndianRed" Content="Delete" Margin="5, 0"/>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="OnExecuteBackup" Content="{localize:Static properties:Resources.Execute}" Margin="5, 0"/>
+                                    <Button Click="OnDeleteBackup" Background="IndianRed" Content="{localize:Static properties:Resources.Delete}" Margin="5, 0"/>
+                                </StackPanel>
+                            
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="OnCreateBackup" Background="ForestGreen" Content="{localize:Static properties:Resources.Create}" Margin="5, 0"/>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate> 
                     </DataGridTemplateColumn.CellTemplate> 

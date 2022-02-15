@@ -117,115 +117,139 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Console_Ask_Valid_Choice" xml:space="preserve">
-    <value>Please, enter a valid choice between 1 and 8</value>
-  </data>
-  <data name="Create_Backup" xml:space="preserve">
-    <value>Create a backup</value>
-  </data>
-  <data name="Rename_Backup" xml:space="preserve">
-    <value>Rename a backup</value>
-  </data>
-  <data name="Delete_Backup" xml:space="preserve">
-    <value>Delete a backup</value>
-  </data>
-  <data name="Change_Language" xml:space="preserve">
-    <value>Change the language</value>
-  </data>
-  <data name="Exit_App" xml:space="preserve">
-    <value>Exit the application</value>
-  </data>
   <data name="Ask_Backup_Name" xml:space="preserve">
-    <value>Give the name of the backup : </value>
-  </data>
-  <data name="Ask_Backup_Source_Path" xml:space="preserve">
-    <value>Give the source path directory : </value>
-  </data>
-  <data name="Ask_Backup_Target_Path" xml:space="preserve">
-    <value>Give the target path directory : </value>
-  </data>
-  <data name="Ask_Backup_Type" xml:space="preserve">
-    <value>Give the type [d = differential / c =complete]: </value>
-  </data>
-  <data name="Ask_Valid_Input" xml:space="preserve">
-    <value>Please, enter a valid input</value>
+    <value>Entrez le nom du travail de sauvegarde : </value>
   </data>
   <data name="Ask_Backup_Name_Delete" xml:space="preserve">
-    <value>Give the name of the backup you want to delete : </value>
+    <value>Entrez le nom du travail à supprimer : </value>
   </data>
   <data name="Ask_Backup_Name_Rename" xml:space="preserve">
-    <value>Give the name of the backup you want to rename : </value>
+    <value>Entrez le nom du travail à renommer : </value>
   </data>
   <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
-    <value>Give the new name of the backup</value>
+    <value>Entrez le nouveau nom du travail : </value>
+  </data>
+  <data name="Ask_Backup_Source_Path" xml:space="preserve">
+    <value>Entrez le chemin source du dossier à sauvegarder : </value>
+  </data>
+  <data name="Ask_Backup_Target_Path" xml:space="preserve">
+    <value>Entrez le chemin ciblé du dossier à sauvegarder : </value>
+  </data>
+  <data name="Ask_Backup_Type" xml:space="preserve">
+    <value>Entrez le type de la sauvegarde [d = differential / c = complete] : </value>
+  </data>
+  <data name="Ask_Valid_Input" xml:space="preserve">
+    <value>Veuillez entrer une valeur valide</value>
+  </data>
+  <data name="Change_Language" xml:space="preserve">
+    <value>Modifier la langue d'affichage</value>
+  </data>
+  <data name="Console_Ask_Valid_Choice" xml:space="preserve">
+    <value>Veuillez choisir un choix valide entre 1 et 8</value>
+  </data>
+  <data name="Create_Backup" xml:space="preserve">
+    <value>Créer un travail de sauvegarde</value>
+  </data>
+  <data name="Delete_Backup" xml:space="preserve">
+    <value>Supprimer un travail de sauvegarde</value>
+  </data>
+  <data name="Exit_App" xml:space="preserve">
+    <value>Quitter l'application</value>
+  </data>
+  <data name="Rename_Backup" xml:space="preserve">
+    <value>Renommer un travail de sauvegarde</value>
   </data>
   <data name="Ask_Language" xml:space="preserve">
-    <value>Which language do you want ? [fr/en] : </value>
+    <value>Choisissez le langage [fr/en] : </value>
   </data>
   <data name="Show_Backups" xml:space="preserve">
-    <value>Display all backups</value>
+    <value>Afficher tous les travaux de sauvegarde</value>
   </data>
   <data name="Execute_All_Backups" xml:space="preserve">
-    <value>Execute all backups</value>
+    <value>Exécuter tous les travaux de sauvegarde</value>
   </data>
   <data name="Error_Too_Many_Backups" xml:space="preserve">
-    <value>Error : you have already 5 backups, please delete one and retry</value>
+    <value>Erreur : vous avez déjà 5 travaux de sauvegarde, supprimez en un et réesseyez</value>
   </data>
   <data name="Error_Backup_Not_Found" xml:space="preserve">
-    <value>Error : there is no backup with this name</value>
+    <value>Erreur : il n'y a pas de travail de sauvegarde avec ce nom</value>
   </data>
   <data name="Error_Backup_Already_Exists" xml:space="preserve">
-    <value>Error : a backup with this name already exists</value>
+    <value>Erreur : un travail de sauvegarde porte déjà ce nom</value>
   </data>
   <data name="Error_Rename_Same_Name" xml:space="preserve">
-    <value>Error : you can't rename you backup with the same name</value>
+    <value>Erreur : le travail de sauvegarde porte déjà ce nom</value>
   </data>
   <data name="Type_Complete" xml:space="preserve">
-    <value>Type : complete</value>
+    <value>Type : complet</value>
   </data>
   <data name="Type_Differential" xml:space="preserve">
-    <value>Type : differential</value>
-  </data>
-  <data name="Source_Path" xml:space="preserve">
-    <value>Source path</value>
-  </data>
-  <data name="Target_Path" xml:space="preserve">
-    <value>Target path</value>
+    <value>Type : différentiel</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Nom</value>
+  </data>
+  <data name="Source_Path" xml:space="preserve">
+    <value>Chemin source</value>
+  </data>
+  <data name="Target_Path" xml:space="preserve">
+    <value>Chemin ciblé</value>
   </data>
   <data name="Success" xml:space="preserve">
-    <value>Success</value>
+    <value>Succès</value>
   </data>
   <data name="Info_No_Backup" xml:space="preserve">
-    <value>No backup found</value>
+    <value>Aucun travail de sauvegarde trouvé</value>
   </data>
   <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
-    <value>Give the name of the save work to execute : </value>
+    <value>Entre le nom du travail de sauvegarde que vous voulez lancer : </value>
   </data>
   <data name="Execute_Backup" xml:space="preserve">
-    <value>Execute a save work</value>
+    <value>Executer un travail de sauvegarde</value>
   </data>
   <data name="Error_NoSaveWork" xml:space="preserve">
-    <value>Error : No save work available</value>
-  </data>
-  <data name="Error_Wrong_SourcePath" xml:space="preserve">
-    <value>Error : The source path you enter doesn't exist</value>
+    <value>Erreur : Il n'existe pas de travaux de sauvegrade</value>
   </data>
   <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
-    <value>Error : Error : No save work of that name</value>
+    <value>Erreur : Il n'existe pas de travaux de sauvegrade de ce nom</value>
+  </data>
+  <data name="Error_Wrong_SourcePath" xml:space="preserve">
+    <value>Erreur : Vous avez rentré un chemin source non valide</value>
   </data>
   <data name="Backups" xml:space="preserve">
-    <value>Backups</value>
+    <value>Sauvegardes</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Paramètres</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Preferences</value>
+    <value>Préférences</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Langage</value>
+  </data>
+  <data name="Search_Backup" xml:space="preserve">
+    <value>Rechercher un travail de sauvegarde</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Backup_Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Exécuter</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Home_Page" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="Log_Format" xml:space="preserve">
+    <value>Format de log</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
   </data>
 </root>

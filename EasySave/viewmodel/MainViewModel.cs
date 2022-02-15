@@ -11,6 +11,7 @@ public class MainViewModel : ViewModelBase
 
     public CommandHandler OnNavigateToBackups { get; set; }
     public CommandHandler OnNavigateToSettings { get; set; }
+    public CommandHandler OnNavigateToHomePage { get; set; }
 
     public ViewModelBase CurrentViewModel
     {
@@ -27,10 +28,16 @@ public class MainViewModel : ViewModelBase
         _settingsViewModel = new SettingsViewModel();
         _backupsViewModel = new BackupsViewModel(null);
 
+        OnNavigateToHomePage = new CommandHandler(NavigateToHomePageView);
         OnNavigateToBackups = new CommandHandler(NavigateToBackupsView);
         OnNavigateToSettings = new CommandHandler(NavigateToSettingsView);
 
         _currentViewModel = _backupsViewModel;
+    }
+
+    private void NavigateToHomePageView()
+    {
+        throw new NotImplementedException();
     }
 
     private void NavigateToBackupsView()

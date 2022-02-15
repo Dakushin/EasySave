@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:translation="clr-namespace:EasySave.translation"
+        xmlns:localize="http://gu.se/Localization"
+        xmlns:properties="clr-namespace:EasySave.Properties"
         xmlns:viewModel="clr-namespace:EasySave.viewmodel"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -60,18 +61,26 @@
                 
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="15">
                     
-                    <RadioButton Content="{x:Static translation:strings.Backups}"
+                    <RadioButton Content="{localize:Static properties:Resources.Home_Page}"
+                                 Tag="../images/homepage.png"
+                                 Height="60"
+                                 Foreground="White"
+                                 FontSize="14"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding OnNavigateToHomePage}"/>
+                    
+                    <RadioButton Content="{localize:Static properties:Resources.Backups}"
                                  Tag="../images/backups.png"
-                                 Height="50"
+                                 Height="60"
                                  Foreground="White"
                                  FontSize="14"
                                  IsChecked="True"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding OnNavigateToBackups}"/>
                 
-                    <RadioButton Content="{x:Static translation:strings.Settings}"
+                    <RadioButton Content="{localize:Static properties:Resources.Settings}"
                                  Tag="../images/settings.png"
-                                 Height="50"
+                                 Height="60"
                                  Foreground="White"
                                  FontSize="14"
                                  Style="{StaticResource MenuButtonTheme}"

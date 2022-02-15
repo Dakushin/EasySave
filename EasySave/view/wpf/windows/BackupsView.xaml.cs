@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using EasySave.viewmodel;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 
 namespace EasySave.view.wpf.windows;
@@ -28,6 +29,11 @@ public partial class BackupsView : UserControl
     private void OnExecuteBackup(object sender, RoutedEventArgs e)
     {
         _viewModel.ExecuteSelectedBackup();
+    }
+    
+    private void OnCreateBackup(object sender, RoutedEventArgs e)
+    {
+        _viewModel.Todo();
     }
 
     private void OnChooseFolder(object sender, MouseButtonEventArgs e)
