@@ -216,4 +216,40 @@
   <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
     <value>Error : Error : No save work of that name</value>
   </data>
+  <data name="Backups" xml:space="preserve">
+    <value>Backups</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Search_Backup" xml:space="preserve">
+    <value>Search a backup</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Backup_Name" xml:space="preserve">
+    <value>Backup name</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Execute</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Home_Page" xml:space="preserve">
+    <value>Homepage</value>
+  </data>
+  <data name="Log_Format" xml:space="preserve">
+    <value>Log format</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
 </root>

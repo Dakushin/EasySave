@@ -2,20 +2,20 @@
 
 namespace EasySave.view;
 
-internal abstract class View
+public abstract class View
 {
     //PRIVATE VARIABLE
-    protected readonly ViewModel ViewModel;
+    protected readonly BackupsViewModel BackupsViewModel;
 
     //CONSTRUCTOR
     protected View()
     {
-        ViewModel = new ViewModel(this);
+        BackupsViewModel = new BackupsViewModel(this);
     }
     //ABSTRACT FUNCTION
-    public abstract void DisplayText(string text);
+    public abstract void NotifyInfo(string message);
 
-    public abstract void DisplayError(string text);
+    public abstract void NotifyError(string message);
 
-    public abstract void DisplaySuccess(string text);
+    public abstract void NotifySuccess(string message);
 }

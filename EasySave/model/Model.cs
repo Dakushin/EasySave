@@ -1,15 +1,20 @@
-﻿namespace EasySave.model;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 
-internal class Model
+namespace EasySave.model;
+
+public sealed class Model
 {
+    private static readonly Model _instance = new();
+    
     //Private variable
     private readonly string _logPath;
     private readonly string _saveStatePath;
-    private readonly List<SaveWork> _saveWorkList;
+    private readonly ObservableCollection<SaveWork> _saveWorkList;
     private bool _workInProgress;
     
     //CONSTRUCTOR
-    public Model()
+    private Model()
     {
         if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave"))
         {
@@ -18,8 +23,16 @@ internal class Model
         }
         _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
         _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\state.json";
-        _saveWorkList = new List<SaveWork>(5);
+        _saveWorkList = new ObservableCollection<SaveWork>();
+        _saveWorkList.Add(new SaveWork("EasySave backup", @"C:\Program Files (x86)\EasySave\", @"C:\Backup\EasySave\", SaveType.Differential));
+        _saveWorkList.Add(new SaveWork("Personal photos", @"C:\Users\John\Pictures\", @"C:\Backup\Photos\", SaveType.Differential));
+        _saveWorkList.Add(new SaveWork("Professional work", @"C:\Users\sacha\Desktop\test", @"C:\Backup\Work\", SaveType.Complete));
         _workInProgress = false;
+    }
+    
+    public static Model GetInstance()
+    {
+        return _instance;
     }
 
     //GETTER AND SETTER
@@ -33,7 +46,7 @@ internal class Model
         return _saveStatePath;
     }
 
-    public List<SaveWork> GetSaveWorkList()
+    public ObservableCollection<SaveWork> GetSaveWorkList()
     {
         return _saveWorkList;
     }
@@ -42,7 +55,7 @@ internal class Model
     public SaveWork FindbyName(string name)
     {
         foreach (var sv in _saveWorkList)
-            if (sv.GetName() == name)
+            if (sv.Name == name)
                 return sv;
         return null;
     }

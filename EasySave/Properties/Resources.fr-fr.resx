@@ -216,4 +216,40 @@
   <data name="Error_Wrong_SourcePath" xml:space="preserve">
     <value>Erreur : Vous avez rentré un chemin source non valide</value>
   </data>
+  <data name="Backups" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Préférences</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langage</value>
+  </data>
+  <data name="Search_Backup" xml:space="preserve">
+    <value>Rechercher un travail de sauvegarde</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Backup_Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Exécuter</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Home_Page" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="Log_Format" xml:space="preserve">
+    <value>Format de log</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using EasySave.model;
+using EasySave.Properties;
 using EasySave.translation;
 using EasySave.viewmodel;
 using static System.Console;
@@ -15,7 +16,7 @@ internal class Console : View
     public Console()
     {
         _isRunning = true;
-        ViewModel.OnProgresseUpdate += DisplayProgressBar;
+        BackupsViewModel.OnProgressUpdate += DisplayProgressBar;
         Display();
     }
 
@@ -26,41 +27,41 @@ internal class Console : View
             switch (GetUserChoice())
             {
                 case UserChoice.ShowAllSaveWork:
-                    ViewModel.DisplayAllSaveWork();
+                    BackupsViewModel.DisplayAllSaveWork();
                     break;
                 case UserChoice.CreateSaveWork:
                 {
                     var (name, sourcePath, targetPath, backupType) = AskForCreatingSaveWork();
-                    ViewModel.CreateSaveWork(name, sourcePath, targetPath, backupType);
+                    BackupsViewModel.CreateSaveWork(name, sourcePath, targetPath, backupType);
                     break;
                 }
                 case UserChoice.DeleteSaveWork:
                 {
                     var name = AskForDeletingSaveWork();
-                    ViewModel.DeleteSaveWork(name);
+                    BackupsViewModel.DeleteSaveWork(name);
                     break;
                 }
                 case UserChoice.RenameSaveWork:
                 {
                     var (name, newName) = AskForRenamingSaveWork();
-                    ViewModel.RenameSaveWork(name, newName);
+                    BackupsViewModel.RenameSaveWork(name, newName);
                     break;
                 }
                 case UserChoice.ExecuteAllSaveWork:
                 {
-                    ViewModel.ExecAllSaveWork();
+                    BackupsViewModel.ExecAllSaveWork();
                     break;
                 }
                 case UserChoice.ChangeLanguage:
                 {
                     var language = AskForChangingLanguage();
-                    ViewModel.ChangeLanguage(language);
+                    BackupsViewModel.ChangeLanguage(language);
                     break;
                 }
                 case UserChoice.ExecuteSaveWork:
                 {
                     var name = AskForNametoExecute();
-                    ViewModel.ExecSaveWork(name);
+                    BackupsViewModel.ExecSaveWork(name);
                     break;
                 }
                 case UserChoice.Exit:
@@ -72,7 +73,7 @@ internal class Console : View
     //function that ask the name of the save work to execute
     private static string AskForNametoExecute()
     {
-        Write(strings.Ask_Backup_Name_ToExecute);
+        Write(Resources.Ask_Backup_Name_ToExecute);
         var name = ReadLineNoEmpty();
 
         return name;
@@ -84,7 +85,7 @@ internal class Console : View
         string language;
         do
         {
-            Write(strings.Ask_Language);
+            Write(Resources.Ask_Language);
             language = ReadLineNoEmpty();
         } while (!Regex.IsMatch(language, "^(fr|en)$"));
 
@@ -94,9 +95,9 @@ internal class Console : View
     //ask the name of the save work you want to rename and the rename
     private static (string, string) AskForRenamingSaveWork()
     {
-        Write(strings.Ask_Backup_Name_Rename);
+        Write(Resources.Ask_Backup_Name_Rename);
         var name = ReadLineNoEmpty();
-        Write(strings.Ask_Backup_New_Name_Rename);
+        Write(Resources.Ask_Backup_New_Name_Rename);
         var newName = ReadLineNoEmpty();
 
         return (name, newName);
@@ -105,7 +106,7 @@ internal class Console : View
     //Ask the name of the deleting savework
     private static string AskForDeletingSaveWork()
     {
-        Write(strings.Ask_Backup_Name_Delete);
+        Write(Resources.Ask_Backup_Name_Delete);
         return ReadLineNoEmpty();
     }
 
@@ -113,17 +114,17 @@ internal class Console : View
     //ask info for the creation of a savework
     private static (string, string, string, SaveType) AskForCreatingSaveWork()
     {
-        Write(strings.Ask_Backup_Name);
+        Write(Resources.Ask_Backup_Name);
         var name = ReadLineNoEmpty();
-        Write(strings.Ask_Backup_Source_Path);
+        Write(Resources.Ask_Backup_Source_Path);
         var sourcePath = ReadLineNoEmpty();
-        Write(strings.Ask_Backup_Target_Path);
+        Write(Resources.Ask_Backup_Target_Path);
         var targetPath = ReadLineNoEmpty();
 
         string backupType;
         do
         {
-            Write(strings.Ask_Backup_Type);
+            Write(Resources.Ask_Backup_Type);
             backupType = ReadLineNoEmpty();
         } while (!Regex.IsMatch(backupType, "^(c|d)"));
 
@@ -138,18 +139,18 @@ internal class Console : View
         {
             var input = ReadLine();
             if (input?.Length > 0) return input;
-            WriteLine(strings.Ask_Valid_Input);
+            WriteLine(Resources.Ask_Valid_Input);
         }
     }
 
     //function that display text, usualy use in ViewModel
-    public override void DisplayText(string text)
+    public override void NotifyInfo(string text)
     {
         WriteLine(text);
     }
     
     //Display an Error
-    public override void DisplayError(string text)
+    public override void NotifyError(string text)
     {
         ForegroundColor = ConsoleColor.DarkRed;
         WriteLine(text);
@@ -157,7 +158,7 @@ internal class Console : View
     }
     
     //Display Success Message
-    public override void DisplaySuccess(string text)
+    public override void NotifySuccess(string text)
     {
         ForegroundColor = ConsoleColor.Green;
         WriteLine(text);
@@ -189,14 +190,14 @@ internal class Console : View
         {
             WriteLine(
                 "##########################################\n"
-                + $"1 - {strings.Show_Backups}\n"
-                + $"2 - {strings.Execute_Backup}\n"
-                + $"3 - {strings.Create_Backup}\n"
-                + $"4 - {strings.Delete_Backup}\n"
-                + $"5 - {strings.Rename_Backup}\n"
-                + $"6 - {strings.Execute_All_Backups}\n"
-                + $"7 - {strings.Change_Language}\n"
-                + $"8 - {strings.Exit_App}\n"
+                + $"1 - {Resources.Show_Backups}\n"
+                + $"2 - {Resources.Execute_Backup}\n"
+                + $"3 - {Resources.Create_Backup}\n"
+                + $"4 - {Resources.Delete_Backup}\n"
+                + $"5 - {Resources.Rename_Backup}\n"
+                + $"6 - {Resources.Execute_All_Backups}\n"
+                + $"7 - {Resources.Change_Language}\n"
+                + $"8 - {Resources.Exit_App}\n"
                 + "##########################################"
             );
 
@@ -207,7 +208,7 @@ internal class Console : View
                 if (Enum.IsDefined(typeof(UserChoice), choice)) return (UserChoice) choice;
             }
 
-            WriteLine(strings.Console_Ask_Valid_Choice);
+            WriteLine(Resources.Console_Ask_Valid_Choice);
         }
     }
 

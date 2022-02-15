@@ -1,18 +1,61 @@
-﻿namespace EasySave.model;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-internal enum SaveType //Enum for the type
+namespace EasySave.model;
+
+public enum SaveType //Enum for the type
 {
     Complete,
     Differential
 }
 
-internal class SaveWork
+public class SaveWork : INotifyPropertyChanged
 {
     //Private member data
-    private readonly SaveType _saveType;
-    private readonly string _sourcePath;
-    private readonly string _targetPath;
+    private SaveType _saveType;
+    private string _sourcePath;
+    private string _targetPath;
     private string _name;
+
+    public SaveType SaveType
+    {
+        get => _saveType;
+        set
+        {
+            _saveType = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string SourcePath
+    {
+        get => _sourcePath;
+        set
+        {
+            _sourcePath = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public string TargetPath
+    {
+        get => _targetPath;
+        set
+        {
+            _targetPath = value;
+            OnPropertyChanged();
+        }
+    }
+    
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
 
     //CONSTRUCTOR
     public SaveWork(string name, string sourcePath, string targetPath, SaveType saveType)
@@ -22,30 +65,16 @@ internal class SaveWork
         _targetPath = targetPath;
         _saveType = saveType;
     }
-
-    //GETTER AND SETTER
-    public string GetName()
+    
+    public SaveWork()
     {
-        return _name;
+        
     }
+    
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    public void SetName(string n)
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        _name = n;
-    }
-
-    public string GetSourcePath()
-    {
-        return _sourcePath;
-    }
-
-    public string GetTargetPath()
-    {
-        return _targetPath;
-    }
-
-    public SaveType Gettype()
-    {
-        return _saveType;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

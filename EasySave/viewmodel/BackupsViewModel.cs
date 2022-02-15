@@ -1,25 +1,47 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
+using System.Media;
 using EasySave.model;
+using EasySave.Properties;
 using EasySave.translation;
 using EasySave.view;
+using EasySave.view.wpf.core;
 
 namespace EasySave.viewmodel;
 
-internal class ViewModel
+public class BackupsViewModel : ViewModelBase
 {
     //PRIVATE VARIABLE
     private readonly Model _model;
     private readonly View _view;
     //PUBLIC EVENT
-    public event EventHandler<string> OnProgresseUpdate;
+    public event EventHandler<string> OnProgressUpdate;
+
+    public ObservableCollection<SaveWork> Backups => _model.GetSaveWorkList();
+
+    public SaveWork SelectedSaveWork { get; set; }
 
     //CONSTRUCTOR
-    public ViewModel(View v)
+    public BackupsViewModel(View v)
     {
         _view = v;
-        _model = new Model();
+        _model = Model.GetInstance();
+
         TryRecupFromSaveStatePath();
     }
+
+    public void ExecuteSelectedBackup()
+    {
+        ExecSaveWork(SelectedSaveWork.Name);
+    }
+
+    public void DeleteSelectedBackup()
+    {
+        DeleteSaveWork(SelectedSaveWork.Name);
+    }
+
+    public BackupsViewModel() : this(null) {}
 
     public void CreateSaveWork(string name, string sourcePath, string targetPath, SaveType saveType) //Function that create savework
     {
@@ -31,21 +53,21 @@ internal class ViewModel
                 {
                     targetPath = Path.GetFullPath(targetPath);
                     _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                    _view.DisplaySuccess(strings.Success);
+                    NotifySuccess(Resources.Success);
                 }
                 else
                 {
-                    _view.DisplayError(strings.Error_Wrong_SourcePath);
+                    NotifyError(Resources.Error_Wrong_SourcePath);
                 }
             }
             else
             {
-                _view.DisplayError(strings.Error_Backup_Already_Exists);
+                NotifyError(Resources.Error_Backup_Already_Exists);
             }
         }
         else
         {
-            _view.DisplayError(strings.Error_Too_Many_Backups);
+            NotifyError(Resources.Error_Too_Many_Backups);
         }
     }
 
@@ -79,11 +101,11 @@ internal class ViewModel
         var sv = _model.FindbyName(name);
         if (sv != null)
         { 
-        _model.GetSaveWorkList().Remove(sv);
-        _view.DisplaySuccess(strings.Success);
+            _model.GetSaveWorkList().Remove(sv);
+            NotifySuccess(Resources.Success);
         }
         else
-            _view.DisplayError(strings.Error_Backup_Not_Found);
+            NotifyError(Resources.Error_Backup_Not_Found);
     }
 
     public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
@@ -127,16 +149,16 @@ internal class ViewModel
         var sv = _model.FindbyName(name);
         if (sv == null)
         {
-            _view.DisplayError(strings.Error_NoSaveWorkOfThisName);
+            NotifyError(Resources.Error_NoSaveWorkOfThisName);
             return;
         }
-        if (!Directory.Exists(sv.GetTargetPath())) Directory.CreateDirectory(sv.GetTargetPath());
+        if (!Directory.Exists(sv.TargetPath)) Directory.CreateDirectory(sv.TargetPath);
 
         var files = new List<string>();
-        files.AddRange(Directory.EnumerateFiles(sv.GetSourcePath()));
-        GetAllFileFromDirectory(Directory.GetDirectories(sv.GetSourcePath()), files);
-        var saveState = new SaveState(sv.GetName(), "ACTIVE", new Json());
-        switch (sv.Gettype()) //Do something diffrente in function of the type
+        files.AddRange(Directory.EnumerateFiles(sv.SourcePath));
+        GetAllFileFromDirectory(Directory.GetDirectories(sv.SourcePath), files);
+        var saveState = new SaveState(sv.Name, "ACTIVE", new Json());
+        switch (sv.SaveType) //Do something diffrente in function of the type
         {
             case SaveType.Complete:
             {
@@ -146,8 +168,8 @@ internal class ViewModel
                 CalculFillProgress(Progression);
                 foreach (var file in files)
                 {
-                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.TargetPath, filePath);
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
 
@@ -158,7 +180,7 @@ internal class ViewModel
                     Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
                     CalculFillProgress(Progression);
                     saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                    var log = new Log(sv.GetName(), file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
+                    var log = new Log(sv.Name, file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
                     (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                     log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                     UpdateSaveState(saveState);
@@ -166,8 +188,8 @@ internal class ViewModel
                 }
 
                 EndSaveWork(saveState);
-                OnProgresseUpdate.Invoke(this, null);
-                _view.DisplaySuccess(strings.Success);
+                OnProgressUpdate.Invoke(this, null);
+                NotifySuccess(Resources.Success);
                 break;
             }
             case SaveType.Differential:
@@ -176,8 +198,8 @@ internal class ViewModel
                 var FileLeftToDo = files.Count;
                 foreach (var file in files)
                 {
-                    var filePath = file.Replace(sv.GetSourcePath() + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.GetTargetPath(), filePath);
+                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                    var targetPath = Path.Combine(sv.TargetPath, filePath);
                     saveState.SetSourceFilePath(file);
                     saveState.SetTargetFilePath(targetPath);
                     var Progression = 0f;
@@ -215,7 +237,7 @@ internal class ViewModel
 
 
                                 saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                                var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                var log = new Log(sv.Name, file, targetPath, string.Empty,
                                     File.ReadAllBytes(file).Length,(float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                                 log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                                 UpdateSaveState(saveState);
@@ -239,7 +261,7 @@ internal class ViewModel
 
 
                             saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                            var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                            var log = new Log(sv.Name, file, targetPath, string.Empty,
                                 File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
                             log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
                             UpdateSaveState(saveState);
@@ -253,8 +275,8 @@ internal class ViewModel
                         
                 }
                 EndSaveWork(saveState);
-                OnProgresseUpdate.Invoke(this, null);
-                _view.DisplaySuccess(strings.Success);
+                OnProgressUpdate.Invoke(this, null);
+                NotifySuccess(Resources.Success);
                 break;
             }
         }
@@ -273,7 +295,7 @@ internal class ViewModel
             stringReturn += '~';
         }
         stringReturn += ']';
-        OnProgresseUpdate?.Invoke(this, stringReturn);
+        //OnProgressUpdate?.Invoke(this, stringReturn);
     }
     private void EndSaveWork(SaveState saveState) //Update SaveState to END
     {
@@ -301,9 +323,9 @@ internal class ViewModel
     {
         if (_model.GetSaveWorkList().Count > 0)
             foreach (var sw in _model.GetSaveWorkList())
-                ExecSaveWork(sw.GetName());
+                ExecSaveWork(sw.Name);
         else
-            _view.DisplayText(strings.Info_No_Backup);
+            NotifyInfo(Resources.Info_No_Backup);
     }
 
     public void RenameSaveWork(string name, string rename) //Rename a Savework
@@ -314,15 +336,15 @@ internal class ViewModel
             var sv2 = _model.FindbyName(rename);
             if (sv2 == null)
             {
-                sv.SetName(rename);
-                _view.DisplaySuccess(strings.Success);
+                sv.Name = rename;
+                NotifySuccess(Resources.Success);
             }
             else
-                _view.DisplayError(strings.Error_Backup_Already_Exists);
+                NotifyError(Resources.Error_Backup_Already_Exists);
         }
         else
         {
-            _view.DisplayError(strings.Error_Backup_Not_Found);
+            NotifyError(Resources.Error_Backup_Not_Found);
         }
     }
 
@@ -332,19 +354,19 @@ internal class ViewModel
         {
             foreach (var sv in _model.GetSaveWorkList()) //loop through each Savework
             {
-                _view.DisplayText($"{strings.Name}: {sv.GetName()}");
-                _view.DisplayText($"{strings.Source_Path}: {sv.GetSourcePath()}");
-                _view.DisplayText($"{strings.Target_Path}: {sv.GetTargetPath()}");
-                switch (sv.Gettype())
+                NotifyInfo($"{Resources.Name}: {sv.Name}");
+                NotifyInfo($"{Resources.Source_Path}: {sv.SourcePath}");
+                NotifyInfo($"{Resources.Target_Path}: {sv.TargetPath}");
+                switch (sv.SaveType)
                 {
                     case SaveType.Complete:
                         {
-                            _view.DisplayText(strings.Type_Complete);
+                            NotifyInfo(Resources.Type_Complete);
                             break;
                         }
                     case SaveType.Differential:
                         {
-                            _view.DisplayText(strings.Type_Differential);
+                            NotifyInfo(Resources.Type_Differential);
                             break;
                         }
                 }
@@ -352,7 +374,7 @@ internal class ViewModel
         }
         else
         {
-            _view.DisplayError(strings.Error_NoSaveWork);
+            NotifyError(Resources.Error_NoSaveWork);
         }
     }
 
@@ -364,6 +386,11 @@ internal class ViewModel
             Language.French => CultureInfo.GetCultureInfo("fr"),
             _ => CultureInfo.CurrentUICulture
         };
-        _view.DisplaySuccess(strings.Success);
+        NotifySuccess(Resources.Success);
+    }
+
+    public void Todo()
+    {
+        SnackBarMessageQueue.Enqueue("TODO");
     }
 }
