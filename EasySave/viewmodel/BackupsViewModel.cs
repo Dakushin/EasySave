@@ -1,6 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Media;
+using System.Windows.Data;
 using EasySave.model;
 using EasySave.translation;
 using EasySave.view;
@@ -19,15 +22,12 @@ public class BackupsViewModel : ViewModelBase
     public ObservableCollection<SaveWork> Backups => _model.GetSaveWorkList();
 
     public SaveWork SelectedSaveWork { get; set; }
-    public CommandHandler OnExecuteBackup { get; set; }
-    public CommandHandler OnDeleteBackup { get; set; }
-
 
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
         _view = v;
-        _model = new Model();
+        _model = Model.GetInstance();
 
         TryRecupFromSaveStatePath();
     }
@@ -39,7 +39,7 @@ public class BackupsViewModel : ViewModelBase
 
     public void DeleteSelectedBackup()
     {
-        Backups.Remove(SelectedSaveWork);
+        DeleteSaveWork(SelectedSaveWork.Name);
     }
 
     public BackupsViewModel() : this(null) {}
@@ -54,21 +54,21 @@ public class BackupsViewModel : ViewModelBase
                 {
                     targetPath = Path.GetFullPath(targetPath);
                     _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                    _view.DisplaySuccess(strings.Success);
+                    NotifySuccess(strings.Success);
                 }
                 else
                 {
-                    _view.DisplayError(strings.Error_Wrong_SourcePath);
+                    NotifyError(strings.Error_Wrong_SourcePath);
                 }
             }
             else
             {
-                _view.DisplayError(strings.Error_Backup_Already_Exists);
+                NotifyError(strings.Error_Backup_Already_Exists);
             }
         }
         else
         {
-            _view.DisplayError(strings.Error_Too_Many_Backups);
+            NotifyError(strings.Error_Too_Many_Backups);
         }
     }
 
@@ -102,11 +102,11 @@ public class BackupsViewModel : ViewModelBase
         var sv = _model.FindbyName(name);
         if (sv != null)
         { 
-        _model.GetSaveWorkList().Remove(sv);
-        _view.DisplaySuccess(strings.Success);
+            _model.GetSaveWorkList().Remove(sv);
+            NotifySuccess(strings.Success);
         }
         else
-            _view.DisplayError(strings.Error_Backup_Not_Found);
+            NotifyError(strings.Error_Backup_Not_Found);
     }
 
     public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
@@ -150,7 +150,7 @@ public class BackupsViewModel : ViewModelBase
         var sv = _model.FindbyName(name);
         if (sv == null)
         {
-            _view.DisplayError(strings.Error_NoSaveWorkOfThisName);
+            NotifyError(strings.Error_NoSaveWorkOfThisName);
             return;
         }
         if (!Directory.Exists(sv.TargetPath)) Directory.CreateDirectory(sv.TargetPath);
@@ -189,8 +189,8 @@ public class BackupsViewModel : ViewModelBase
                 }
 
                 EndSaveWork(saveState);
-                //OnProgressUpdate.Invoke(this, null);
-                //_view.DisplaySuccess(strings.Success);
+                OnProgressUpdate.Invoke(this, null);
+                NotifySuccess(strings.Success);
                 break;
             }
             case SaveType.Differential:
@@ -277,7 +277,7 @@ public class BackupsViewModel : ViewModelBase
                 }
                 EndSaveWork(saveState);
                 OnProgressUpdate.Invoke(this, null);
-                _view.DisplaySuccess(strings.Success);
+                NotifySuccess(strings.Success);
                 break;
             }
         }
@@ -326,7 +326,7 @@ public class BackupsViewModel : ViewModelBase
             foreach (var sw in _model.GetSaveWorkList())
                 ExecSaveWork(sw.Name);
         else
-            _view.DisplayText(strings.Info_No_Backup);
+            NotifyInfo(strings.Info_No_Backup);
     }
 
     public void RenameSaveWork(string name, string rename) //Rename a Savework
@@ -338,14 +338,14 @@ public class BackupsViewModel : ViewModelBase
             if (sv2 == null)
             {
                 sv.Name = rename;
-                _view.DisplaySuccess(strings.Success);
+                NotifySuccess(strings.Success);
             }
             else
-                _view.DisplayError(strings.Error_Backup_Already_Exists);
+                NotifyError(strings.Error_Backup_Already_Exists);
         }
         else
         {
-            _view.DisplayError(strings.Error_Backup_Not_Found);
+            NotifyError(strings.Error_Backup_Not_Found);
         }
     }
 
@@ -355,19 +355,19 @@ public class BackupsViewModel : ViewModelBase
         {
             foreach (var sv in _model.GetSaveWorkList()) //loop through each Savework
             {
-                _view.DisplayText($"{strings.Name}: {sv.Name}");
-                _view.DisplayText($"{strings.Source_Path}: {sv.SourcePath}");
-                _view.DisplayText($"{strings.Target_Path}: {sv.TargetPath}");
+                NotifyInfo($"{strings.Name}: {sv.Name}");
+                NotifyInfo($"{strings.Source_Path}: {sv.SourcePath}");
+                NotifyInfo($"{strings.Target_Path}: {sv.TargetPath}");
                 switch (sv.SaveType)
                 {
                     case SaveType.Complete:
                         {
-                            _view.DisplayText(strings.Type_Complete);
+                            NotifyInfo(strings.Type_Complete);
                             break;
                         }
                     case SaveType.Differential:
                         {
-                            _view.DisplayText(strings.Type_Differential);
+                            NotifyInfo(strings.Type_Differential);
                             break;
                         }
                 }
@@ -375,7 +375,7 @@ public class BackupsViewModel : ViewModelBase
         }
         else
         {
-            _view.DisplayError(strings.Error_NoSaveWork);
+            NotifyError(strings.Error_NoSaveWork);
         }
     }
 
@@ -387,6 +387,6 @@ public class BackupsViewModel : ViewModelBase
             Language.French => CultureInfo.GetCultureInfo("fr"),
             _ => CultureInfo.CurrentUICulture
         };
-        _view.DisplaySuccess(strings.Success);
+        NotifySuccess(strings.Success);
     }
 }

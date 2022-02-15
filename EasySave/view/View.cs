@@ -13,9 +13,9 @@ public abstract class View
         BackupsViewModel = new BackupsViewModel(this);
     }
     //ABSTRACT FUNCTION
-    public abstract void DisplayText(string text);
+    public abstract void NotifyInfo(string message);
 
-    public abstract void DisplayError(string text);
+    public abstract void NotifyError(string message);
 
-    public abstract void DisplaySuccess(string text);
+    public abstract void NotifySuccess(string message);
 }

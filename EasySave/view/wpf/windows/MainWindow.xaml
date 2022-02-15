@@ -26,7 +26,14 @@
         
     <Border Background="#272537"
             CornerRadius="20">
-            <Grid>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition/>
@@ -75,7 +82,10 @@
                 <ContentControl Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="10"
-                                Content="{Binding CurrentViewModel}"></ContentControl>
+                                Content="{Binding CurrentViewModel}"/>
             </Grid>
-        </Border>
+            
+            <materialDesign:Snackbar Grid.Row="1" MessageQueue="{Binding SnackBarMessageQueue}" />
+        </Grid>
+    </Border>
 </Window>

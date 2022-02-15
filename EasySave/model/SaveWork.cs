@@ -66,6 +66,11 @@ public class SaveWork : INotifyPropertyChanged
         _saveType = saveType;
     }
     
+    public SaveWork()
+    {
+        
+    }
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

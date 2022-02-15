@@ -15,7 +15,7 @@ public partial class MainWindow : Window
     {
         MouseDown += (_, args) =>
         {
-            if (args.ChangedButton == MouseButton.Left)
+            if (args.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }

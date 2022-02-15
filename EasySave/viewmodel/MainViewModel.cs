@@ -28,7 +28,7 @@ public class MainViewModel : ViewModelBase
         _backupsViewModel = new BackupsViewModel(null);
 
         OnNavigateToBackups = new CommandHandler(NavigateToBackupsView);
-        OnNavigateToSettings = new CommandHandler(NavigateToSetttingsView);
+        OnNavigateToSettings = new CommandHandler(NavigateToSettingsView);
 
         _currentViewModel = _backupsViewModel;
     }
@@ -38,7 +38,7 @@ public class MainViewModel : ViewModelBase
         CurrentViewModel = _backupsViewModel;
     }
 
-    private void NavigateToSetttingsView()
+    private void NavigateToSettingsView()
     {
         CurrentViewModel = _settingsViewModel;
     }

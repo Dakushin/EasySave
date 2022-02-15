@@ -16,15 +16,40 @@
                  Style="{StaticResource ModernTextBox}"/>
         
         <DataGrid Height="600" 
-                  ItemsSource="{Binding Backups}" 
+                  ItemsSource="{Binding Backups}"
                   AlternatingRowBackground="DimGray" 
                   AutoGenerateColumns="False"
-                  SelectedItem="{Binding SelectedSaveWork, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedSaveWork, Mode=TwoWay}"
+                  InitializingNewItem="DataGrid_OnInitializingNewItem">
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Width="150" Header="Backup&#x0a;(name)" Binding="{Binding Name}"></DataGridTextColumn>
-                <DataGridTextColumn Width="3*" Header="Source folder" Binding="{Binding SourcePath}"></DataGridTextColumn>
-                <DataGridTextColumn Width="3*" Header="Target folder" Binding="{Binding TargetPath}"></DataGridTextColumn>
+                
+                <DataGridTemplateColumn Width="3*" Header="Source folder">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate>
+                            <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
+                                <TextBlock.Text> 
+                                    <Binding Mode="TwoWay"  Path="SourcePath"></Binding> 
+                                </TextBlock.Text> 
+                            </TextBlock> 
+                        </DataTemplate> 
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="3*" Header="Target folder">
+                    <DataGridTemplateColumn.CellTemplate> 
+                        <DataTemplate>
+                            <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
+                                <TextBlock.Text> 
+                                    <Binding Mode="TwoWay"  Path="TargetPath"></Binding> 
+                                </TextBlock.Text> 
+                            </TextBlock> 
+                        </DataTemplate> 
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+                
                 <DataGridTextColumn Width="2*" Header="Type" Binding="{Binding SaveType}"></DataGridTextColumn>
+                
                 <DataGridTemplateColumn Width="200" Header="Actions">
                     <DataGridTemplateColumn.CellTemplate> 
                         <DataTemplate>

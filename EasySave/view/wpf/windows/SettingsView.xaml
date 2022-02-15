@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:translation="clr-namespace:EasySave.translation"
              xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              mc:Ignorable="d"
-             d:DesignWidth="1000" d:DesignHeight="725">
+             d:DesignWidth="1000" d:DesignHeight="725"
+             Background="#272537">
     
     <UserControl.DataContext>
         <viewModel:SettingsViewModel></viewModel:SettingsViewModel>
@@ -31,84 +33,46 @@
                    Foreground="White"
                    FontSize="30"/>
         
-        <Border Width="400"
-                Height="200"
-                Grid.Row="1" Grid.Column="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
-                    <GradientStop Color="#5bc3ff" Offset="0.0"></GradientStop>
-                    <GradientStop Color="#3aa0ff" Offset="1.0"></GradientStop>
-                </LinearGradientBrush>
-            </Border.Background>
+       
         
-            <Border.Clip>
-                <RectangleGeometry RadiusX="10"
-                                   RadiusY="10"
-                                   Rect="0, 0, 400, 200"/>
-            </Border.Clip>
+        <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="16">
+                    <materialDesign:PackIcon Kind="Language" Height="64" Width="64"/>
+                    <TextBlock FontSize="24" Margin="15, 0">Language</TextBlock>
+                </StackPanel>
+                
+                <StackPanel Orientation="Vertical" Margin="16">
+                    <ItemsControl>
+                        <RadioButton
+                            Content="English"
+                            Width="100"
+                            Height="30"
+                            Foreground="White"
+                            FontSize="14"
+                            IsChecked="True"
+                            Command="{Binding OnSelectEnglish}"/>
         
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{x:Static translation:strings.Language}"
-                           Foreground="White"
-                           FontSize="28"
-                           Margin="20, 10, 0, 0"></TextBlock>
-
-                <ItemsControl Grid.Row="1">
-                    <RadioButton Tag="../images/flag_en.png"
-                                 Width="50"
-                                 Height="40"
-                                 Foreground="White"
-                                 FontSize="14"
-                                 IsChecked="True"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding OnSelectEnglish}"/>
+                        <RadioButton
+                            Content="Français"
+                            Width="100"
+                            Height="30"
+                            Foreground="White"
+                            FontSize="14"
+                            Command="{Binding OnSelectFrench}"/>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
         
-                    <RadioButton Tag="../images/flag_fr.png"
-                                 Width="50"
-                                 Height="40"
-                                 Foreground="White"
-                                 FontSize="14"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding OnSelectFrench}"/>
-                </ItemsControl>
-            </Grid>
-        </Border>
+        <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+            <StackPanel Orientation="Horizontal" Margin="16">
+                <materialDesign:PackIcon Kind="Xml" Height="64" Width="64"/>
+                <TextBlock FontSize="24" Margin="15, 0">Log format</TextBlock>
+            </StackPanel>
+        </materialDesign:Card>
         
-        <Border Grid.Row="1" Grid.Column="1" Width="200"
-                Height="200"
-                CornerRadius="10">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
-                    <GradientStop Color="#ffc554" Offset="0.0"></GradientStop>
-                    <GradientStop Color="#ffb73a" Offset="1.0"></GradientStop>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
+       
         
-        <Border Grid.Row="2" Grid.Column="0" Width="200"
-                Height="200"
-                CornerRadius="10">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
-                    <GradientStop Color="#ffc554" Offset="0.0"></GradientStop>
-                    <GradientStop Color="#ffb73a" Offset="1.0"></GradientStop>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        
-        <Border Grid.Row="2" Grid.Column="1" Width="200"
-                Height="200"
-                CornerRadius="10">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
-                    <GradientStop Color="#ffc554" Offset="0"></GradientStop>
-                    <GradientStop Color="#ffb73a" Offset="1"></GradientStop>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
     </Grid>
 </UserControl>

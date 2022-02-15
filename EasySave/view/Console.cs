@@ -143,13 +143,13 @@ internal class Console : View
     }
 
     //function that display text, usualy use in ViewModel
-    public override void DisplayText(string text)
+    public override void NotifyInfo(string text)
     {
         WriteLine(text);
     }
     
     //Display an Error
-    public override void DisplayError(string text)
+    public override void NotifyError(string text)
     {
         ForegroundColor = ConsoleColor.DarkRed;
         WriteLine(text);
@@ -157,7 +157,7 @@ internal class Console : View
     }
     
     //Display Success Message
-    public override void DisplaySuccess(string text)
+    public override void NotifySuccess(string text)
     {
         ForegroundColor = ConsoleColor.Green;
         WriteLine(text);

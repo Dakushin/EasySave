@@ -3,8 +3,10 @@ using System.IO;
 
 namespace EasySave.model;
 
-internal class Model
+public sealed class Model
 {
+    private static readonly Model _instance = new();
+    
     //Private variable
     private readonly string _logPath;
     private readonly string _saveStatePath;
@@ -12,7 +14,7 @@ internal class Model
     private bool _workInProgress;
     
     //CONSTRUCTOR
-    public Model()
+    private Model()
     {
         if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave"))
         {
@@ -26,6 +28,11 @@ internal class Model
         _saveWorkList.Add(new SaveWork("Personal photos", @"C:\Users\John\Pictures\", @"C:\Backup\Photos\", SaveType.Differential));
         _saveWorkList.Add(new SaveWork("Professional work", @"C:\Users\sacha\Desktop\test", @"C:\Backup\Work\", SaveType.Complete));
         _workInProgress = false;
+    }
+    
+    public static Model GetInstance()
+    {
+        return _instance;
     }
 
     //GETTER AND SETTER
