@@ -4,13 +4,11 @@ namespace EasySave.model;
 
 internal class SaveState
 {
-    //Private Variable 
-    private readonly FileFormat _fileFormat;
 
     //JSON CONSTRUCTOR
     [JsonConstructor]
-    public SaveState(string name, string sourceFilePath, string targetFilePath, string state, int nbFilesToCopy,
-        int totalFilesSize, int nbFilesLeftToDo, int progression)
+    public SaveState(string name, string state, string sourceFilePath = "", string targetFilePath = "", int nbFilesToCopy = 0,
+           int totalFilesSize = 0, int nbFilesLeftToDo = 0, int progression = 0)
     {
         Name = name;
         SourceFilePath = sourceFilePath;
@@ -23,18 +21,6 @@ internal class SaveState
     }
 
     //CONSTRUCTOR
-    public SaveState(string name, string state, FileFormat fileFormat)
-    {
-        Name = name;
-        SourceFilePath = null;
-        TargetFilePath = null;
-        State = state;
-        NbFilesToCopy = 0;
-        TotalFilesSize = 0;
-        NbFilesLeftToDo = 0;
-        Progression = 0;
-        _fileFormat = fileFormat;
-    }
 
     //public variables for the json serializer
     public string Name { get; set; }
@@ -52,7 +38,6 @@ internal class SaveState
     public int NbFilesLeftToDo { get; set; }
 
     public int Progression { get; set; }
-
     //GETTER AND SETTER
     public string GetName()
     {
@@ -117,10 +102,5 @@ internal class SaveState
     public void SetTargetFilePath(string targetFilePath)
     {
         TargetFilePath = targetFilePath;
-    }
-
-    public FileFormat GetFileFormat()
-    {
-        return _fileFormat;
     }
 }

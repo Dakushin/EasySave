@@ -1,125 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-    <resheader name="resmimetype">
-        <value>text/microsoft-resx</value>
-    </resheader>
-    <resheader name="version">
-        <value>1.3</value>
-    </resheader>
-    <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-    </resheader>
-    <data name="Console_Ask_Valid_Choice" xml:space="preserve">
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Console_Ask_Valid_Choice" xml:space="preserve">
     <value>Please, enter a valid choice between 1 and 8</value>
   </data>
-    <data name="Create_Backup" xml:space="preserve">
+  <data name="Create_Backup" xml:space="preserve">
     <value>Create a backup</value>
   </data>
-    <data name="Rename_Backup" xml:space="preserve">
+  <data name="Rename_Backup" xml:space="preserve">
     <value>Rename a backup</value>
   </data>
-    <data name="Delete_Backup" xml:space="preserve">
+  <data name="Delete_Backup" xml:space="preserve">
     <value>Delete a backup</value>
   </data>
-    <data name="Change_Language" xml:space="preserve">
+  <data name="Change_Language" xml:space="preserve">
     <value>Change the language</value>
   </data>
-    <data name="Exit_App" xml:space="preserve">
+  <data name="Exit_App" xml:space="preserve">
     <value>Exit the application</value>
   </data>
-    <data name="Ask_Backup_Name" xml:space="preserve">
+  <data name="Ask_Backup_Name" xml:space="preserve">
     <value>Give the name of the backup : </value>
   </data>
-    <data name="Ask_Backup_Source_Path" xml:space="preserve">
+  <data name="Ask_Backup_Source_Path" xml:space="preserve">
     <value>Give the source path directory : </value>
   </data>
-    <data name="Ask_Backup_Target_Path" xml:space="preserve">
+  <data name="Ask_Backup_Target_Path" xml:space="preserve">
     <value>Give the target path directory : </value>
   </data>
-    <data name="Ask_Backup_Type" xml:space="preserve">
+  <data name="Ask_Backup_Type" xml:space="preserve">
     <value>Give the type [d = differential / c =complete]: </value>
   </data>
-    <data name="Ask_Valid_Input" xml:space="preserve">
+  <data name="Ask_Valid_Input" xml:space="preserve">
     <value>Please, enter a valid input</value>
   </data>
-    <data name="Ask_Backup_Name_Delete" xml:space="preserve">
+  <data name="Ask_Backup_Name_Delete" xml:space="preserve">
     <value>Give the name of the backup you want to delete : </value>
   </data>
-    <data name="Ask_Backup_Name_Rename" xml:space="preserve">
+  <data name="Ask_Backup_Name_Rename" xml:space="preserve">
     <value>Give the name of the backup you want to rename : </value>
   </data>
-    <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
+  <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
     <value>Give the new name of the backup</value>
   </data>
-    <data name="Ask_Language" xml:space="preserve">
+  <data name="Ask_Language" xml:space="preserve">
     <value>Which language do you want ? [fr/en] : </value>
   </data>
-    <data name="Show_Backups" xml:space="preserve">
+  <data name="Show_Backups" xml:space="preserve">
     <value>Display all backups</value>
   </data>
-    <data name="Execute_All_Backups" xml:space="preserve">
+  <data name="Execute_All_Backups" xml:space="preserve">
     <value>Execute all backups</value>
   </data>
-    <data name="Error_Too_Many_Backups" xml:space="preserve">
+  <data name="Error_Too_Many_Backups" xml:space="preserve">
     <value>Error : you have already 5 backups, please delete one and retry</value>
   </data>
-    <data name="Error_Backup_Not_Found" xml:space="preserve">
+  <data name="Error_Backup_Not_Found" xml:space="preserve">
     <value>Error : there is no backup with this name</value>
   </data>
-    <data name="Error_Backup_Already_Exists" xml:space="preserve">
+  <data name="Error_Backup_Already_Exists" xml:space="preserve">
     <value>Error : a backup with this name already exists</value>
   </data>
-    <data name="Error_Rename_Same_Name" xml:space="preserve">
+  <data name="Error_Rename_Same_Name" xml:space="preserve">
     <value>Error : you can't rename you backup with the same name</value>
   </data>
-    <data name="Type_Complete" xml:space="preserve">
+  <data name="Type_Complete" xml:space="preserve">
     <value>Type : complete</value>
   </data>
-    <data name="Type_Differential" xml:space="preserve">
+  <data name="Type_Differential" xml:space="preserve">
     <value>Type : differential</value>
   </data>
-    <data name="Source_Path" xml:space="preserve">
+  <data name="Source_Path" xml:space="preserve">
     <value>Source path</value>
   </data>
-    <data name="Target_Path" xml:space="preserve">
+  <data name="Target_Path" xml:space="preserve">
     <value>Target path</value>
   </data>
-    <data name="Name" xml:space="preserve">
+  <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-    <data name="Success" xml:space="preserve">
+  <data name="Success" xml:space="preserve">
     <value>Success</value>
   </data>
-    <data name="Info_No_Backup" xml:space="preserve">
+  <data name="Info_No_Backup" xml:space="preserve">
     <value>No backup found</value>
   </data>
-    <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
+  <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
     <value>Give the name of the save work to execute : </value>
   </data>
-    <data name="Execute_Backup" xml:space="preserve">
+  <data name="Execute_Backup" xml:space="preserve">
     <value>Execute a save work</value>
   </data>
-    <data name="Error_NoSaveWork" xml:space="preserve">
+  <data name="Error_NoSaveWork" xml:space="preserve">
     <value>Error : No save work available</value>
   </data>
-    <data name="Error_Wrong_SourcePath" xml:space="preserve">
+  <data name="Error_Wrong_SourcePath" xml:space="preserve">
     <value>Error : The source path you enter doesn't exist</value>
   </data>
-    <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
+  <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
     <value>Error : Error : No save work of that name</value>
   </data>
-    <data name="Backups" xml:space="preserve">
+  <data name="Backups" xml:space="preserve">
     <value>Backups</value>
   </data>
-    <data name="Settings" xml:space="preserve">
+  <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
-    <data name="Preferences" xml:space="preserve">
+  <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
-    <data name="Language" xml:space="preserve">
+  <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
   <data name="Search_Backup" xml:space="preserve">
@@ -145,5 +251,8 @@
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="Error_WorkingProcess" xml:space="preserve">
+    <value>The following process is running, please stop it before starting a backup :</value>
   </data>
 </root>

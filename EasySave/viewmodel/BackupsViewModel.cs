@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Media;
+using System.Diagnostics;
 using EasySave.model;
 using EasySave.Properties;
 using EasySave.translation;
@@ -74,8 +75,9 @@ public class BackupsViewModel : ViewModelBase
     private void UpdateSaveState(SaveState saveState) //Update the Save state file
     {
         List<SaveState> states = null;
+        FileFormat Json = new Json();
         if (File.Exists(_model.GetSaveStatePath()))
-            states = saveState.GetFileFormat().UnSerialize<SaveState>(_model.GetSaveStatePath());
+            states = Json.UnSerialize<SaveState>(_model.GetSaveStatePath());
         File.Delete(_model.GetSaveStatePath());
         var enter = false;
         if (states != null)
@@ -88,11 +90,11 @@ public class BackupsViewModel : ViewModelBase
                 }
 
             if (!enter) states.Add(saveState);
-            foreach (var sv in states) sv.GetFileFormat().SaveInFormat(_model.GetSaveStatePath(), sv);
+            foreach (var sv in states) Json.SaveInFormat(_model.GetSaveStatePath(), sv);
         }
         else
         {
-            saveState.GetFileFormat().SaveInFormat(_model.GetSaveStatePath(), saveState);
+            Json.SaveInFormat(_model.GetSaveStatePath(), saveState);
         }
     }
 
@@ -143,146 +145,166 @@ public class BackupsViewModel : ViewModelBase
         }
         
     }
-
-    public void ExecSaveWork(string name) //Function to do the action of copie-past in a save directory
-    {
-        var sv = _model.FindbyName(name);
-        if (sv == null)
+        public void ExecSaveWork(string name) //Function to do the action of copie-past in a save directory
         {
-            NotifyError(Resources.Error_NoSaveWorkOfThisName);
-            return;
-        }
-        if (!Directory.Exists(sv.TargetPath)) Directory.CreateDirectory(sv.TargetPath);
-
-        var files = new List<string>();
-        files.AddRange(Directory.EnumerateFiles(sv.SourcePath));
-        GetAllFileFromDirectory(Directory.GetDirectories(sv.SourcePath), files);
-        var saveState = new SaveState(sv.Name, "ACTIVE", new Json());
-        switch (sv.SaveType) //Do something diffrente in function of the type
-        {
-            case SaveType.Complete:
+            var sv = _model.FindbyName(name);
+            if (sv == null)
             {
-                saveState.SetTotalFilesToCopy(files.Count);
-                var FileLeftToDo = files.Count;
-                var Progression = 0f;
-                CalculFillProgress(Progression);
-                foreach (var file in files)
-                {
-                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.TargetPath, filePath);
-                    saveState.SetSourceFilePath(file);
-                    saveState.SetTargetFilePath(targetPath);
-
-                    DateTime datetime = DateTime.Now;
-                    File.Copy(file, targetPath, true);
-                    TimeSpan time = DateTime.Now.Subtract(datetime);
-                    FileLeftToDo--;
-                    Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
-                    CalculFillProgress(Progression);
-                    saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                    var log = new Log(sv.Name, file, targetPath, string.Empty, File.ReadAllBytes(file).Length,
-                    (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
-                    log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
-                    UpdateSaveState(saveState);
-                    
-                }
-
-                EndSaveWork(saveState);
-                OnProgressUpdate.Invoke(this, null);
-                NotifySuccess(Resources.Success);
-                break;
+                NotifyError(Resources.Error_NoSaveWorkOfThisName);
+                return;
             }
-            case SaveType.Differential:
+            if (!Directory.Exists(sv.TargetPath)) Directory.CreateDirectory(sv.TargetPath);
+            string NameOfProcessRunning = CheckIfWorkProcessIsOpen(_model.GetListProcessToCheck());
+            if (NameOfProcessRunning != string.Empty)
             {
-                saveState.SetTotalFilesToCopy(files.Count);
-                var FileLeftToDo = files.Count;
-                foreach (var file in files)
-                {
-                    var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
-                    var targetPath = Path.Combine(sv.TargetPath, filePath);
-                    saveState.SetSourceFilePath(file);
-                    saveState.SetTargetFilePath(targetPath);
-                    var Progression = 0f;
-                    CalculFillProgress(Progression);
-                    if (File.Exists(targetPath)) //try to know if the file exist, to check if he was modified
+                NotifyError(Resources.Error_WorkingProcess);
+                NotifyInfo(NameOfProcessRunning);
+                return;
+            }
+            var files = new List<string>();
+            files.AddRange(Directory.EnumerateFiles(sv.SourcePath));
+            GetAllFileFromDirectory(Directory.GetDirectories(sv.SourcePath), files);
+            var saveState = new SaveState(sv.Name, "ACTIVE");
+            switch (sv.SaveType) //Do something diffrente in function of the type
+            {
+                case SaveType.Complete:
                     {
-                        var fs1 = new FileStream(file, FileMode.Open);
-                        var fs2 = new FileStream(targetPath, FileMode.Open);
-                            
-                        var same = true;
-                        if (fs1.Length == fs2.Length)
+                        saveState.SetTotalFilesToCopy(files.Count);
+                        var FileLeftToDo = files.Count;
+                        //var Progression = 0f;
+                        //CalculFillProgress(Progression);
+                        foreach (var file in files)
                         {
-                            var fb1 = fs1.ReadByte();
-                            var fb2 = fs2.ReadByte();
-
-                            while (fb1 != -1 && same) //loop to check byte per byte the 2 files
+                            var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                            var targetPath = Path.Combine(sv.SourcePath, filePath);
+                            saveState.SetSourceFilePath(file);
+                            saveState.SetTargetFilePath(targetPath);
+                            
+                            Stopwatch sw = new Stopwatch();
+                            if (CheckToCrypt(file))
                             {
-                                if (fb1 == fb2)
-                                    same = true;
-                                else
-                                    same = false;
-                                fb1 = fs1.ReadByte();
-                                fb2 = fs2.ReadByte();
+                                sw.Start();
+                                int timetoencrypt = Cryptage(file, targetPath);
+                                sw.Stop();
+                                _model.GetLogFileFormat().SaveInFormat(_model.GetLogPath(),
+                                new Log(sv.Name, file, targetPath, string.Empty,
+                                File.ReadAllBytes(file).Length, (float)sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetoencrypt));
+                            }
+                            else
+                            {
+                                sw.Start();
+                                File.Copy(file, targetPath, true);
+                                sw.Stop();
+                                _model.GetLogFileFormat().SaveInFormat(_model.GetLogPath(),
+                                new Log(sv.Name, file, targetPath, string.Empty,
+                                File.ReadAllBytes(file).Length, (float)sw.ElapsedMilliseconds, DateTime.Now.ToString(), 0));
                             }
 
-                            // Close the file
-                            fs1.Close();
-                            fs2.Close();
+                            FileLeftToDo--;
+                            //Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                            //CalculFillProgress(Progression);
+                            saveState.SetTotalFilesLeftToDo(FileLeftToDo);
+                            UpdateSaveState(saveState);
 
-                            if (!same) //if the file wasn't the same, he do the copy
-                            { 
+                        }
+
+                        EndSaveWork(saveState);
+                        //OnProgresseUpdate.Invoke(this, null);
+                        //_view.DisplaySuccess(strings.Success);
+                        break;
+                    }
+                case SaveType.Differential:
+                    {
+                        saveState.SetTotalFilesToCopy(files.Count);
+                        var FileLeftToDo = files.Count;
+                        foreach (var file in files)
+                        {
+                            var filePath = file.Replace(sv.SourcePath + Path.DirectorySeparatorChar, null);
+                            var targetPath = Path.Combine(sv.SourcePath, filePath);
+                            saveState.SetSourceFilePath(file);
+                            saveState.SetTargetFilePath(targetPath);
+                            //var Progression = 0f;
+                            //CalculFillProgress(Progression);
+                            if (File.Exists(targetPath)) //try to know if the file exist, to check if he was modified
+                            {
+                                var fs1 = new FileStream(file, FileMode.Open);
+                                var fs2 = new FileStream(targetPath, FileMode.Open);
+
+                                var same = true;
+                                if (fs1.Length == fs2.Length)
+                                {
+                                    var fb1 = fs1.ReadByte();
+                                    var fb2 = fs2.ReadByte();
+
+                                    while (fb1 != -1 && same) //loop to check byte per byte the 2 files
+                                    {
+                                        if (fb1 == fb2)
+                                            same = true;
+                                        else
+                                            same = false;
+                                        fb1 = fs1.ReadByte();
+                                        fb2 = fs2.ReadByte();
+                                    }
+
+                                    // Close the file
+                                    fs1.Close();
+                                    fs2.Close();
+
+                                    if (!same) //if the file wasn't the same, he do the copy
+                                    {
+                                        DateTime datetime = DateTime.Now;
+                                        File.Copy(file, targetPath, true);
+                                        TimeSpan time = DateTime.Now.Subtract(datetime);
+
+
+                                        saveState.SetTotalFilesLeftToDo(FileLeftToDo);
+                                        //var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                        // File.ReadAllBytes(file).Length,(float) time.TotalMilliseconds, DateTime.Now.ToString());
+                                        //_model.GetLogFileFormat().SaveInFormat(_model.GetLogPath(), log);
+                                        UpdateSaveState(saveState);
+                                    }
+
+
+
+                                }
+
+                                FileLeftToDo--;
+                                Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                                CalculFillProgress(Progression);
+
+
+
+                            }
+                            else //if the file doesn't existe it will be create
+                            {
                                 DateTime datetime = DateTime.Now;
                                 File.Copy(file, targetPath, true);
                                 TimeSpan time = DateTime.Now.Subtract(datetime);
 
 
                                 saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                                var log = new Log(sv.Name, file, targetPath, string.Empty,
-                                    File.ReadAllBytes(file).Length,(float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
-                                log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
+                                //var log = new Log(sv.GetName(), file, targetPath, string.Empty,
+                                //File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString());
+                                //_model.GetLogFileFormat().SaveInFormat(_model.GetLogPath(), log);
                                 UpdateSaveState(saveState);
+                                FileLeftToDo--;
+                                Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                                CalculFillProgress(Progression);
+
+
                             }
-                                
-                               
-                               
+
+
                         }
-
-                            FileLeftToDo--;
-                            Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
-                            CalculFillProgress(Progression);
-                            
-
-
-                    } else //if the file doesn't existe it will be create
-                    {
-                            DateTime datetime = DateTime.Now;
-                            File.Copy(file, targetPath, true);
-                            TimeSpan time = DateTime.Now.Subtract(datetime);
-
-
-                            saveState.SetTotalFilesLeftToDo(FileLeftToDo);
-                            var log = new Log(sv.Name, file, targetPath, string.Empty,
-                                File.ReadAllBytes(file).Length, (float) time.TotalMilliseconds, DateTime.Now.ToString(), new Json());
-                            log.GetFileFormat().SaveInFormat(_model.GetLogPath(), log);
-                            UpdateSaveState(saveState);
-                            FileLeftToDo--;
-                            Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
-                            CalculFillProgress(Progression);
-                            
-
+                        EndSaveWork(saveState);
+                        //OnProgresseUpdate.Invoke(this, null);
+                        //_view.DisplaySuccess(strings.Success);
+                        break;
                     }
-
-                        
-                }
-                EndSaveWork(saveState);
-                OnProgressUpdate.Invoke(this, null);
-                NotifySuccess(Resources.Success);
-                break;
             }
         }
-    }
 
-    private void CalculFillProgress(float progress) //Calcul the fill progress of the progress bar
+        private void CalculFillProgress(float progress) //Calcul the fill progress of the progress bar
     {
         string stringReturn = "[";
         float nbDiez = progress / 2.5f;
@@ -393,4 +415,44 @@ public class BackupsViewModel : ViewModelBase
     {
         SnackBarMessageQueue.Enqueue("TODO");
     }
-}
+
+        public void ChangeFileFormat(FileFormat fileFormat)
+        {
+            _model.SetLogFileFormat(fileFormat);
+            NotifySuccess(Resources.Success);
+        }
+
+
+        private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck)//Function for check if job Process is on
+        {
+            foreach (string ProcessToCheck in listOfProcessToCheck)
+            {
+                Process[] processes = Process.GetProcessesByName(ProcessToCheck);
+                if (processes.Length > 0) return ProcessToCheck;
+            }
+            return string.Empty;
+        }
+
+        private int Cryptage(string sourcePath, string targetPath)
+        {
+            Process cryptosoft = new Process();
+            cryptosoft.StartInfo.FileName = "Cryptosoft.exe";
+            cryptosoft.StartInfo.Arguments = $"{sourcePath} {targetPath}";
+            cryptosoft.StartInfo.UseShellExecute = true;
+            cryptosoft.Start();
+            cryptosoft.WaitForExit();
+            return cryptosoft.ExitCode;
+
+        }
+    private bool CheckToCrypt(string file)
+    {
+        foreach (string ext in _model.GetListExtentionToCheck())
+        {
+            if (ext == Path.GetExtension(file))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    }
