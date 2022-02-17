@@ -12,7 +12,10 @@ public sealed class Model
     private readonly string _saveStatePath;
     private readonly ObservableCollection<SaveWork> _saveWorkList;
     private bool _workInProgress;
-    
+    private List<string> listProcessToCheck;
+    private List<string> listExtentionToCheck;
+    private FileFormat _logFileFormat;
+
     //CONSTRUCTOR
     private Model()
     {
@@ -24,12 +27,13 @@ public sealed class Model
         _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
         _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<SaveWork>();
-        _saveWorkList.Add(new SaveWork("EasySave backup", @"C:\Program Files (x86)\EasySave\", @"C:\Backup\EasySave\", SaveType.Differential));
-        _saveWorkList.Add(new SaveWork("Personal photos", @"C:\Users\John\Pictures\", @"C:\Backup\Photos\", SaveType.Differential));
-        _saveWorkList.Add(new SaveWork("Professional work", @"C:\Users\sacha\Desktop\test", @"C:\Backup\Work\", SaveType.Complete));
         _workInProgress = false;
+        _logFileFormat = new Json();
+        listProcessToCheck = new List<string>() { "Calculator", "word", "notepad", "WINWORD", "chrome" };
+        listExtentionToCheck = new List<string>() { ".png", ".jpeg", ".jpg" };
+
     }
-    
+
     public static Model GetInstance()
     {
         return _instance;
@@ -58,5 +62,25 @@ public sealed class Model
             if (sv.Name == name)
                 return sv;
         return null;
+    }
+
+    public FileFormat GetLogFileFormat()
+    {
+        return _logFileFormat;
+    }
+
+    public void SetLogFileFormat(FileFormat x)
+    {
+        _logFileFormat = x;
+    }
+
+    public List<string> GetListProcessToCheck()
+    {
+        return listProcessToCheck;
+    }
+
+    public List<string> GetListExtentionToCheck()
+    {
+        return listExtentionToCheck;
     }
 }

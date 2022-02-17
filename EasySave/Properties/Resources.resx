@@ -252,4 +252,7 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="Error_WorkingProcess" xml:space="preserve">
+    <value>The following process is running, please stop it before starting a backup :</value>
+  </data>
 </root>

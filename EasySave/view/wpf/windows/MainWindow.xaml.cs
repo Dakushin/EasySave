@@ -21,4 +21,19 @@ public partial class MainWindow : Window
             }
         };
     }
+
+    public void OnClose(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    public void OnMinimize(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    public void OnMaximize(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState == WindowState.Normal ? WindowState.Maximized : WindowState.Normal;
+    }
 }

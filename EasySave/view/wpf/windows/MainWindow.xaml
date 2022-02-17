@@ -59,6 +59,18 @@
                                FontSize="22"/>
                 </StackPanel>
                 
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Click="OnMinimize" Style="{DynamicResource MaterialDesignIconButton}">
+                        <materialDesign:PackIcon Kind="WindowMinimize" Foreground="#eec719"></materialDesign:PackIcon>
+                    </Button>
+                    <Button Click="OnMaximize" Style="{DynamicResource MaterialDesignIconButton}">
+                        <materialDesign:PackIcon Kind="WindowMaximize" Foreground="#eec719"></materialDesign:PackIcon>
+                    </Button>
+                    <Button Click="OnClose" Style="{DynamicResource MaterialDesignIconButton}">
+                        <materialDesign:PackIcon Kind="WindowClose" Foreground="#eec719"></materialDesign:PackIcon>
+                    </Button>
+                </StackPanel>
+                
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="15">
                     
                     <RadioButton Content="{localize:Static properties:Resources.Home_Page}"
