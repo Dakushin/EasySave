@@ -8,6 +8,7 @@ public class MainViewModel : ViewModelBase
     
     private readonly SettingsViewModel _settingsViewModel;
     private readonly BackupsViewModel _backupsViewModel;
+    private readonly HomePageViewModel _homePageViewModel;
 
     public CommandHandler OnNavigateToBackups { get; set; }
     public CommandHandler OnNavigateToSettings { get; set; }
@@ -27,6 +28,7 @@ public class MainViewModel : ViewModelBase
     {
         _settingsViewModel = new SettingsViewModel();
         _backupsViewModel = new BackupsViewModel(null);
+        _homePageViewModel = new HomePageViewModel();
 
         OnNavigateToHomePage = new CommandHandler(NavigateToHomePageView);
         OnNavigateToBackups = new CommandHandler(NavigateToBackupsView);
@@ -37,7 +39,7 @@ public class MainViewModel : ViewModelBase
 
     private void NavigateToHomePageView()
     {
-        throw new NotImplementedException();
+        CurrentViewModel = _homePageViewModel;
     }
 
     private void NavigateToBackupsView()

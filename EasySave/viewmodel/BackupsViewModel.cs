@@ -269,8 +269,8 @@ public class BackupsViewModel : ViewModelBase
                                 }
 
                                 FileLeftToDo--;
-                                Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
-                                CalculFillProgress(Progression);
+                                // Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                                // CalculFillProgress(Progression);
 
 
 
@@ -288,8 +288,8 @@ public class BackupsViewModel : ViewModelBase
                                 //_model.GetLogFileFormat().SaveInFormat(_model.GetLogPath(), log);
                                 UpdateSaveState(saveState);
                                 FileLeftToDo--;
-                                Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
-                                CalculFillProgress(Progression);
+                                // Progression = (float)(files.Count - FileLeftToDo) / (float)files.Count * 100f;
+                                // CalculFillProgress(Progression);
 
 
                             }
