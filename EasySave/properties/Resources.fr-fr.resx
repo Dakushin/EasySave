@@ -258,4 +258,10 @@
   <data name="Backup_Created" xml:space="preserve">
     <value>Travail de sauvegarde crée</value>
   </data>
+  <data name="Welcome_1" xml:space="preserve">
+    <value>Bonjour</value>
+  </data>
+  <data name="Welcome_2" xml:space="preserve">
+    <value>Bienvenu dans EasySave 3.0</value>
+  </data>
 </root>

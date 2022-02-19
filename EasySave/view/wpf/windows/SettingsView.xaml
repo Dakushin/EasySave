@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:localize="http://gu.se/Localization"
-             xmlns:properties="clr-namespace:EasySave.Properties"
+             xmlns:properties="clr-namespace:EasySave.properties"
              xmlns:viewModel="clr-namespace:EasySave.viewmodel"
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"

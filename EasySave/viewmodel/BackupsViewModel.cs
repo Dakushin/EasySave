@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Media;
 using System.Diagnostics;
+using System.Media;
+using System.Windows.Data;
 using EasySave.model;
-using EasySave.Properties;
+using EasySave.properties;
 using EasySave.translation;
 using EasySave.view;
 using EasySave.view.wpf.core;
@@ -453,5 +455,23 @@ public class BackupsViewModel : ViewModelBase
             }
         }
         return true;
+    }
+
+    private string _filterText;
+
+    public void Filter(string filterText)
+    {
+        _filterText = filterText;
+        
+        ICollectionView view = CollectionViewSource.GetDefaultView(Backups);
+        view.Filter = item =>
+        {
+            if (item is SaveWork backup)
+            {
+                return backup.Name.ToLower().Contains(_filterText.ToLower());
+            }
+            
+            return true;
+        };
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using EasySave.model;
-using EasySave.Properties;
+using EasySave.properties;
 using EasySave.translation;
-using EasySave.viewmodel;
 using static System.Console;
 
 namespace EasySave.view;

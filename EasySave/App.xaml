@@ -11,7 +11,6 @@
                  <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Blue" />
                  <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                  <ResourceDictionary Source="view/wpf/theme/MenuButtonTheme.xaml"></ResourceDictionary>
-                 <ResourceDictionary Source="view/wpf/theme/TextBoxTheme.xaml"></ResourceDictionary>
                  <ResourceDictionary Source="view/wpf/theme/ClickableRadioButton.xaml"></ResourceDictionary>
              </ResourceDictionary.MergedDictionaries>
              
@@ -21,6 +20,10 @@
              
              <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
                  <view:SettingsView/>
+             </DataTemplate>
+             
+             <DataTemplate DataType="{x:Type viewModel:HomePageViewModel}">
+                 <view:HomePageView/>
              </DataTemplate>
              
          </ResourceDictionary>

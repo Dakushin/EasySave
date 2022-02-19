@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EasySave.Properties {
+namespace EasySave.properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace EasySave.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EasySave.properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -480,6 +480,24 @@ namespace EasySave.Properties {
         internal static string Type_Differential {
             get {
                 return ResourceManager.GetString("Type_Differential", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        internal static string Welcome_1 {
+            get {
+                return ResourceManager.GetString("Welcome_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to EasySave v3.0.
+        /// </summary>
+        internal static string Welcome_2 {
+            get {
+                return ResourceManager.GetString("Welcome_2", resourceCulture);
             }
         }
     }

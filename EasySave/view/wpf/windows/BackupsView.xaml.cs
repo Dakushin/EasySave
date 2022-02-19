@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using EasySave.model;
 using EasySave.view.wpf.core;
@@ -80,5 +82,12 @@ public partial class BackupsView : UserControl
         {
             ViewModelBase.NotifyInfo("Operation cancelled");
         }
+    }
+
+    private void OnFilter(object sender, TextChangedEventArgs e)
+    {
+        if (sender is not TextBox filterBox) return;
+        
+        _viewModel.Filter(filterBox.Text);
     }
 }
