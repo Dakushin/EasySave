@@ -255,4 +255,7 @@
   <data name="Error_WorkingProcess" xml:space="preserve">
     <value>Erreur : Le processus suivant est actif, fermer le avant de relancer une exécution :</value>
   </data>
+  <data name="Backup_Created" xml:space="preserve">
+    <value>Travail de sauvegarde crée</value>
+  </data>
 </root>

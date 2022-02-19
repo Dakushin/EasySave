@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace EasySave.model;
 
@@ -64,11 +65,6 @@ public class SaveWork : INotifyPropertyChanged
         _sourcePath = sourcePath;
         _targetPath = targetPath;
         _saveType = saveType;
-    }
-    
-    public SaveWork()
-    {
-        
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;

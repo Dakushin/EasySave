@@ -54,7 +54,7 @@ public class BackupsViewModel : ViewModelBase
                 {
                     targetPath = Path.GetFullPath(targetPath);
                     _model.GetSaveWorkList().Add(new SaveWork(name, sourcePath, targetPath, saveType));
-                    NotifySuccess(Resources.Success);
+                    NotifySuccess(Resources.Backup_Created);
                 }
                 else
                 {
@@ -442,7 +442,6 @@ public class BackupsViewModel : ViewModelBase
             cryptosoft.Start();
             cryptosoft.WaitForExit();
             return cryptosoft.ExitCode;
-
         }
     private bool CheckToCrypt(string file)
     {
@@ -455,4 +454,4 @@ public class BackupsViewModel : ViewModelBase
         }
         return true;
     }
-    }
+}

@@ -1,8 +1,9 @@
 ﻿using System.IO;
-using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EasySave.model;
+using EasySave.view.wpf.core;
 using EasySave.viewmodel;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
@@ -31,14 +32,9 @@ public partial class BackupsView : UserControl
         _viewModel.ExecuteSelectedBackup();
     }
     
-    private void OnCreateBackup(object sender, RoutedEventArgs e)
-    {
-        _viewModel.Todo();
-    }
-
     private void OnChooseFolder(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not TextBlock folderTextBlock) return;
+        if (sender is not TextBox textBox) return;
 
         var folderBrowser = new OpenFileDialog
         {
@@ -50,12 +46,39 @@ public partial class BackupsView : UserControl
         var result = folderBrowser.ShowDialog(); 
         if (result.HasValue && result.Value) 
         { 
-            folderTextBlock.Text = Path.GetDirectoryName(folderBrowser.FileName); 
+            textBox.Text = Path.GetDirectoryName(folderBrowser.FileName); 
         }
     }
 
-    private void DataGrid_OnInitializingNewItem(object sender, InitializingNewItemEventArgs e)
+    private void OnCreateBackup(object sender, DialogClosingEventArgs e)
     {
-        SystemSounds.Beep.Play();
+        if (e.Parameter is not bool accept) return;
+
+        if (accept)
+        {
+            if (BackupType.SelectedItem is not ComboBoxItem backupTypeSelected)
+            {
+                ViewModelBase.NotifyError("Please, fill all the information when creating a backup");
+                return;
+            }
+                
+            var backupName = BackupName.Text.Trim();
+            var backupSourcePath = BackupSourcePath.Text.Trim();
+            var backupTargetPath = BackupTargetPath.Text.Trim();
+            var backupType = backupTypeSelected.Name;
+
+            if (backupName.Length > 0 && backupType != null && Enum.TryParse(backupType, out SaveType saveType))
+            {
+                _viewModel.CreateSaveWork(backupName, backupSourcePath, backupTargetPath, saveType);
+            }
+            else
+            {
+                ViewModelBase.NotifyError("Please, fill all the information when creating a backup");
+            }
+        }
+        else
+        {
+            ViewModelBase.NotifyInfo("Operation cancelled");
+        }
     }
 }

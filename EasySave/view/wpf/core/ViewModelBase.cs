@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Media;
 using System.Runtime.CompilerServices;
 using MaterialDesignThemes.Wpf;
 
@@ -15,17 +14,17 @@ public class ViewModelBase : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    protected void NotifyInfo(string message)
+    public static void NotifyInfo(string message)
     {
         SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.Information}, () => {});
     }
 
-    protected void NotifyError(string message)
+    public static void NotifyError(string message)
     {
         SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.Error}, () => {});
     }
 
-    protected void NotifySuccess(string message)
+    public static void NotifySuccess(string message)
     {
         SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.CheckBold}, () => {});
     }
