@@ -142,6 +142,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, fill all the information when creating a backup.
+        /// </summary>
+        internal static string Ask_Informations_Create_Backup {
+            get {
+                return ResourceManager.GetString("Ask_Informations_Create_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Which language do you want ? [fr/en] : .
         /// </summary>
         internal static string Ask_Language {
@@ -183,6 +192,15 @@ namespace EasySave.properties {
         internal static string Backups {
             get {
                 return ResourceManager.GetString("Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cancelled.
+        /// </summary>
+        internal static string Cancelled {
+            get {
+                return ResourceManager.GetString("Cancelled", resourceCulture);
             }
         }
         
@@ -349,6 +367,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter backups by name.
+        /// </summary>
+        internal static string Filter_Backup {
+            get {
+                return ResourceManager.GetString("Filter_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Homepage.
         /// </summary>
         internal static string Home_Page {
@@ -453,6 +480,15 @@ namespace EasySave.properties {
         internal static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to successfully executed.
+        /// </summary>
+        internal static string Success_Execution {
+            get {
+                return ResourceManager.GetString("Success_Execution", resourceCulture);
             }
         }
         

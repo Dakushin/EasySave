@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Diagnostics;
-using System.Media;
 using System.Windows.Data;
 using EasySave.model;
 using EasySave.model.backupStrategies;
@@ -171,11 +170,11 @@ public class BackupsViewModel : ViewModelBase
         var success = await Task.Run(backup.Execute);
         if (success)
         {
-            NotifySuccess($"{backup.Name} successfully executed");
+            NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
         }
         else
         {
-            NotifyError($"{backup.Name} cancelled");
+            NotifyError($"{backup.Name} {Resources.Cancelled}");
         }
     }
    

@@ -264,4 +264,16 @@
   <data name="Welcome_2" xml:space="preserve">
     <value>Welcome to EasySave v3.0</value>
   </data>
+  <data name="Filter_Backup" xml:space="preserve">
+    <value>Filter backups by name</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>cancelled</value>
+  </data>
+  <data name="Success_Execution" xml:space="preserve">
+    <value>successfully executed</value>
+  </data>
+  <data name="Ask_Informations_Create_Backup" xml:space="preserve">
+    <value>Please, fill all the information when creating a backup</value>
+  </data>
 </root>

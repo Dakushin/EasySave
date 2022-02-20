@@ -262,6 +262,18 @@
     <value>Bonjour</value>
   </data>
   <data name="Welcome_2" xml:space="preserve">
-    <value>Bienvenu dans EasySave 3.0</value>
+    <value>Bienvenue dans EasySave 3.0</value>
+  </data>
+  <data name="Filter_Backup" xml:space="preserve">
+    <value>Rechercher un travail</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>annulé</value>
+  </data>
+  <data name="Success_Execution" xml:space="preserve">
+    <value>exécuté avec succès</value>
+  </data>
+  <data name="Ask_Informations_Create_Backup" xml:space="preserve">
+    <value>Veuillez renseigner toutes les informations lors de la création d'un travail de sauvegarde</value>
   </data>
 </root>

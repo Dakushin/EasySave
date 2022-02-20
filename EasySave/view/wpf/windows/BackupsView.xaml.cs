@@ -7,6 +7,7 @@ using EasySave.view.wpf.core;
 using EasySave.viewmodel;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
+using EasySave.properties;
 
 namespace EasySave.view.wpf.windows;
 
@@ -63,7 +64,7 @@ public partial class BackupsView : UserControl
         {
             if (BackupType.SelectedItem is not ComboBoxItem backupTypeSelected)
             {
-                ViewModelBase.NotifyError("Please, fill all the information when creating a backup");
+                ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Create_Backup);
                 return;
             }
                 
@@ -78,12 +79,12 @@ public partial class BackupsView : UserControl
             }
             else
             {
-                ViewModelBase.NotifyError("Please, fill all the information when creating a backup");
+                ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Create_Backup);
             }
         }
         else
         {
-            ViewModelBase.NotifyInfo("Operation cancelled");
+            ViewModelBase.NotifyInfo(properties.Resources.Cancelled);
         }
     }
 
