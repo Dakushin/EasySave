@@ -1,23 +1,17 @@
-﻿namespace EasySave.model.backupStrategies;
+﻿using System.IO;
+
+namespace EasySave.model.backupStrategies;
 
 public class Complete : BackupStrategy
 {
-    public override bool Execute(Backup backup)
+    protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
     {
-        var x = 1;
+        TotalBytesToCopy = GetDirectorySize(sourceFolderPath);
 
-        while (!isCancelled && ++x <= 100)
+        foreach (var sourceFilePath in Directory.GetFiles(sourceFolderPath))
         {
-            lock(PauseLock)
-            {
-                Thread.Sleep(30);
-                backup.Progression = x;
-            }
+            CopyFile(sourceFilePath, Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath)));
         }
-
-        var cancelled = isCancelled;
-        ResetState(backup);
-        return !cancelled;
     }
 
     public override string GetName()

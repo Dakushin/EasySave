@@ -12,7 +12,6 @@ public sealed class Model
     private readonly string _logPath;
     private readonly string _saveStatePath;
     private readonly ObservableCollection<Backup> _saveWorkList;
-    private bool _workInProgress;
     private List<string> listProcessToCheck;
     private List<string> listExtentionToCheck;
     private FileFormat _logFileFormat;
@@ -28,7 +27,6 @@ public sealed class Model
         _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
         _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<Backup>();
-        _workInProgress = false;
         _logFileFormat = new Json();
         listProcessToCheck = new List<string>() { "Calculator", "word", "notepad", "WINWORD", "chrome" };
         listExtentionToCheck = new List<string>() { ".png", ".jpeg", ".jpg" };

@@ -1,23 +1,46 @@
-﻿namespace EasySave.model.backupStrategies;
+﻿using System.IO;
+
+namespace EasySave.model.backupStrategies;
 
 public class Differential : BackupStrategy
 {
-    public override bool Execute(Backup backup)
+    protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
     {
-        var x = 1;
-
-        while (!isCancelled && ++x <= 100)
+        var filesToCopy = GetFilesToCopy(sourceFolderPath, targetFolderPath);
+        
+        foreach (var sourceFilePath in filesToCopy)
         {
-            lock(PauseLock)
+            CopyFile(sourceFilePath, Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath)));
+        }
+    }
+
+    private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)
+    {
+        var filesToCopy = new List<string>();
+        
+        foreach (var sourceFilePath in Directory.GetFiles(sourceFolderPath))
+        {
+            var targetFilePath = Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath));
+            
+            if (File.Exists(targetFilePath)) // the file have a backup => check if the backups is up to date 
             {
-                Thread.Sleep(10);
-                backup.Progression = x;
+                var sourceFileLastWriteTime = File.GetLastWriteTime(sourceFilePath);
+                var targetFileLastWriteTime = File.GetLastWriteTime(targetFilePath);
+
+                if (sourceFileLastWriteTime > targetFileLastWriteTime)
+                {
+                    filesToCopy.Add(sourceFilePath);
+                    TotalBytesToCopy += new FileInfo(sourceFilePath).Length;
+                }
+            }
+            else // the file don't have a backup => copy it
+            {
+                filesToCopy.Add(sourceFilePath);
+                TotalBytesToCopy += new FileInfo(sourceFilePath).Length;
             }
         }
 
-        var cancelled = isCancelled;
-        ResetState(backup);
-        return !cancelled;
+        return filesToCopy;
     }
 
     public override string GetName()
