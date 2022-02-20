@@ -261,18 +261,18 @@ namespace EasySave.properties {
         /// <summary>
         ///   Looks up a localized string similar to Error : No save work available.
         /// </summary>
-        internal static string Error_NoSaveWork {
+        internal static string Error_NoBackup {
             get {
-                return ResourceManager.GetString("Error_NoSaveWork", resourceCulture);
+                return ResourceManager.GetString("Error_NoBackup", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Error : Error : No save work of that name.
         /// </summary>
-        internal static string Error_NoSaveWorkOfThisName {
+        internal static string Error_NoBackupOfThisName {
             get {
-                return ResourceManager.GetString("Error_NoSaveWorkOfThisName", resourceCulture);
+                return ResourceManager.GetString("Error_NoBackupOfThisName", resourceCulture);
             }
         }
         

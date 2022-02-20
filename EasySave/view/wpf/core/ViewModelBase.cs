@@ -7,7 +7,7 @@ namespace EasySave.view.wpf.core;
 public class ViewModelBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
-    public static SnackbarMessageQueue SnackBarMessageQueue { get; } = new(TimeSpan.FromMilliseconds(2500));
+    public static SnackbarMessageQueue SnackBarMessageQueue { get; } = new(TimeSpan.FromSeconds(2));
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

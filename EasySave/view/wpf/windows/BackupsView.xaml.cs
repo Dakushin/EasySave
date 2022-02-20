@@ -1,10 +1,8 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using EasySave.model;
+using EasySave.model.backupStrategies;
 using EasySave.view.wpf.core;
 using EasySave.viewmodel;
 using MaterialDesignThemes.Wpf;
@@ -36,8 +34,6 @@ public partial class BackupsView : UserControl
     
     private void OnChooseFolder(object sender, MouseButtonEventArgs e)
     {
-        if (sender is not TextBox textBox) return;
-
         var folderBrowser = new OpenFileDialog
         {
             ValidateNames = false,
@@ -45,10 +41,17 @@ public partial class BackupsView : UserControl
             CheckPathExists = true,
             FileName = "Select a folder"
         };
-        var result = folderBrowser.ShowDialog(); 
-        if (result.HasValue && result.Value) 
-        { 
-            textBox.Text = Path.GetDirectoryName(folderBrowser.FileName); 
+        var result = folderBrowser.ShowDialog();
+        if (!result.HasValue || !result.Value) return;
+        
+        switch (sender)
+        {
+            case TextBox textBox:
+                textBox.Text = Path.GetDirectoryName(folderBrowser.FileName);
+                break;
+            case TextBlock textBlock:
+                textBlock.Text = Path.GetDirectoryName(folderBrowser.FileName);
+                break;
         }
     }
 
@@ -69,9 +72,9 @@ public partial class BackupsView : UserControl
             var backupTargetPath = BackupTargetPath.Text.Trim();
             var backupType = backupTypeSelected.Name;
 
-            if (backupName.Length > 0 && backupType != null && Enum.TryParse(backupType, out SaveType saveType))
+            if (backupName.Length > 0 && !string.IsNullOrEmpty(backupType))
             {
-                _viewModel.CreateSaveWork(backupName, backupSourcePath, backupTargetPath, saveType);
+                _viewModel.CreateBackup(backupName, backupSourcePath, backupTargetPath, backupType.Equals("Complete") ? new Complete() : new Differential());
             }
             else
             {
@@ -89,5 +92,20 @@ public partial class BackupsView : UserControl
         if (sender is not TextBox filterBox) return;
         
         _viewModel.Filter(filterBox.Text);
+    }
+
+    private void OnResumeBackup(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ResumeSelectedBackup();
+    }
+
+    private void OnPauseBackup(object sender, RoutedEventArgs e)
+    {
+        _viewModel.PauseSelectedBackup();
+    }
+
+    private void OnCancelBackup(object sender, RoutedEventArgs e)
+    {
+        _viewModel.CancelSelectedBackup();
     }
 }

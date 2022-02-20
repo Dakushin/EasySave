@@ -207,13 +207,13 @@
   <data name="Execute_Backup" xml:space="preserve">
     <value>Execute a save work</value>
   </data>
-  <data name="Error_NoSaveWork" xml:space="preserve">
+  <data name="Error_NoBackup" xml:space="preserve">
     <value>Error : No save work available</value>
   </data>
   <data name="Error_Wrong_SourcePath" xml:space="preserve">
     <value>Error : The source path you enter doesn't exist</value>
   </data>
-  <data name="Error_NoSaveWorkOfThisName" xml:space="preserve">
+  <data name="Error_NoBackupOfThisName" xml:space="preserve">
     <value>Error : Error : No save work of that name</value>
   </data>
   <data name="Backups" xml:space="preserve">

@@ -7,9 +7,22 @@
              xmlns:properties="clr-namespace:EasySave.properties"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:core="clr-namespace:EasySave.view.wpf.core"
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
              Background="#272537">
+    
+    <UserControl.Resources>
+        <core:ProgressionToVisibilityConverter 
+            x:Key="ProgressionToCollapsedConverter"
+            TrueValue="Collapsed"
+            FalseValue="Visible"/>
+        
+        <core:ProgressionToVisibilityConverter 
+            x:Key="ProgressionToVisibleConverter"
+            TrueValue="Visible"
+            FalseValue="Collapsed"/>
+    </UserControl.Resources>
     
     <materialDesign:DialogHost DialogClosing="OnCreateBackup">
         <materialDesign:DialogHost.DialogContent>
@@ -75,20 +88,32 @@
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
         
-        <StackPanel>
-            <TextBox TextChanged="OnFilter"
-                     Style="{StaticResource MaterialDesignFilledTextBox}"
-                     materialDesign:HintAssist.Hint="Filter backups by name"
-                     VerticalAlignment="Top"
-                     Width="250"
-                     HorizontalAlignment="Left"
-                     Margin="0, 0, 0, 15"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             
-            <DataGrid Height="600" 
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <TextBox TextChanged="OnFilter"
+                         Style="{StaticResource MaterialDesignFilledTextBox}"
+                         materialDesign:HintAssist.Hint="Filter backups by name"
+                         HorizontalAlignment="Left"
+                         Width="250"/>
+            
+                <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" 
+                        Background="ForestGreen" 
+                        Content="{localize:Static properties:Resources.Create_Backup}" 
+                        Width="250"
+                        Margin="15, 0"/>
+            </StackPanel>
+            
+            <DataGrid Grid.Row="1"
+                      Margin="16"
                       ItemsSource="{Binding Backups}"
                       AlternatingRowBackground="DimGray" 
                       AutoGenerateColumns="False"
-                      SelectedItem="{Binding SelectedSaveWork, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedBackup, Mode=TwoWay}">
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="150" Header="{localize:Static properties:Resources.Backup_Name}" Binding="{Binding Name}"></DataGridTextColumn>
@@ -116,15 +141,47 @@
                         </DataGridTemplateColumn.CellTemplate> 
                     </DataGridTemplateColumn>
                     
-                    <DataGridTextColumn Width="2*" Header="Type" Binding="{Binding SaveType}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Width="2*" Header="Type">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <ComboBox Text="{Binding BackupStrategyName, UpdateSourceTrigger=PropertyChanged}">
+                                        <ComboBoxItem Content="Complete" Name="Complete"/>
+                                        <ComboBoxItem Content="Differential" Name="Differential"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     
-                    <DataGridTemplateColumn Width="230" Header="{localize:Static properties:Resources.Actions}">
+                    <DataGridTemplateColumn Width="250" Header="{localize:Static properties:Resources.Actions}">
                         <DataGridTemplateColumn.CellTemplate> 
                             <DataTemplate>
                                 <StackPanel>
-                                    <StackPanel Orientation="Horizontal" x:Name="backupsEditionButtons">
+                                    <StackPanel Orientation="Horizontal" x:Name="backupsEditionButtons" 
+                                                Visibility="{Binding Progression, Converter={StaticResource ProgressionToVisibleConverter}}">
                                         <Button Click="OnExecuteBackup" Content="{localize:Static properties:Resources.Execute}" Margin="5, 0"/>
                                         <Button Click="OnDeleteBackup" Background="IndianRed" Content="{localize:Static properties:Resources.Delete}" Margin="5, 0"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Orientation="Horizontal"
+                                                Visibility="{Binding Progression, Converter={StaticResource ProgressionToCollapsedConverter}}">
+                                        <Button
+                                            Click="OnResumeBackup"
+                                            Style="{StaticResource MaterialDesignIconButton}">
+                                            <materialDesign:PackIcon Kind="Play"/>
+                                        </Button>
+                                        <Button
+                                            Click="OnPauseBackup"
+                                            Style="{StaticResource MaterialDesignIconButton}">
+                                            <materialDesign:PackIcon Kind="Pause"/>
+                                        </Button>
+                                        <Button
+                                            Click="OnCancelBackup"
+                                            Style="{StaticResource MaterialDesignIconButton}">
+                                            <materialDesign:PackIcon Kind="Stop"/>
+                                        </Button>
+                                        <ProgressBar Value="{Binding Progression}" Height="20" Width="75"/>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate> 
@@ -132,9 +189,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            
-           <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" Background="ForestGreen" Content="{localize:Static properties:Resources.Create_Backup}" Width="200" Margin="0, 15"/>
-        </StackPanel>
+        </Grid>
     </materialDesign:DialogHost>
     
 </UserControl>
