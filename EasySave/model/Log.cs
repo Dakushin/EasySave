@@ -6,8 +6,8 @@ public class Log
 {
     //CONSTRUCTOR
     [JsonConstructor]
-    public Log(string name, string fileSource, string fileTarget, string destPath, int fileSize, float fileTransferTime,
-        string time, int timeToCrypt)
+    public Log(string name, string fileSource, string fileTarget, string destPath, long fileSize, long fileTransferTime,
+        string time, int timeToCrypt = 0)
     {
         Name = name;
         FileSource = fileSource;
@@ -23,7 +23,6 @@ public class Log
     {
     }
 
-
     //public variable for the json serializer
     public string Name { get; }
 
@@ -33,16 +32,16 @@ public class Log
 
     public string DestPath { get; set; }
 
-    public int FileSize { get; set; }
+    public long FileSize { get; set; }
 
-    public float FileTransferTime { get; set; }
+    public long FileTransferTime { get; set; }
 
     public string Time { get; set; }
 
-    public int TimeToCrypt { get; set; }
+    public long TimeToCrypt { get; set; }
 
     //GETTER AND SETTER
-    public int GetFileSize()
+    public long GetFileSize()
     {
         return FileSize;
     }
@@ -57,7 +56,7 @@ public class Log
         return FileTransferTime;
     }
 
-    public void SetFileTransferTime(float fileTransferTime)
+    public void SetFileTransferTime(long fileTransferTime)
     {
         this.FileTransferTime = fileTransferTime;
     }

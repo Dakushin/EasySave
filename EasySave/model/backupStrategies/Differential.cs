@@ -17,8 +17,7 @@ public class Differential : BackupStrategy
     private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)
     {
         var filesToCopy = new List<string>();
-
-        foreach (var sourceFilePath in Directory.GetFiles(sourceFolderPath))
+        foreach (var sourceFilePath in GetAllFileFromDirectory(Directory.GetDirectories(sourceFolderPath)))
         {
             var targetFilePath = Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath));
 

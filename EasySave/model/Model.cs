@@ -22,7 +22,7 @@ public sealed class Model
         if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave"))
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                       "\\EasySave");
-        _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
+        _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log-" + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
         _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                          "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<Backup>();

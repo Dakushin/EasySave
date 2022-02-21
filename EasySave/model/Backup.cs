@@ -12,6 +12,7 @@ public class Backup : INotifyPropertyChanged
     private int _progression;
     private string _sourcePath;
     private string _targetPath;
+    private bool _crypted;
 
     //CONSTRUCTOR
     public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy)

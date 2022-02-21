@@ -1,11 +1,12 @@
 ﻿using System.IO;
-
+using System.Diagnostics;
 namespace EasySave.model.backupStrategies;
 
 public abstract class BackupStrategy
 {
     protected readonly object PauseLock = new();
     private bool _isPaused;
+    private string _backupAssociateName;
     protected bool IsCancelled;
     protected long TotalBytesToCopy;
     protected event EventHandler<long>? BytesCopied;
@@ -14,7 +15,7 @@ public abstract class BackupStrategy
     {
         var sourceFolderPath = backup.SourcePath;
         var targetFolderPath = backup.TargetPath;
-
+        _backupAssociateName = backup.Name;
         long totalBytesCopied = 0;
 
         BytesCopied = (_, bytesCopied) =>
@@ -76,19 +77,25 @@ public abstract class BackupStrategy
         return directoryInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(fileInfo => fileInfo.Length);
     }
 
+    protected void CopyFileCrypted(string sourceFilePath, string targetFilePath)
+    {
+
+    }
     protected void CopyFile(string sourceFilePath, string targetFilePath)
     {
         var buffer = new byte[1024 * 1024]; // 1MB buffer
-
+        Stopwatch sw = Stopwatch.StartNew();
         try
         {
             using (var source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read)) 
             {
+                CreateDirectoryIfNotExist(targetFilePath);
                 using (var target = new FileStream(targetFilePath, FileMode.Create, FileAccess.Write))
                 {
                     int currentBlockSize;
 
                     while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
+                    {
                         lock (PauseLock)
                         {
                             BytesCopied(this, currentBlockSize);
@@ -97,6 +104,7 @@ public abstract class BackupStrategy
 
                             if (IsCancelled) break;
                         }
+                    }
                 }
             }
         }
@@ -104,5 +112,33 @@ public abstract class BackupStrategy
         {
             IsCancelled = true;
         }
+        sw.Stop();
+        var log = new Log(_backupAssociateName, sourceFilePath, targetFilePath, string.Empty,
+                           new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString());
+        Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
     }
+
+    protected List<string> GetAllFileFromDirectory(string[] directories/*, List<string> files*/)
+    {
+        var files = new List<string>();
+        foreach (var directory in directories)
+        {
+            var list = Directory.GetDirectories(directory);
+            if (list.Length > 0) files.AddRange(GetAllFileFromDirectory(list/*, files*/));
+
+            files.AddRange(Directory.EnumerateFiles(directory));
+        }
+        return files;
+    }
+
+    private void CreateDirectoryIfNotExist(string targetFilePath)
+    {
+        var lastfile = targetFilePath.Split(Path.DirectorySeparatorChar);
+        var newtargetpath = targetFilePath.Replace(Path.DirectorySeparatorChar + lastfile[lastfile.Length - 1], null);
+        if (!Directory.Exists(newtargetpath))
+        {
+            Directory.CreateDirectory(Path.GetFullPath(newtargetpath));
+        }
+    }
+
 }

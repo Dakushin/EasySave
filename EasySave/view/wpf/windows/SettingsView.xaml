@@ -58,9 +58,9 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16">
                     <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0"
-                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" />
+                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectJSON}"/>
                     <RadioButton Content="../images/xml.png" Margin="10, 0"
-                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" />
+                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectXML}"/>
                 </StackPanel>
             </StackPanel>
         </materialDesign:Card>

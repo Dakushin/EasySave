@@ -5,8 +5,10 @@ namespace EasySave.model;
 
 internal class Json : FileFormat
 {
+    private string extention = ".json";
     public override void SaveInFormat<T>(string path, T obj) //Function that serialise an objet to json file
     {
+        path = Checkpath(path, extention);
         var list = new List<T>();
         if (File.Exists(path)) list = UnSerialize<T>(path);
         list.Add(obj);
@@ -16,6 +18,7 @@ internal class Json : FileFormat
 
     public override List<T> UnSerialize<T>(string path) //Function generic that Deserialise an json file by item
     {
+        path = Checkpath(path, extention);
         if (File.Exists(path)) return JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(path));
 
         return null;
