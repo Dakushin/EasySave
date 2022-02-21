@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Diagnostics;
 using System.Windows.Data;
 using EasySave.model;
 using EasySave.model.backupStrategies;
@@ -20,13 +19,6 @@ public class BackupsViewModel : ViewModelBase
     private readonly View _view;
     private string _filterText;
 
-    //PUBLIC EVENT
-    public event EventHandler<string> OnProgressUpdate;
-
-    public ObservableCollection<Backup> Backups => _model.GetBackupList();
-
-    public Backup SelectedBackup { get; set; }
-
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
@@ -35,6 +27,17 @@ public class BackupsViewModel : ViewModelBase
 
         TryRecupFromSaveStatePath();
     }
+
+    public BackupsViewModel() : this(null)
+    {
+    }
+
+    public ObservableCollection<Backup> Backups => _model.GetBackupList();
+
+    public Backup SelectedBackup { get; set; }
+
+    //PUBLIC EVENT
+    public event EventHandler<string> OnProgressUpdate;
 
     public void ExecuteSelectedBackup()
     {
@@ -45,7 +48,7 @@ public class BackupsViewModel : ViewModelBase
     {
         DeleteBackup(SelectedBackup.Name);
     }
-    
+
     public void ResumeSelectedBackup()
     {
         SelectedBackup.BackupStrategy.Resume();
@@ -61,9 +64,8 @@ public class BackupsViewModel : ViewModelBase
         SelectedBackup.BackupStrategy.Cancel();
     }
 
-    public BackupsViewModel() : this(null) {}
-
-    public void CreateBackup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy) //Function that create savework
+    public void CreateBackup(string name, string sourcePath, string targetPath,
+        BackupStrategy backupStrategy) //Function that create savework
     {
         if (_model.GetBackupList().Count < 5) //check if we have more than 5 wavework
         {
@@ -121,12 +123,14 @@ public class BackupsViewModel : ViewModelBase
     {
         var sv = _model.FindbyName(name);
         if (sv != null)
-        { 
+        {
             _model.GetBackupList().Remove(sv);
             NotifySuccess(Resources.Success);
         }
         else
+        {
             NotifyError(Resources.Error_Backup_Not_Found);
+        }
     }
 
     public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
@@ -136,48 +140,41 @@ public class BackupsViewModel : ViewModelBase
         FileFormat fileFormat = new Json();
         List<BackupState> saveStates;
         if (!File.Exists(_model.GetSaveStatePath())) return;
-        
+
         saveStates = fileFormat.UnSerialize<BackupState>(_model.GetSaveStatePath());
         foreach (var sv in saveStates)
-        {
             if (sv.GetNbFilesLeftToDo() > 0)
             {
-                List<string> listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
-                List<string> listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
-                bool sameDirectory = false;
-                while (!sameDirectory && listDirectorySource.Any() && listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
-                {
-                    if (listDirectorySource.Last<string>() == listDirectoryTarget.Last<string>())
+                var listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
+                var listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
+                var sameDirectory = false;
+                while (!sameDirectory && listDirectorySource.Any() &&
+                       listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
+                    if (listDirectorySource.Last() == listDirectoryTarget.Last())
                     {
-                        listDirectorySource.Remove(listDirectorySource.Last<string>());
-                        listDirectoryTarget.Remove(listDirectoryTarget.Last<string>());
+                        listDirectorySource.Remove(listDirectorySource.Last());
+                        listDirectoryTarget.Remove(listDirectoryTarget.Last());
                     }
                     else
                     {
                         sameDirectory = true;
                     }
-                }
-                string sourcePath = string.Join(Path.DirectorySeparatorChar, listDirectorySource);
-                string targetPath = string.Join(Path.DirectorySeparatorChar, listDirectoryTarget);
+
+                var sourcePath = string.Join(Path.DirectorySeparatorChar, listDirectorySource);
+                var targetPath = string.Join(Path.DirectorySeparatorChar, listDirectoryTarget);
                 _model.GetBackupList().Add(new Backup(sv.GetName(), sourcePath, targetPath, new Differential()));
             }
-        }
-        
     }
 
     private async void ExecuteBackup(Backup backup)
     {
         var success = await Task.Run(backup.Execute);
         if (success)
-        {
             NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
-        }
         else
-        {
             NotifyError($"{backup.Name} {Resources.Cancelled}");
-        }
     }
-   
+
     private void EndBackup(BackupState backupState) //Update SaveState to END
     {
         backupState.SetSourceFilePath("");
@@ -227,19 +224,20 @@ public class BackupsViewModel : ViewModelBase
     }
 
 
-    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck)//Function for check if job Process is on
+    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
     {
-        foreach (string ProcessToCheck in listOfProcessToCheck)
+        foreach (var ProcessToCheck in listOfProcessToCheck)
         {
-            Process[] processes = Process.GetProcessesByName(ProcessToCheck);
+            var processes = Process.GetProcessesByName(ProcessToCheck);
             if (processes.Length > 0) return ProcessToCheck;
         }
+
         return string.Empty;
     }
 
     private int Cryptage(string sourcePath, string targetPath)
     {
-        Process cryptosoft = new Process();
+        var cryptosoft = new Process();
         cryptosoft.StartInfo.FileName = "Cryptosoft.exe";
         cryptosoft.StartInfo.Arguments = $"{sourcePath} {targetPath}";
         cryptosoft.StartInfo.UseShellExecute = true;
@@ -247,30 +245,24 @@ public class BackupsViewModel : ViewModelBase
         cryptosoft.WaitForExit();
         return cryptosoft.ExitCode;
     }
+
     private bool CheckToCrypt(string file)
     {
-        foreach (string ext in _model.GetListExtentionToCheck())
-        {
+        foreach (var ext in _model.GetListExtentionToCheck())
             if (ext == Path.GetExtension(file))
-            {
                 return false;
-            }
-        }
         return true;
     }
-    
+
     public void Filter(string filterText)
     {
         _filterText = filterText;
-        
-        ICollectionView view = CollectionViewSource.GetDefaultView(Backups);
+
+        var view = CollectionViewSource.GetDefaultView(Backups);
         view.Filter = item =>
         {
-            if (item is Backup backup)
-            {
-                return backup.Name.ToLower().Contains(_filterText.ToLower());
-            }
-            
+            if (item is Backup backup) return backup.Name.ToLower().Contains(_filterText.ToLower());
+
             return true;
         };
     }

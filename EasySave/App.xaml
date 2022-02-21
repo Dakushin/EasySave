@@ -6,26 +6,27 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="view/wpf/windows/MainWindow.xaml">
     <Application.Resources>
-         <ResourceDictionary>
-             <ResourceDictionary.MergedDictionaries>
-                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Blue" />
-                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                 <ResourceDictionary Source="view/wpf/theme/MenuButtonTheme.xaml"></ResourceDictionary>
-                 <ResourceDictionary Source="view/wpf/theme/ClickableRadioButton.xaml"></ResourceDictionary>
-             </ResourceDictionary.MergedDictionaries>
-             
-             <DataTemplate DataType="{x:Type viewModel:BackupsViewModel}">
-                 <view:BackupsView/>
-             </DataTemplate>
-             
-             <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
-                 <view:SettingsView/>
-             </DataTemplate>
-             
-             <DataTemplate DataType="{x:Type viewModel:HomePageViewModel}">
-                 <view:HomePageView/>
-             </DataTemplate>
-             
-         </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Blue" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="view/wpf/theme/MenuButtonTheme.xaml" />
+                <ResourceDictionary Source="view/wpf/theme/ClickableRadioButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:BackupsViewModel}">
+                <view:BackupsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+                <view:SettingsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:HomePageViewModel}">
+                <view:HomePageView />
+            </DataTemplate>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

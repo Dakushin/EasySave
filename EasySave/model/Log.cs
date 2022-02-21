@@ -4,22 +4,24 @@ namespace EasySave.model;
 
 public class Log
 {
-
     //CONSTRUCTOR
     [JsonConstructor]
     public Log(string name, string fileSource, string fileTarget, string destPath, int fileSize, float fileTransferTime,
-       string time, int timetocrypt)
+        string time, int timeToCrypt)
     {
         Name = name;
         FileSource = fileSource;
         FileTarget = fileTarget;
-        this.destPath = destPath;
+        DestPath = destPath;
         FileSize = fileSize;
         FileTransferTime = fileTransferTime;
-        this.time = time;
-        this.timetocrypt = timetocrypt;
+        Time = time;
+        TimeToCrypt = timeToCrypt;
     }
 
+    public Log()
+    {
+    }
 
 
     //public variable for the json serializer
@@ -29,27 +31,25 @@ public class Log
 
     public string FileTarget { get; set; }
 
-    public string destPath { get; set; }
+    public string DestPath { get; set; }
 
     public int FileSize { get; set; }
 
     public float FileTransferTime { get; set; }
 
-    public string time { get; set; }
+    public string Time { get; set; }
 
-    public int timetocrypt { get; set; }
-    public Log()
-    { }
+    public int TimeToCrypt { get; set; }
 
     //GETTER AND SETTER
-    public int GetFileSize() 
+    public int GetFileSize()
     {
         return FileSize;
     }
 
-    public void SetFileSize(int FileSize)
+    public void SetFileSize(int fileSize)
     {
-        this.FileSize = FileSize;
+        this.FileSize = fileSize;
     }
 
     public float GetFileTransferTime()
@@ -57,19 +57,18 @@ public class Log
         return FileTransferTime;
     }
 
-    public void SetFileTransferTime(float FileTransferTime)
+    public void SetFileTransferTime(float fileTransferTime)
     {
-        this.FileTransferTime = FileTransferTime;
+        this.FileTransferTime = fileTransferTime;
     }
 
     public string GetTime()
     {
-        return time;
+        return Time;
     }
 
     public void SetTime(string currentTime)
     {
-        time = currentTime;
+        Time = currentTime;
     }
-
 }

@@ -4,9 +4,9 @@ namespace EasySave.view.wpf.core;
 
 public class CommandHandler : ICommand
 {
+    private readonly Func<bool>? _canExecute;
 
     private readonly Action _execute;
-    private readonly Func<bool>? _canExecute;
 
     public CommandHandler(Action execute, Func<bool>? canExecute = null)
     {
@@ -18,7 +18,7 @@ public class CommandHandler : ICommand
     {
         return _canExecute == null || _canExecute.Invoke();
     }
-    
+
     public void Execute(object? parameter)
     {
         _execute();

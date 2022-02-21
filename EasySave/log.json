@@ -91,7 +91,8 @@
   },
   {
     "Name": "test",
-<<<<<<< HEAD
+    <<<<<<<
+    HEAD
     "FileSource": "x:\\x\\.jpg",
     "FileTarget": "x:\\y\\.jpg",
     "destPath": "",
@@ -449,13 +450,14 @@
     "FileSize": 1017943,
     "FileTransferTime": 1.0336,
     "time": "01/02/2022 15:40:57"
-=======
+    =======
     "FileSource": "C:\\Users\\sacha\\Desktop\\en\\test.txt",
     "FileTarget": "C:\\Users\\sacha\\Desktop\\fr\\test.txt",
     "destPath": "",
     "FileSize": 0,
     "FileTransferTime": 2.2737,
     "time": "2/1/2022 3:11:21 PM"
->>>>>>> 91a86c2ea5a23f5cd0fd268eb77f3ca1be260f46
+    >>>>>>>
+    91a86c2ea5a23f5cd0fd268eb77f3ca1be260f46
   }
 ]

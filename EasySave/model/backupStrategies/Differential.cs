@@ -7,7 +7,7 @@ public class Differential : BackupStrategy
     protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
     {
         var filesToCopy = GetFilesToCopy(sourceFolderPath, targetFolderPath);
-        
+
         foreach (var sourceFilePath in filesToCopy)
         {
             CopyFile(sourceFilePath, Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath)));
@@ -17,11 +17,11 @@ public class Differential : BackupStrategy
     private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)
     {
         var filesToCopy = new List<string>();
-        
+
         foreach (var sourceFilePath in Directory.GetFiles(sourceFolderPath))
         {
             var targetFilePath = Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath));
-            
+
             if (File.Exists(targetFilePath)) // the file have a backup => check if the backups is up to date 
             {
                 var sourceFileLastWriteTime = File.GetLastWriteTime(sourceFilePath);

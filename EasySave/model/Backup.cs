@@ -8,10 +8,20 @@ public class Backup : INotifyPropertyChanged
 {
     //Private member data
     private BackupStrategy _backupStrategy;
-    private string _sourcePath;
-    private string _targetPath;
     private string _name;
     private int _progression;
+    private string _sourcePath;
+    private string _targetPath;
+
+    //CONSTRUCTOR
+    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy)
+    {
+        _name = name;
+        _sourcePath = sourcePath;
+        _targetPath = targetPath;
+        _backupStrategy = backupStrategy;
+        _progression = 0;
+    }
 
     public BackupStrategy BackupStrategy
     {
@@ -47,7 +57,7 @@ public class Backup : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
+
     public string TargetPath
     {
         get => _targetPath;
@@ -57,7 +67,7 @@ public class Backup : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    
+
     public string Name
     {
         get => _name;
@@ -85,22 +95,12 @@ public class Backup : INotifyPropertyChanged
         }
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     public bool Execute()
     {
         return _backupStrategy.Execute(this);
     }
-
-    //CONSTRUCTOR
-    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy)
-    {
-        _name = name;
-        _sourcePath = sourcePath;
-        _targetPath = targetPath;
-        _backupStrategy = backupStrategy;
-        _progression = 0;
-    }
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

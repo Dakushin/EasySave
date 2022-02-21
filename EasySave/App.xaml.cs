@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 
 namespace EasySave;
 
@@ -14,8 +15,8 @@ public partial class App : Application
             Current.Shutdown(0);
         }
 
-        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("fr-FR");
-        
+        Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr-FR");
+
         base.OnStartup(e);
     }
 }

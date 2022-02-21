@@ -5,35 +5,35 @@ namespace EasySave.model.backupStrategies;
 public abstract class BackupStrategy
 {
     protected readonly object PauseLock = new();
-    protected bool IsCancelled;
-    protected event EventHandler<long>? BytesCopied;
-    protected long TotalBytesToCopy; 
     private bool _isPaused;
+    protected bool IsCancelled;
+    protected long TotalBytesToCopy;
+    protected event EventHandler<long>? BytesCopied;
 
     public bool Execute(Backup backup)
     {
         var sourceFolderPath = backup.SourcePath;
         var targetFolderPath = backup.TargetPath;
-        
+
         long totalBytesCopied = 0;
 
         BytesCopied = (_, bytesCopied) =>
         {
             totalBytesCopied += bytesCopied;
-            long progression = totalBytesCopied * 100 / TotalBytesToCopy;
+            var progression = totalBytesCopied * 100 / TotalBytesToCopy;
 
             backup.Progression = (int) progression;
         };
-        
+
         ExecuteInternally(sourceFolderPath, targetFolderPath);
-        
+
         var cancelled = IsCancelled;
         ResetState(backup);
         return !cancelled;
     }
 
     protected abstract void ExecuteInternally(string sourceFolderPath, string targetFolderPath);
-    
+
     public abstract string GetName();
 
     public void Pause()
@@ -57,10 +57,8 @@ public abstract class BackupStrategy
     public void Cancel()
     {
         if (_isPaused) // cancel even is the task is paused
-        {
             Resume();
-        }
-        
+
         IsCancelled = true;
     }
 
@@ -71,7 +69,7 @@ public abstract class BackupStrategy
         IsCancelled = false;
         Resume();
     }
-    
+
     protected static long GetDirectorySize(string folderPath)
     {
         var directoryInfo = new DirectoryInfo(folderPath);
@@ -84,26 +82,21 @@ public abstract class BackupStrategy
 
         try
         {
-            using (FileStream source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+            using (var source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read)) 
             {
-                using (FileStream target = new FileStream(targetFilePath, FileMode.Create, FileAccess.Write))
+                using (var target = new FileStream(targetFilePath, FileMode.Create, FileAccess.Write))
                 {
                     int currentBlockSize;
 
                     while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
-                    {
                         lock (PauseLock)
                         {
                             BytesCopied(this, currentBlockSize);
 
                             target.Write(buffer, 0, currentBlockSize);
 
-                            if (IsCancelled)
-                            {
-                                break;
-                            }
+                            if (IsCancelled) break;
                         }
-                    }
                 }
             }
         }

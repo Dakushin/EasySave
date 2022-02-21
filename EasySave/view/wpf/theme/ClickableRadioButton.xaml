@@ -3,11 +3,11 @@
     <Style x:Key="ClickableRadioButton" TargetType="RadioButton">
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="False">
-                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Opacity" Value="0.5" />
             </Trigger>
         </Style.Triggers>
 
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="2" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -15,8 +15,8 @@
                     <Border BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="DarkOrange"
                             Background="Transparent"
-                            CornerRadius="20">                                    
-                        <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            CornerRadius="20">
+                        <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

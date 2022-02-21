@@ -10,21 +10,21 @@
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
              Background="#272537">
-    
+
     <UserControl.DataContext>
-        <viewModel:SettingsViewModel></viewModel:SettingsViewModel>
+        <viewModel:SettingsViewModel />
     </UserControl.DataContext>
-    
+
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="400" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-                
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="250"/>
-            <RowDefinition/>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="250" />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <TextBlock Text="{localize:Static properties:Resources.Preferences}"
@@ -32,34 +32,38 @@
                    HorizontalAlignment="Left"
                    Margin="20, 0, 0, 0"
                    Foreground="White"
-                   FontSize="30"/>
-        
-        <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+                   FontSize="30" />
+
+        <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="16">
-                    <materialDesign:PackIcon Kind="Language" Height="64" Width="64"/>
-                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}"></TextBlock>
+                    <materialDesign:PackIcon Kind="Language" Height="64" Width="64" />
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}" />
                 </StackPanel>
-                
+
                 <StackPanel Margin="16" HorizontalAlignment="Center">
                     <localize:LanguageSelector AutogenerateLanguages="True" />
                 </StackPanel>
             </StackPanel>
         </materialDesign:Card>
-        
-        <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+
+        <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="16">
-                    <materialDesign:PackIcon Kind="Xml" Height="64" Width="64"/>
-                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Log_Format}"></TextBlock>
+                    <materialDesign:PackIcon Kind="Xml" Height="64" Width="64" />
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Log_Format}" />
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16">
-                    <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0" Style="{StaticResource ClickableRadioButton}" Width="64" Height="64"/>
-                    <RadioButton Content="../images/xml.png" Margin="10, 0" Style="{StaticResource ClickableRadioButton}" Width="64" Height="64"/>
+                    <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0"
+                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" />
+                    <RadioButton Content="../images/xml.png" Margin="10, 0"
+                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" />
                 </StackPanel>
             </StackPanel>
         </materialDesign:Card>
-        
+
     </Grid>
 </UserControl>

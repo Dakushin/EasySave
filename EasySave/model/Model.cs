@@ -7,32 +7,33 @@ namespace EasySave.model;
 public sealed class Model
 {
     private static readonly Model _instance = new();
-    
+
     //Private variable
     private readonly string _logPath;
     private readonly string _saveStatePath;
     private readonly ObservableCollection<Backup> _saveWorkList;
-    private List<string> listProcessToCheck;
-    private List<string> listExtentionToCheck;
     private FileFormat _logFileFormat;
+    private readonly List<string> _listExtentionToCheck;
+    private readonly List<string> _listProcessToCheck;
 
     //CONSTRUCTOR
     private Model()
     {
         if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave"))
-        {
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                       "\\EasySave");
-        }
         _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log.json";
-        _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\state.json";
+        _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                         "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<Backup>();
         _logFileFormat = new Json();
-        listProcessToCheck = new List<string>() { "Calculator", "word", "notepad", "WINWORD", "chrome" };
-        listExtentionToCheck = new List<string>() { ".png", ".jpeg", ".jpg" };
+        _listProcessToCheck = new List<string> {"Calculator", "word", "notepad", "WINWORD", "chrome"};
+        _listExtentionToCheck = new List<string> {".png", ".jpeg", ".jpg"};
 
-        _saveWorkList.Add(new Backup("test", @"C:\Users\sacha\Desktop\test\1", @"C:\Users\sacha\Desktop\test\2", new Complete()));
-        _saveWorkList.Add(new Backup("bonjour_monde", @"C:\Users\sacha\Desktop\test\1", @"C:\Users\sacha\Desktop\test\2", new Complete()));
+        _saveWorkList.Add(new Backup("test", @"C:\Users\sacha\Desktop\test\1", @"C:\Users\sacha\Desktop\test\2",
+            new Complete()));
+        _saveWorkList.Add(new Backup("bonjour_monde", @"C:\Users\sacha\Desktop\test\1",
+            @"C:\Users\sacha\Desktop\test\2", new Complete()));
     }
 
     public static Model GetInstance()
@@ -77,11 +78,11 @@ public sealed class Model
 
     public List<string> GetListProcessToCheck()
     {
-        return listProcessToCheck;
+        return _listProcessToCheck;
     }
 
     public List<string> GetListExtentionToCheck()
     {
-        return listExtentionToCheck;
+        return _listExtentionToCheck;
     }
 }

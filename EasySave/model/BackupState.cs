@@ -4,11 +4,11 @@ namespace EasySave.model;
 
 internal class BackupState
 {
-
     //JSON CONSTRUCTOR
     [JsonConstructor]
-    public BackupState(string name, string state, string sourceFilePath = "", string targetFilePath = "", int nbFilesToCopy = 0,
-           int totalFilesSize = 0, int nbFilesLeftToDo = 0, int progression = 0)
+    public BackupState(string name, string state, string sourceFilePath = "", string targetFilePath = "",
+        int nbFilesToCopy = 0,
+        int totalFilesSize = 0, int nbFilesLeftToDo = 0, int progression = 0)
     {
         Name = name;
         SourceFilePath = sourceFilePath;
@@ -38,6 +38,7 @@ internal class BackupState
     public int NbFilesLeftToDo { get; set; }
 
     public int Progression { get; set; }
+
     //GETTER AND SETTER
     public string GetName()
     {

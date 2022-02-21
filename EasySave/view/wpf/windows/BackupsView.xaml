@@ -11,55 +11,55 @@
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
              Background="#272537">
-    
+
     <UserControl.Resources>
-        <core:ProgressionToVisibilityConverter 
+        <core:ProgressionToVisibilityConverter
             x:Key="ProgressionToCollapsedConverter"
             TrueValue="Collapsed"
-            FalseValue="Visible"/>
-        
-        <core:ProgressionToVisibilityConverter 
+            FalseValue="Visible" />
+
+        <core:ProgressionToVisibilityConverter
             x:Key="ProgressionToVisibleConverter"
             TrueValue="Visible"
-            FalseValue="Collapsed"/>
+            FalseValue="Collapsed" />
     </UserControl.Resources>
-    
+
     <materialDesign:DialogHost DialogClosing="OnCreateBackup">
         <materialDesign:DialogHost.DialogContent>
             <StackPanel Margin="24" Width="400">
-                <TextBlock Text="Create a new backup"/>
-                
+                <TextBlock Text="Create a new backup" />
+
                 <TextBox
                     Style="{StaticResource MaterialDesignFilledTextBox}"
                     VerticalAlignment="Top"
                     materialDesign:HintAssist.Hint="Enter the name"
                     Margin="0 12 0 0"
                     HorizontalAlignment="Stretch"
-                    x:Name="BackupName"/>
-                
+                    x:Name="BackupName" />
+
                 <TextBox Style="{StaticResource MaterialDesignFilledTextBox}"
                          VerticalAlignment="Top"
                          materialDesign:HintAssist.Hint="Enter the source path"
                          PreviewMouseLeftButtonUp="OnChooseFolder"
                          Margin="0 12 0 0"
                          HorizontalAlignment="Stretch"
-                         x:Name="BackupSourcePath"/>
-                
+                         x:Name="BackupSourcePath" />
+
                 <TextBox Style="{StaticResource MaterialDesignFilledTextBox}"
                          VerticalAlignment="Top"
                          materialDesign:HintAssist.Hint="Enter the target path"
                          PreviewMouseLeftButtonUp="OnChooseFolder"
                          Margin="0 12 0 0"
                          HorizontalAlignment="Stretch"
-                         x:Name="BackupTargetPath"/>
-                
+                         x:Name="BackupTargetPath" />
+
                 <ComboBox materialDesign:HintAssist.Hint="Type"
                           Margin="0 12 0 18"
                           x:Name="BackupType">
-                    <ComboBoxItem Content="Complete" Name="Complete"/>
-                    <ComboBoxItem Content="Differential" Name="Differential"/>
+                    <ComboBoxItem Content="Complete" Name="Complete" />
+                    <ComboBoxItem Content="Differential" Name="Differential" />
                 </ComboBox>
-   
+
                 <StackPanel
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
@@ -71,9 +71,9 @@
                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
                         <Button.CommandParameter>
                             <system:Boolean>True</system:Boolean>
-                        </Button.CommandParameter>                                        
+                        </Button.CommandParameter>
                     </Button>
-                                
+
                     <Button
                         Style="{StaticResource MaterialDesignFlatButton}"
                         IsCancel="True"
@@ -82,110 +82,113 @@
                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
                         <Button.CommandParameter>
                             <system:Boolean>False</system:Boolean>
-                        </Button.CommandParameter>                                        
+                        </Button.CommandParameter>
                     </Button>
                 </StackPanel>
             </StackPanel>
         </materialDesign:DialogHost.DialogContent>
-        
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
+
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <TextBox TextChanged="OnFilter"
                          Style="{StaticResource MaterialDesignFilledTextBox}"
                          materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Filter_Backup}"
                          HorizontalAlignment="Left"
-                         Width="250"/>
-            
-                <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" 
-                        Background="ForestGreen" 
-                        Content="{localize:Static properties:Resources.Create_Backup}" 
+                         Width="250" />
+
+                <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                        Background="ForestGreen"
+                        Content="{localize:Static properties:Resources.Create_Backup}"
                         Width="250"
-                        Margin="15, 0"/>
+                        Margin="15, 0" />
             </StackPanel>
-            
+
             <DataGrid Grid.Row="1"
                       Margin="16"
                       ItemsSource="{Binding Backups}"
-                      AlternatingRowBackground="DimGray" 
+                      AlternatingRowBackground="DimGray"
                       AutoGenerateColumns="False"
                       SelectedItem="{Binding SelectedBackup, Mode=TwoWay}">
-                
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="150" Header="{localize:Static properties:Resources.Backup_Name}" Binding="{Binding Name}"></DataGridTextColumn>
-                    
+                    <DataGridTextColumn Width="150" Header="{localize:Static properties:Resources.Backup_Name}"
+                                        Binding="{Binding Name}" />
+
                     <DataGridTemplateColumn Width="3*" Header="{localize:Static properties:Resources.Source_Path}">
-                        <DataGridTemplateColumn.CellTemplate> 
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
-                                    <TextBlock.Text> 
-                                        <Binding Mode="TwoWay"  Path="SourcePath"></Binding> 
-                                    </TextBlock.Text> 
-                                </TextBlock> 
-                            </DataTemplate> 
-                        </DataGridTemplateColumn.CellTemplate> 
+                                <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder">
+                                    <TextBlock.Text>
+                                        <Binding Mode="TwoWay" Path="SourcePath" />
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="3*" Header="{localize:Static properties:Resources.Target_Path}">
-                        <DataGridTemplateColumn.CellTemplate> 
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder"> 
-                                    <TextBlock.Text> 
-                                        <Binding Mode="TwoWay"  Path="TargetPath"></Binding> 
-                                    </TextBlock.Text> 
-                                </TextBlock> 
+                                <TextBlock PreviewMouseLeftButtonUp="OnChooseFolder">
+                                    <TextBlock.Text>
+                                        <Binding Mode="TwoWay" Path="TargetPath" />
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate> 
+                        </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTemplateColumn Width="2*" Header="Type">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <ComboBox Text="{Binding BackupStrategyName, UpdateSourceTrigger=PropertyChanged}">
-                                        <ComboBoxItem Content="Complete" Name="Complete"/>
-                                        <ComboBoxItem Content="Differential" Name="Differential"/>
+                                        <ComboBoxItem Content="Complete" Name="Complete" />
+                                        <ComboBoxItem Content="Differential" Name="Differential" />
                                     </ComboBox>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTemplateColumn Width="250" Header="{localize:Static properties:Resources.Actions}">
-                        <DataGridTemplateColumn.CellTemplate> 
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <StackPanel Orientation="Horizontal" x:Name="backupsEditionButtons" 
+                                    <StackPanel Orientation="Horizontal" x:Name="backupsEditionButtons"
                                                 Visibility="{Binding Progression, Converter={StaticResource ProgressionToVisibleConverter}}">
-                                        <Button Click="OnExecuteBackup" Content="{localize:Static properties:Resources.Execute}" Margin="5, 0"/>
-                                        <Button Click="OnDeleteBackup" Background="IndianRed" Content="{localize:Static properties:Resources.Delete}" Margin="5, 0"/>
+                                        <Button Click="OnExecuteBackup"
+                                                Content="{localize:Static properties:Resources.Execute}" Margin="5, 0" />
+                                        <Button Click="OnDeleteBackup" Background="IndianRed"
+                                                Content="{localize:Static properties:Resources.Delete}" Margin="5, 0" />
                                     </StackPanel>
-                                    
+
                                     <StackPanel Orientation="Horizontal"
                                                 Visibility="{Binding Progression, Converter={StaticResource ProgressionToCollapsedConverter}}">
                                         <Button
                                             Click="OnResumeBackup"
                                             Style="{StaticResource MaterialDesignIconButton}">
-                                            <materialDesign:PackIcon Kind="Play"/>
+                                            <materialDesign:PackIcon Kind="Play" />
                                         </Button>
                                         <Button
                                             Click="OnPauseBackup"
                                             Style="{StaticResource MaterialDesignIconButton}">
-                                            <materialDesign:PackIcon Kind="Pause"/>
+                                            <materialDesign:PackIcon Kind="Pause" />
                                         </Button>
                                         <Button
                                             Click="OnCancelBackup"
                                             Style="{StaticResource MaterialDesignIconButton}">
-                                            <materialDesign:PackIcon Kind="Stop"/>
+                                            <materialDesign:PackIcon Kind="Stop" />
                                         </Button>
-                                        <ProgressBar Value="{Binding Progression}" Height="20" Width="75"/>
+                                        <ProgressBar Value="{Binding Progression}" Height="20" Width="75" />
                                     </StackPanel>
                                 </StackPanel>
-                            </DataTemplate> 
-                        </DataGridTemplateColumn.CellTemplate> 
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>

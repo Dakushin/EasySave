@@ -10,72 +10,72 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Width="1400" Height="800"
-        MinWidth="1200" MinHeight="600" 
+        MinWidth="1200" MinHeight="600"
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
         AllowsTransparency="True">
-    
+
     <Window.DataContext>
-        <viewModel:MainViewModel></viewModel:MainViewModel>
+        <viewModel:MainViewModel />
     </Window.DataContext>
-        
+
     <Border Background="#272537"
             CornerRadius="20">
-        
+
         <Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                
+
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="75"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="75" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Margin="15"
                             Orientation="Horizontal">
                     <Image Source="/view/wpf/images/logo.png"
                            Width="50"
-                           Height="50"></Image>
-                    
+                           Height="50" />
+
                     <TextBlock Text="EasySave"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Margin="20, 0, 0, 0"
                                Foreground="White"
-                               FontSize="22"/>
+                               FontSize="22" />
                 </StackPanel>
-                
+
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Click="OnMinimize" Style="{DynamicResource MaterialDesignIconButton}">
-                        <materialDesign:PackIcon Kind="WindowMinimize" Foreground="#eec719"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="WindowMinimize" Foreground="#eec719" />
                     </Button>
                     <Button Click="OnMaximize" Style="{DynamicResource MaterialDesignIconButton}">
-                        <materialDesign:PackIcon Kind="WindowMaximize" Foreground="#eec719"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="WindowMaximize" Foreground="#eec719" />
                     </Button>
                     <Button Click="OnClose" Style="{DynamicResource MaterialDesignIconButton}">
-                        <materialDesign:PackIcon Kind="WindowClose" Foreground="#eec719"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="WindowClose" Foreground="#eec719" />
                     </Button>
                 </StackPanel>
-                
+
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="15">
-                    
+
                     <RadioButton Content="{localize:Static properties:Resources.Home_Page}"
                                  Tag="../images/homepage.png"
                                  Height="60"
                                  Foreground="White"
                                  FontSize="14"
                                  Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding OnNavigateToHomePage}"/>
-                    
+                                 Command="{Binding OnNavigateToHomePage}" />
+
                     <RadioButton Content="{localize:Static properties:Resources.Backups}"
                                  Tag="../images/backups.png"
                                  Height="60"
@@ -83,24 +83,24 @@
                                  FontSize="14"
                                  IsChecked="True"
                                  Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding OnNavigateToBackups}"/>
-                
+                                 Command="{Binding OnNavigateToBackups}" />
+
                     <RadioButton Content="{localize:Static properties:Resources.Settings}"
                                  Tag="../images/settings.png"
                                  Height="60"
                                  Foreground="White"
                                  FontSize="14"
                                  Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding OnNavigateToSettings}"/>
-                    
+                                 Command="{Binding OnNavigateToSettings}" />
+
                 </StackPanel>
-                
+
                 <ContentControl Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="10"
-                                Content="{Binding CurrentViewModel}"/>
+                                Content="{Binding CurrentViewModel}" />
             </Grid>
-            
+
             <materialDesign:Snackbar MessageQueue="{Binding SnackBarMessageQueue}" />
         </Grid>
     </Border>

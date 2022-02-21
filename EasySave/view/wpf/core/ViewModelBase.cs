@@ -6,8 +6,8 @@ namespace EasySave.view.wpf.core;
 
 public class ViewModelBase : INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
     public static SnackbarMessageQueue SnackBarMessageQueue { get; } = new(TimeSpan.FromSeconds(2));
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
@@ -16,16 +16,16 @@ public class ViewModelBase : INotifyPropertyChanged
 
     public static void NotifyInfo(string message)
     {
-        SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.Information}, () => {});
+        SnackBarMessageQueue.Enqueue(message, new PackIcon {Kind = PackIconKind.Information}, () => { });
     }
 
     public static void NotifyError(string message)
     {
-        SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.Error}, () => {});
+        SnackBarMessageQueue.Enqueue(message, new PackIcon {Kind = PackIconKind.Error}, () => { });
     }
 
     public static void NotifySuccess(string message)
     {
-        SnackBarMessageQueue.Enqueue(message, new PackIcon { Kind = PackIconKind.CheckBold}, () => {});
+        SnackBarMessageQueue.Enqueue(message, new PackIcon {Kind = PackIconKind.CheckBold}, () => { });
     }
 }

@@ -12,6 +12,7 @@ public abstract class View
     {
         BackupsViewModel = new BackupsViewModel(this);
     }
+
     //ABSTRACT FUNCTION
     public abstract void NotifyInfo(string message);
 

@@ -7,14 +7,13 @@ using EasySave.view.wpf.core;
 using EasySave.viewmodel;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
-using EasySave.properties;
 
 namespace EasySave.view.wpf.windows;
 
 public partial class BackupsView : UserControl
 {
     private readonly BackupsViewModel _viewModel;
-    
+
     public BackupsView()
     {
         InitializeComponent();
@@ -27,12 +26,12 @@ public partial class BackupsView : UserControl
     {
         _viewModel.DeleteSelectedBackup();
     }
-    
+
     private void OnExecuteBackup(object sender, RoutedEventArgs e)
     {
         _viewModel.ExecuteSelectedBackup();
     }
-    
+
     private void OnChooseFolder(object sender, MouseButtonEventArgs e)
     {
         var folderBrowser = new OpenFileDialog
@@ -44,7 +43,7 @@ public partial class BackupsView : UserControl
         };
         var result = folderBrowser.ShowDialog();
         if (!result.HasValue || !result.Value) return;
-        
+
         switch (sender)
         {
             case TextBox textBox:
@@ -67,20 +66,17 @@ public partial class BackupsView : UserControl
                 ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Create_Backup);
                 return;
             }
-                
+
             var backupName = BackupName.Text.Trim();
             var backupSourcePath = BackupSourcePath.Text.Trim();
             var backupTargetPath = BackupTargetPath.Text.Trim();
             var backupType = backupTypeSelected.Name;
 
             if (backupName.Length > 0 && !string.IsNullOrEmpty(backupType))
-            {
-                _viewModel.CreateBackup(backupName, backupSourcePath, backupTargetPath, backupType.Equals("Complete") ? new Complete() : new Differential());
-            }
+                _viewModel.CreateBackup(backupName, backupSourcePath, backupTargetPath,
+                    backupType.Equals("Complete") ? new Complete() : new Differential());
             else
-            {
                 ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Create_Backup);
-            }
         }
         else
         {
@@ -91,7 +87,7 @@ public partial class BackupsView : UserControl
     private void OnFilter(object sender, TextChangedEventArgs e)
     {
         if (sender is not TextBox filterBox) return;
-        
+
         _viewModel.Filter(filterBox.Text);
     }
 

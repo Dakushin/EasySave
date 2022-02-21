@@ -8,7 +8,7 @@ public class ProgressionToVisibilityConverter : IValueConverter
 {
     public Visibility TrueValue { get; set; }
     public Visibility FalseValue { get; set; }
-    
+
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         var progression = (int) value;
