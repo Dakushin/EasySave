@@ -96,6 +96,17 @@ public class Backup : INotifyPropertyChanged
         }
     }
 
+    public bool Crypted
+    {
+        get => _crypted;
+        set
+        {
+            _crypted = value;
+            OnPropertyChanged();
+        }
+
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public bool Execute()

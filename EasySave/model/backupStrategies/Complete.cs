@@ -7,14 +7,8 @@ public class Complete : BackupStrategy
     protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
     {
         TotalBytesToCopy = GetDirectorySize(sourceFolderPath);
-        foreach (var sourceFilePath in GetAllFileFromDirectory(Directory.GetDirectories(sourceFolderPath)))
-        {
-            var file = sourceFilePath.Replace(sourceFolderPath + Path.DirectorySeparatorChar, null);
-            var targetFilePath = Path.Combine(targetFolderPath, file);
-            CopyFile(sourceFilePath, targetFilePath);
-        }
-        
-        
+        var filesToCopy = GetAllFileFromDirectory(sourceFolderPath, true);
+        DoAllCopy(filesToCopy, sourceFolderPath, targetFolderPath);
     }
 
     public override string GetName()

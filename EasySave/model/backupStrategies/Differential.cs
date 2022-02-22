@@ -7,17 +7,14 @@ public class Differential : BackupStrategy
     protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
     {
         var filesToCopy = GetFilesToCopy(sourceFolderPath, targetFolderPath);
+        DoAllCopy(filesToCopy, sourceFolderPath, targetFolderPath);
 
-        foreach (var sourceFilePath in filesToCopy)
-        {
-            CopyFile(sourceFilePath, Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath)));
-        }
     }
 
     private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)
     {
         var filesToCopy = new List<string>();
-        foreach (var sourceFilePath in GetAllFileFromDirectory(Directory.GetDirectories(sourceFolderPath)))
+        foreach (var sourceFilePath in GetAllFileFromDirectory(sourceFolderPath, true))
         {
             var targetFilePath = Path.Combine(targetFolderPath, Path.GetFileName(sourceFilePath));
 

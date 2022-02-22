@@ -7,7 +7,7 @@ public class Log
     //CONSTRUCTOR
     [JsonConstructor]
     public Log(string name, string fileSource, string fileTarget, string destPath, long fileSize, long fileTransferTime,
-        string time, int timeToCrypt = 0)
+        string time, long timeToCrypt = 0)
     {
         Name = name;
         FileSource = fileSource;

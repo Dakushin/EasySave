@@ -34,6 +34,43 @@ public sealed class Model
             new Complete()));
         _saveWorkList.Add(new Backup("bonjour_monde", @"C:\Users\sacha\Desktop\test\1",
             @"C:\Users\sacha\Desktop\test\2", new Complete()));
+
+        TryRecupFromSaveStatePath();
+    }
+
+    public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
+    {
+        if (!File.Exists(GetSaveStatePath())) return;
+
+        FileFormat fileFormat = new Json();
+        List<BackupState> saveStates;
+
+
+        saveStates = fileFormat.UnSerialize<BackupState>(GetSaveStatePath());
+        foreach (var sv in saveStates)
+            if (sv.GetNbFilesLeftToDo() > 0)
+            {
+                var listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
+                var listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
+                var sameDirectory = false;
+                while (!sameDirectory && listDirectorySource.Any() &&
+                       listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
+                    if (listDirectorySource.Last() == listDirectoryTarget.Last())
+                    {
+                        listDirectorySource.Remove(listDirectorySource.Last());
+                        listDirectoryTarget.Remove(listDirectoryTarget.Last());
+                    }
+                    else
+                    {
+                        sameDirectory = true;
+                    }
+
+                var sourcePath = string.Join(Path.DirectorySeparatorChar, listDirectorySource);
+                var targetPath = string.Join(Path.DirectorySeparatorChar, listDirectoryTarget);
+                var strategy = new Differential();
+                strategy.SetFileLeftToDo(sv.NbFilesLeftToDo);
+                _saveWorkList.Add(new Backup(sv.GetName(), sourcePath, targetPath, new Differential()));
+            }
     }
 
     public static Model GetInstance()

@@ -6,16 +6,19 @@ public abstract class BackupStrategy
 {
     protected readonly object PauseLock = new();
     private bool _isPaused;
-    private string _backupAssociateName;
     protected bool IsCancelled;
     protected long TotalBytesToCopy;
+    protected int FileLeftToDo = 0;
     protected event EventHandler<long>? BytesCopied;
+    protected BackupState _backupState;
+    private bool _iscrypted;
 
     public bool Execute(Backup backup)
     {
         var sourceFolderPath = backup.SourcePath;
         var targetFolderPath = backup.TargetPath;
-        _backupAssociateName = backup.Name;
+        _iscrypted = backup.Crypted;
+        _backupState = new BackupState(backup.Name, "ACTIVE");
         long totalBytesCopied = 0;
 
         BytesCopied = (_, bytesCopied) =>
@@ -24,11 +27,17 @@ public abstract class BackupStrategy
             var progression = totalBytesCopied * 100 / TotalBytesToCopy;
 
             backup.Progression = (int) progression;
+            _backupState.SetProgression((int) progression);
+            UpdateSaveState(_backupState);
         };
 
         ExecuteInternally(sourceFolderPath, targetFolderPath);
 
         var cancelled = IsCancelled;
+        if (!cancelled)
+        {
+            EndBackup(_backupState);
+        }
         ResetState(backup);
         return !cancelled;
     }
@@ -94,15 +103,14 @@ public abstract class BackupStrategy
                 {
                     int currentBlockSize;
 
-                    while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0)
+                    while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0 && !IsCancelled)
                     {
                         lock (PauseLock)
                         {
                             BytesCopied(this, currentBlockSize);
 
                             target.Write(buffer, 0, currentBlockSize);
-
-                            if (IsCancelled) break;
+                 
                         }
                     }
                 }
@@ -113,21 +121,26 @@ public abstract class BackupStrategy
             IsCancelled = true;
         }
         sw.Stop();
-        var log = new Log(_backupAssociateName, sourceFilePath, targetFilePath, string.Empty,
+        var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
                            new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString());
         Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
     }
 
-    protected List<string> GetAllFileFromDirectory(string[] directories/*, List<string> files*/)
+    protected List<string> GetAllFileFromDirectory(string sourcePathDirectoy, bool firstdirectory)
     {
+
         var files = new List<string>();
-        foreach (var directory in directories)
+        if(firstdirectory)
+        {
+            files.AddRange(Directory.GetFiles(sourcePathDirectoy));
+        }
+        foreach (var directory in Directory.GetDirectories(sourcePathDirectoy))
         {
             var list = Directory.GetDirectories(directory);
-            if (list.Length > 0) files.AddRange(GetAllFileFromDirectory(list/*, files*/));
+            if (list.Length > 0) files.AddRange(GetAllFileFromDirectory(directory, false));
 
-            files.AddRange(Directory.EnumerateFiles(directory));
         }
+        
         return files;
     }
 
@@ -138,6 +151,83 @@ public abstract class BackupStrategy
         if (!Directory.Exists(newtargetpath))
         {
             Directory.CreateDirectory(Path.GetFullPath(newtargetpath));
+        }
+    }
+
+    private void EndBackup(BackupState backupState) //Update SaveState to END
+    {
+        backupState.SetSourceFilePath("");
+        backupState.SetTargetFilePath("");
+        backupState.SetTotalFileSize(0);
+        backupState.SetState("END");
+        backupState.SetTotalFilesToCopy(0);
+        backupState.SetTotalFilesLeftToDo(0);
+        UpdateSaveState(backupState);
+    }
+
+    private void UpdateSaveState(BackupState backupState) //Update the Save state file
+    {
+        List<BackupState> states = null;
+        FileFormat Json = new Json();
+        if (File.Exists(Model.GetInstance().GetSaveStatePath()))
+            states = Json.UnSerialize<BackupState>(Model.GetInstance().GetSaveStatePath());
+        File.Delete(Model.GetInstance().GetSaveStatePath());
+        var enter = false;
+        if (states != null)
+        {
+            for (var i = 0; i < states.Count; i++)
+                if (states[i].GetName() == backupState.GetName())
+                {
+                    states[i] = backupState;
+                    enter = true;
+                }
+
+            if (!enter) states.Add(backupState);
+            foreach (var sv in states) Json.SaveInFormat(Model.GetInstance().GetSaveStatePath(), sv);
+        }
+        else
+        {
+            Json.SaveInFormat(Model.GetInstance().GetSaveStatePath(), backupState);
+        }
+    }
+
+    protected string GetPathWithDirectory(string sourceFilePath, string sourceFolderPath, string targetFolderPath)
+    {
+        return Path.Combine(targetFolderPath, sourceFilePath.Replace(sourceFolderPath + Path.DirectorySeparatorChar, null));
+    }
+
+    public void SetFileLeftToDo(int Fltd)
+    {
+        FileLeftToDo = Fltd;
+    }
+
+    protected void DoAllCopy(List<string> FileToCopy, string sourceFolderPath, string targetFolderPath)
+    {
+        _backupState.SetTotalFilesToCopy(FileToCopy.Count);
+        FileLeftToDo = FileToCopy.Count;
+        foreach(var sourceFilePath in FileToCopy)
+        {
+            if (IsCancelled) break;
+            _backupState.SetTotalFileSize(new FileInfo(sourceFilePath).Length);
+            var targetFilePath = GetPathWithDirectory(sourceFilePath, sourceFolderPath, targetFolderPath);
+            _backupState.SetSourceFilePath(sourceFilePath);
+            _backupState.SetTargetFilePath(targetFilePath);
+
+            Stopwatch sw = Stopwatch.StartNew();
+            if (_iscrypted)
+            {
+                CopyFile(sourceFilePath, targetFilePath);
+            } else
+            {
+
+            }
+            sw.Stop();
+            var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
+                               new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), );
+            Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
+            FileLeftToDo--;
+            _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
+            UpdateSaveState(_backupState);
         }
     }
 

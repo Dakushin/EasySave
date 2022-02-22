@@ -13,7 +13,7 @@ public class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         _settingsViewModel = new SettingsViewModel();
-        _backupsViewModel = new BackupsViewModel(null);
+        _backupsViewModel = new BackupsViewModel();
         _homePageViewModel = new HomePageViewModel();
 
         OnNavigateToHomePage = new CommandHandler(NavigateToHomePageView);

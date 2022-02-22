@@ -24,8 +24,6 @@ public class BackupsViewModel : ViewModelBase
     {
         _view = v;
         _model = Model.GetInstance();
-
-        TryRecupFromSaveStatePath();
     }
 
     public BackupsViewModel() : this(null)
@@ -93,32 +91,6 @@ public class BackupsViewModel : ViewModelBase
         }
     }
 
-    private void UpdateSaveState(BackupState backupState) //Update the Save state file
-    {
-        List<BackupState> states = null;
-        FileFormat Json = new Json();
-        if (File.Exists(_model.GetSaveStatePath()))
-            states = Json.UnSerialize<BackupState>(_model.GetSaveStatePath());
-        File.Delete(_model.GetSaveStatePath());
-        var enter = false;
-        if (states != null)
-        {
-            for (var i = 0; i < states.Count; i++)
-                if (states[i].GetName() == backupState.GetName())
-                {
-                    states[i] = backupState;
-                    enter = true;
-                }
-
-            if (!enter) states.Add(backupState);
-            foreach (var sv in states) Json.SaveInFormat(_model.GetSaveStatePath(), sv);
-        }
-        else
-        {
-            Json.SaveInFormat(_model.GetSaveStatePath(), backupState);
-        }
-    }
-
     public void DeleteBackup(string name) //function to delete a Savework by name
     {
         var sv = _model.FindbyName(name);
@@ -133,58 +105,17 @@ public class BackupsViewModel : ViewModelBase
         }
     }
 
-    public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
-    {
-        if (!File.Exists(_model.GetSaveStatePath())) return;
-
-        FileFormat fileFormat = new Json();
-        List<BackupState> saveStates;
-        if (!File.Exists(_model.GetSaveStatePath())) return;
-
-        saveStates = fileFormat.UnSerialize<BackupState>(_model.GetSaveStatePath());
-        foreach (var sv in saveStates)
-            if (sv.GetNbFilesLeftToDo() > 0)
-            {
-                var listDirectorySource = new List<string>(sv.SourceFilePath.Split(Path.DirectorySeparatorChar));
-                var listDirectoryTarget = new List<string>(sv.TargetFilePath.Split(Path.DirectorySeparatorChar));
-                var sameDirectory = false;
-                while (!sameDirectory && listDirectorySource.Any() &&
-                       listDirectoryTarget.Any()) //Loop to fetch the original directory from all path
-                    if (listDirectorySource.Last() == listDirectoryTarget.Last())
-                    {
-                        listDirectorySource.Remove(listDirectorySource.Last());
-                        listDirectoryTarget.Remove(listDirectoryTarget.Last());
-                    }
-                    else
-                    {
-                        sameDirectory = true;
-                    }
-
-                var sourcePath = string.Join(Path.DirectorySeparatorChar, listDirectorySource);
-                var targetPath = string.Join(Path.DirectorySeparatorChar, listDirectoryTarget);
-                _model.GetBackupList().Add(new Backup(sv.GetName(), sourcePath, targetPath, new Differential()));
-            }
-    }
-
     private async void ExecuteBackup(Backup backup)
     {
         var success = await Task.Run(backup.Execute);
         if (success)
+            
             NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
         else
             NotifyError($"{backup.Name} {Resources.Cancelled}");
     }
 
-    private void EndBackup(BackupState backupState) //Update SaveState to END
-    {
-        backupState.SetSourceFilePath("");
-        backupState.SetTargetFilePath("");
-        backupState.SetTotalFileSize(0);
-        backupState.SetState("END");
-        backupState.SetTotalFilesToCopy(0);
-        backupState.SetTotalFilesLeftToDo(0);
-        UpdateSaveState(backupState);
-    }
+   
 
     private void GetAllFileFromDirectory(string[] directories, List<string> files) //return all file in a directory
     {
