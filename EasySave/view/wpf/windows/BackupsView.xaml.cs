@@ -70,6 +70,7 @@ public partial class BackupsView : UserControl
             var backupTargetPath = BackupTargetPath.Text.Trim();
             var backupType = backupTypeSelected.Name;
             var backupEncrypted = BackupEncrypted.IsChecked!.Value;
+            
 
             if (backupName.Length > 0 && !string.IsNullOrEmpty(backupType))
                 _viewModel.CreateBackup(backupName, backupSourcePath, backupTargetPath,
