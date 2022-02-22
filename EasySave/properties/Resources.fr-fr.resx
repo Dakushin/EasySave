@@ -281,4 +281,40 @@
     <data name="Ask_Informations_Create_Backup" xml:space="preserve">
     <value>Veuillez renseigner toutes les informations lors de la création d'un travail de sauvegarde</value>
   </data>
+    <data name="Encrypted" xml:space="preserve">
+      <value>Chiffré</value>
+    </data>
+    <data name="Priority_Files" xml:space="preserve">
+      <value>Fichiers prioritaires</value>
+    </data>
+    <data name="Encrypted_Files" xml:space="preserve">
+      <value>Fichiers chiffrés</value>
+    </data>
+    <data name="Add_Priority_Files_Extension" xml:space="preserve">
+      <value>Ajouter</value>
+    </data>
+    <data name="Remove_Priority_Files_Extension" xml:space="preserve">
+      <value>Supprimer la sélection</value>
+    </data>
+    <data name="Add_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Ajouter</value>
+    </data>
+    <data name="Remove_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Supprimer la sélection</value>
+    </data>
+    <data name="Add_New_File_Extension" xml:space="preserve">
+      <value>Ajouter une nouvelle extension de fichiers</value>
+    </data>
+    <data name="File_Extension_Placeholder" xml:space="preserve">
+      <value>Extension (.pdf)</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+      <value>Annuler</value>
+    </data>
+    <data name="Ask_Informations_Add_File_Extension" xml:space="preserve">
+      <value>L'extension doit commencer par un point</value>
+    </data>
+    <data name="User_Doc_Link" xml:space="preserve">
+      <value>Ouvrir la documentation utilisateur dans le navigateur</value>
+    </data>
 </root>

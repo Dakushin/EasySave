@@ -20,7 +20,7 @@ public class MainViewModel : ViewModelBase
         OnNavigateToBackups = new CommandHandler(NavigateToBackupsView);
         OnNavigateToSettings = new CommandHandler(NavigateToSettingsView);
 
-        _currentViewModel = _backupsViewModel;
+        _currentViewModel = _homePageViewModel;
     }
 
     public CommandHandler OnNavigateToBackups { get; set; }

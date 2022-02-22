@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using EasySave.translation;
+﻿using System.Collections.ObjectModel;
 using EasySave.view.wpf.core;
 using EasySave.model;
 
@@ -7,31 +6,57 @@ namespace EasySave.viewmodel;
 
 public class SettingsViewModel : ViewModelBase
 {
+    public ObservableCollection<string> PriorityFileExtensions { get; }
+
+    public ObservableCollection<string> EncryptedFileExtensions { get; }
+
+    private readonly Model _model;
+
     public SettingsViewModel()
     {
-        OnSelectEnglish = new CommandHandler(() => ChangeLanguage(Language.English));
-        OnSelectFrench = new CommandHandler(() => ChangeLanguage(Language.French));
-        OnSelectXML = new CommandHandler(() => ChangeLogFormat(new Xml()));
-        OnSelectJSON = new CommandHandler(() => ChangeLogFormat(new Json()));
-    }
-
-    public CommandHandler OnSelectEnglish { get; set; }
-    public CommandHandler OnSelectFrench { get; set; }
-    public CommandHandler OnSelectXML { get; set; }
-    public CommandHandler OnSelectJSON { get; set; }
-
-    private static void ChangeLanguage(Language language) //Function to change language
-    {
-        Thread.CurrentThread.CurrentUICulture = language switch
+        _model = Model.GetInstance();
+        
+        PriorityFileExtensions = new ObservableCollection<string>(new[]
         {
-            Language.English => CultureInfo.GetCultureInfo("en"),
-            Language.French => CultureInfo.GetCultureInfo("fr"),
-            _ => CultureInfo.CurrentUICulture
-        };
+            ".pdf",
+            ".txt",
+            ".docx",
+            ".pdf",
+            ".txt",
+            ".docx"
+        });
+        
+        EncryptedFileExtensions = new ObservableCollection<string>(new[]
+        {
+            ".pdf",
+            ".txt",
+            ".docx",
+            ".mspaint"
+        });
     }
 
-    private static void ChangeLogFormat(FileFormat fileFormat)
+    public void ChangeLogFormat(FileFormat fileFormat)
     {
-        Model.GetInstance().SetLogFileFormat(fileFormat);
+        _model.SetLogFileFormat(fileFormat);
+    }
+
+    public void RemovePriorityFileExtension(string extension)
+    {
+        PriorityFileExtensions.Remove(extension);
+    }
+    
+    public void AddPriorityFileExtension(string extension)
+    {
+        PriorityFileExtensions.Add(extension);
+    }
+    
+    public void RemoveEncryptedFileExtension(string extension)
+    {
+        EncryptedFileExtensions.Remove(extension);
+    }
+
+    public void AddEncryptedFileExtension(string extension)
+    {
+        EncryptedFileExtensions.Add(extension);
     }
 }

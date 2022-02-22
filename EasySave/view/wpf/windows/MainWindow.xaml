@@ -73,6 +73,7 @@
                                  Height="60"
                                  Foreground="White"
                                  FontSize="14"
+                                 IsChecked="True"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding OnNavigateToHomePage}" />
 
@@ -81,7 +82,6 @@
                                  Height="60"
                                  Foreground="White"
                                  FontSize="14"
-                                 IsChecked="True"
                                  Style="{StaticResource MenuButtonTheme}"
                                  Command="{Binding OnNavigateToBackups}" />
 
@@ -94,7 +94,7 @@
                                  Command="{Binding OnNavigateToSettings}" />
 
                 </StackPanel>
-
+                
                 <ContentControl Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="10"
