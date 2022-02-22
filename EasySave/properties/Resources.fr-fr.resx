@@ -302,4 +302,16 @@
     <data name="Remove_Encrypted_Files_Extension" xml:space="preserve">
       <value>Supprimer la sélection</value>
     </data>
+    <data name="Add_New_File_Extension" xml:space="preserve">
+      <value>Ajouter une nouvelle extension de fichiers</value>
+    </data>
+    <data name="File_Extension_Placeholder" xml:space="preserve">
+      <value>Extension (.pdf)</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+      <value>Annuler</value>
+    </data>
+    <data name="Ask_Informations_Add_File_Extension" xml:space="preserve">
+      <value>L'extension doit commencer par un point</value>
+    </data>
 </root>

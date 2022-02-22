@@ -19,7 +19,7 @@ public partial class BackupsView : UserControl
         InitializeComponent();
 
         _viewModel = new BackupsViewModel();
-        DataContext = _viewModel;
+        _viewModel = (BackupsViewModel) DataContext;
     }
 
     private void OnDeleteBackup(object sender, RoutedEventArgs e)
@@ -57,9 +57,7 @@ public partial class BackupsView : UserControl
 
     private void OnCreateBackup(object sender, DialogClosingEventArgs e)
     {
-        if (e.Parameter is not bool accept) return;
-
-        if (accept)
+        if (Equals(e.Parameter, true))
         {
             if (BackupType.SelectedItem is not ComboBoxItem backupTypeSelected)
             {
@@ -71,10 +69,11 @@ public partial class BackupsView : UserControl
             var backupSourcePath = BackupSourcePath.Text.Trim();
             var backupTargetPath = BackupTargetPath.Text.Trim();
             var backupType = backupTypeSelected.Name;
+            var backupEncrypted = BackupEncrypted.IsChecked!.Value;
 
             if (backupName.Length > 0 && !string.IsNullOrEmpty(backupType))
                 _viewModel.CreateBackup(backupName, backupSourcePath, backupTargetPath,
-                    backupType.Equals("Complete") ? new Complete() : new Differential());
+                    backupType.Equals("Complete") ? new Complete() : new Differential(), backupEncrypted);
             else
                 ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Create_Backup);
         }

@@ -79,6 +79,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a new file extension.
+        /// </summary>
+        internal static string Add_New_File_Extension {
+            get {
+                return ResourceManager.GetString("Add_New_File_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         internal static string Add_Priority_Files_Extension {
@@ -160,6 +169,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The extension must starts with a dot.
+        /// </summary>
+        internal static string Ask_Informations_Add_File_Extension {
+            get {
+                return ResourceManager.GetString("Ask_Informations_Add_File_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, fill all the information when creating a backup.
         /// </summary>
         internal static string Ask_Informations_Create_Backup {
@@ -210,6 +228,15 @@ namespace EasySave.properties {
         internal static string Backups {
             get {
                 return ResourceManager.GetString("Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
             }
         }
         
@@ -399,6 +426,15 @@ namespace EasySave.properties {
         internal static string Exit_App {
             get {
                 return ResourceManager.GetString("Exit_App", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension (.pdf).
+        /// </summary>
+        internal static string File_Extension_Placeholder {
+            get {
+                return ResourceManager.GetString("File_Extension_Placeholder", resourceCulture);
             }
         }
         

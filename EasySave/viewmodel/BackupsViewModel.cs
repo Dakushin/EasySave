@@ -62,17 +62,16 @@ public class BackupsViewModel : ViewModelBase
         SelectedBackup.BackupStrategy.Cancel();
     }
 
-    public void CreateBackup(string name, string sourcePath, string targetPath,
-        BackupStrategy backupStrategy) //Function that create savework
+    public void CreateBackup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy, bool isEncrypted)
     {
-        if (_model.GetBackupList().Count < 5) //check if we have more than 5 wavework
+        if (_model.GetBackupList().Count < 5) //check if we have more than 5 backups
         {
-            if (_model.FindbyName(name) == null) //check if already existe
+            if (_model.FindbyName(name) == null) //check if it already exists
             {
                 if (Directory.Exists(sourcePath) || File.Exists(sourcePath)) // check if source path is good
                 {
                     targetPath = Path.GetFullPath(targetPath);
-                    _model.GetBackupList().Add(new Backup(name, sourcePath, targetPath, backupStrategy));
+                    _model.GetBackupList().Add(new Backup(name, sourcePath, targetPath, backupStrategy, isEncrypted));
                     NotifySuccess(Resources.Backup_Created);
                 }
                 else
