@@ -205,30 +205,67 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         FileLeftToDo = FileToCopy.Count;
-        foreach(var sourceFilePath in FileToCopy)
+        var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck())
+        if (nameofprocess == string.Empty)
         {
-            if (IsCancelled) break;
-            _backupState.SetTotalFileSize(new FileInfo(sourceFilePath).Length);
-            var targetFilePath = GetPathWithDirectory(sourceFilePath, sourceFolderPath, targetFolderPath);
-            _backupState.SetSourceFilePath(sourceFilePath);
-            _backupState.SetTargetFilePath(targetFilePath);
-
-            Stopwatch sw = Stopwatch.StartNew();
-            if (_iscrypted)
+            foreach (var sourceFilePath in FileToCopy)
             {
-                CopyFile(sourceFilePath, targetFilePath);
-            } else
-            {
-
+                if (IsCancelled) break;
+                _backupState.SetTotalFileSize(new FileInfo(sourceFilePath).Length);
+                var targetFilePath = GetPathWithDirectory(sourceFilePath, sourceFolderPath, targetFolderPath);
+                _backupState.SetSourceFilePath(sourceFilePath);
+                _backupState.SetTargetFilePath(targetFilePath);
+                long timetocrypt = 0;
+                Stopwatch sw = Stopwatch.StartNew();
+                if (_iscrypted && CheckToCrypt(sourceFilePath))
+                {
+                    timetocrypt = Cryptage(sourceFilePath, targetFilePath);
+                } else
+                {
+                    CopyFile(sourceFilePath, targetFilePath);
+                }
+                sw.Stop();
+                var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
+                                   new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+                Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
+                FileLeftToDo--;
+                _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
+                UpdateSaveState(_backupState);
             }
-            sw.Stop();
-            var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
-                               new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), );
-            Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
-            FileLeftToDo--;
-            _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
-            UpdateSaveState(_backupState);
+        } else
+        {
+
         }
+    }
+
+    private bool CheckToCrypt(string file)
+    {
+        foreach (var ext in Model.GetInstance().GetListExtentionToCheck())
+            if (ext == Path.GetExtension(file))
+                return false;
+        return true;
+    }
+
+    private int Cryptage(string sourcePath, string targetPath)
+    {
+        var cryptosoft = new Process();
+        cryptosoft.StartInfo.FileName = "Cryptosoft.exe";
+        cryptosoft.StartInfo.Arguments = $"{sourcePath} {targetPath}";
+        cryptosoft.StartInfo.UseShellExecute = true;
+        cryptosoft.Start();
+        cryptosoft.WaitForExit();
+        return cryptosoft.ExitCode;
+    }
+
+    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
+    {
+        foreach (var ProcessToCheck in listOfProcessToCheck)
+        {
+            var processes = Process.GetProcessesByName(ProcessToCheck);
+            if (processes.Length > 0) return ProcessToCheck;
+        }
+
+        return string.Empty;
     }
 
 }

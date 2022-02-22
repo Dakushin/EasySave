@@ -155,36 +155,6 @@ public class BackupsViewModel : ViewModelBase
     }
 
 
-    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
-    {
-        foreach (var ProcessToCheck in listOfProcessToCheck)
-        {
-            var processes = Process.GetProcessesByName(ProcessToCheck);
-            if (processes.Length > 0) return ProcessToCheck;
-        }
-
-        return string.Empty;
-    }
-
-    private int Cryptage(string sourcePath, string targetPath)
-    {
-        var cryptosoft = new Process();
-        cryptosoft.StartInfo.FileName = "Cryptosoft.exe";
-        cryptosoft.StartInfo.Arguments = $"{sourcePath} {targetPath}";
-        cryptosoft.StartInfo.UseShellExecute = true;
-        cryptosoft.Start();
-        cryptosoft.WaitForExit();
-        return cryptosoft.ExitCode;
-    }
-
-    private bool CheckToCrypt(string file)
-    {
-        foreach (var ext in _model.GetListExtentionToCheck())
-            if (ext == Path.GetExtension(file))
-                return false;
-        return true;
-    }
-
     public void Filter(string filterText)
     {
         _filterText = filterText;
