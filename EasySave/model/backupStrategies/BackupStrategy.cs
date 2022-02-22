@@ -238,7 +238,7 @@ public abstract class BackupStrategy
                 }
                 else
                 {
-                    Pause();
+                    ProcessPause.Invoke(this, new EventArgs());
                 }
                 sw.Stop();
                 var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
@@ -15,6 +14,8 @@ namespace EasySave.viewmodel;
 public class BackupsViewModel : ViewModelBase
 {
     //PRIVATE VARIABLE
+    //private List<Task> tasks;
+    private Thread thread;
     private readonly Model _model;
     private readonly View _view;
     private string _filterText;
@@ -22,6 +23,7 @@ public class BackupsViewModel : ViewModelBase
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
+        
         _view = v;
         _model = Model.GetInstance();
     }
@@ -49,17 +51,17 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
-        SelectedBackup.BackupStrategy.Resume();
+        thread = new Thread(SelectedBackup.BackupStrategy.Resume);
     }
 
     public void PauseSelectedBackup()
     {
-        SelectedBackup.BackupStrategy.Pause();
+        thread = new Thread(SelectedBackup.BackupStrategy.Pause);
     }
 
     public void CancelSelectedBackup()
     {
-        SelectedBackup.BackupStrategy.Cancel();
+        thread = new Thread(SelectedBackup.BackupStrategy.Cancel);
     }
 
     public void CreateBackup(string name, string sourcePath, string targetPath,
@@ -107,11 +109,13 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ExecuteBackup(Backup backup)
     {
-        bool success;
+
         try
         {
-            backup.BackupStrategy.ProcessPause += EventPause;
-            success = await Task.Run(backup.Execute);
+            var task = Task.Factory.StartNew(() => backup.Execute());
+            //tasks.Add(task);
+            var success = await task;
+            
             if (success)
                 NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
             else
@@ -195,4 +199,5 @@ public class BackupsViewModel : ViewModelBase
             return true;
         };
     }
+
 }
