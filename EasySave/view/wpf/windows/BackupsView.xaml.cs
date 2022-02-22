@@ -18,8 +18,7 @@ public partial class BackupsView : UserControl
     {
         InitializeComponent();
 
-        _viewModel = new BackupsViewModel();
-        _viewModel = (BackupsViewModel) DataContext;
+        _viewModel = DataContext as BackupsViewModel;
     }
 
     private void OnDeleteBackup(object sender, RoutedEventArgs e)

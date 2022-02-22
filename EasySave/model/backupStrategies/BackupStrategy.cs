@@ -213,9 +213,9 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         var i = FileLeftToDo = FileToCopy.Count - (FileToCopy.Count - FileLeftToDo);
-        var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-        if (nameofprocess == string.Empty)
-        {
+        //var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
+        //if (nameofprocess == string.Empty)
+        //{
             for(; i < FileToCopy.Count; i++)
             {
                 if (IsCancelled) break;
@@ -225,9 +225,9 @@ public abstract class BackupStrategy
                 _backupState.SetTargetFilePath(FileToCopy[i]);
                 long timetocrypt = 0;
                 Stopwatch sw = Stopwatch.StartNew();
-                nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-                if (nameofprocess == string.Empty)
-                {
+                //nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
+                //if (nameofprocess == string.Empty)
+                //{
                     if (_iscrypted && CheckToCrypt(FileToCopy[i]))
                     {
                         timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
@@ -235,11 +235,11 @@ public abstract class BackupStrategy
                     {
                         CopyFile(FileToCopy[i], targetFilePath);
                     }
-                }
-                else
-                {
-                    ProcessPause.Invoke(this, new EventArgs());
-                }
+                //}
+                //else
+                //{
+                //    ProcessPause.Invoke(this, new EventArgs());
+                //}
                 sw.Stop();
                 var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
                                    new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
@@ -248,10 +248,10 @@ public abstract class BackupStrategy
                 _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
                 UpdateSaveState(_backupState);
             }
-        } else
-        {
-            throw new ProcessExecption(nameofprocess, this, sourceFolderPath, targetFolderPath, FileToCopy, 2);
-        }
+        //} else
+        //{
+        //    throw new ProcessExecption(nameofprocess, this, sourceFolderPath, targetFolderPath, FileToCopy, 2);
+        //}
     }
 
 
@@ -274,15 +274,5 @@ public abstract class BackupStrategy
         return cryptosoft.ExitCode;
     }
 
-    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
-    {
-        foreach (var ProcessToCheck in listOfProcessToCheck)
-        {
-            var processes = Process.GetProcessesByName(ProcessToCheck);
-            if (processes.Length > 0) return ProcessToCheck;
-        }
-
-        return string.Empty;
-    }
 
 }

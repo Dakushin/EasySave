@@ -5,12 +5,15 @@ namespace EasySave.model;
 
 public class Server
 {
-    public Socket serversocket;
-    Server _instance;
-    int port;
+    private Socket serversocket;
+    private static Server _instance;
+    private static int port = 4900;
     private Server()
-    { }
-    public Server GetInstance()
+    {
+        OpenSocket();
+
+    }
+    public static Server GetInstance()
     { 
         if(_instance == null)
         {
@@ -19,7 +22,7 @@ public class Server
         return _instance;
     }
 
-    void OpenSocket()
+    private void OpenSocket()
     {
         var ipAdresse = IPAddress.Parse("127.0.0.1");
         var localEndPoint = new IPEndPoint(ipAdresse, port);
@@ -27,6 +30,7 @@ public class Server
         serversocket.Bind(localEndPoint);
         serversocket.Listen(2);
     }
+
 
 }
 

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
+using System.Diagnostics;
 using EasySave.model;
 using EasySave.model.backupStrategies;
 using EasySave.properties;
@@ -18,13 +19,19 @@ public class BackupsViewModel : ViewModelBase
     private readonly Model _model;
     private readonly View _view;
     private string _filterText;
-
+    private bool alreadyLaunch = false;
+    private bool ProcessDetect;
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
         
         _view = v;
         _model = Model.GetInstance();
+        if (!alreadyLaunch)
+        {
+            ThreadCheckingWorkingSoftware();
+            alreadyLaunch = true;
+        }
     }
 
     public BackupsViewModel() : this(null)
@@ -50,7 +57,10 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
-        SelectedBackup.BackupStrategy.Resume();
+        if (ProcessDetect)
+        {
+            SelectedBackup.BackupStrategy.Resume();
+        }
     }
 
     public void PauseSelectedBackup()
@@ -134,17 +144,20 @@ public class BackupsViewModel : ViewModelBase
 
     }
 
-    public void EventPause(object o, EventArgs args)
+    private async void ThreadCheckingWorkingSoftware()
     {
-        PauseSelectedBackup();
+        var software = await Task.Run(CheckProcesses);
+        if(software != null && !ProcessDetect) 
+        {
+            PauseSelectedBackup();
+            ProcessDetect = true;
+        } else
+        {
+            ProcessDetect = false;
+        }
+        ThreadCheckingWorkingSoftware();
     }
 
-    private async void ReTry(List<string> list, string sourceFilePath, string targetFilePath)
-    {
-
-    }
-
-   
 
     private void GetAllFileFromDirectory(string[] directories, List<string> files) //return all file in a directory
     {
@@ -195,6 +208,33 @@ public class BackupsViewModel : ViewModelBase
 
             return true;
         };
+    }
+
+    public static string CheckProcesses()
+    {
+        while (CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck()) == string.Empty)
+        { 
+            Thread.Sleep(1000);
+        }
+        return CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck());
+    }
+
+    public static string CheckIfClose(string process)
+    {
+        while (CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck()) == process)
+        { }
+        return string.Empty;
+    }
+
+    private static string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
+    {
+        foreach (var ProcessToCheck in listOfProcessToCheck)
+        {
+            var processes = Process.GetProcessesByName(ProcessToCheck);
+            if (processes.Length > 0) return ProcessToCheck;
+        }
+
+        return string.Empty;
     }
 
 }
