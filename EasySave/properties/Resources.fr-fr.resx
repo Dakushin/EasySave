@@ -314,4 +314,7 @@
     <data name="Ask_Informations_Add_File_Extension" xml:space="preserve">
       <value>L'extension doit commencer par un point</value>
     </data>
+    <data name="User_Doc_Link" xml:space="preserve">
+      <value>Ouvrir la documentation utilisateur dans le navigateur</value>
+    </data>
 </root>

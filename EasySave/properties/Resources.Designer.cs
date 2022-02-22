@@ -619,6 +619,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open the user documentation in your web browser.
+        /// </summary>
+        internal static string User_Doc_Link {
+            get {
+                return ResourceManager.GetString("User_Doc_Link", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         internal static string Welcome_1 {
