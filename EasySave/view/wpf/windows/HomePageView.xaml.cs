@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace EasySave.view.wpf.windows;
 
@@ -14,7 +13,10 @@ public partial class HomePageView : UserControl
 
     private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
     {
-        var processInfo = new ProcessStartInfo("https://google.fr");
+        var currentCulture = Gu.Localization.Translator.CurrentCulture;
+        var userDocUrl = $"https://sachathommet.fr/easysave/user_doc_{currentCulture.Name}.pdf";
+        
+        var processInfo = new ProcessStartInfo(userDocUrl);
         processInfo.UseShellExecute = true;
         Process.Start(processInfo);
         e.Handled = true;
