@@ -30,7 +30,7 @@ public sealed class Model
         _listProcessToCheck = new List<string> {"Calculator", "word", "notepad", "WINWORD", "chrome"};
         _listExtentionToCheck = new List<string> {".png", ".jpeg", ".jpg"};
 
-        _saveWorkList.Add(new Backup("test", @"C:\Users\sacha\Desktop\test\1", @"C:\Users\sacha\Desktop\test\2",
+        _saveWorkList.Add(new Backup("test", @"X:\x", @"X:\y",
             new Complete()));
         _saveWorkList.Add(new Backup("bonjour_monde", @"C:\Users\sacha\Desktop\test\1",
             @"C:\Users\sacha\Desktop\test\2", new Complete()));

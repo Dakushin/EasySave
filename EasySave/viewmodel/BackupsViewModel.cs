@@ -107,12 +107,40 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ExecuteBackup(Backup backup)
     {
-        var success = await Task.Run(backup.Execute);
-        if (success)
-            
-            NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
-        else
-            NotifyError($"{backup.Name} {Resources.Cancelled}");
+        bool success;
+        try
+        {
+            backup.BackupStrategy.ProcessPause += EventPause;
+            success = await Task.Run(backup.Execute);
+            if (success)
+                NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
+            else
+                NotifyError($"{backup.Name} {Resources.Cancelled}");
+        }
+        catch(ProcessExecption pe)
+        {
+            switch(pe.exception)
+            {
+                case 1:
+                    {
+                        
+                        break;
+                    }
+                case 2: pe.backupStrategy.Cancel(); break;
+            }
+            NotifyError(Resources.Error_WorkingProcess + pe.Name);
+        }
+
+    }
+
+    public void EventPause(object o, EventArgs args)
+    {
+        PauseSelectedBackup();
+    }
+
+    private async void ReTry(List<string> list, string sourceFilePath, string targetFilePath)
+    {
+
     }
 
    

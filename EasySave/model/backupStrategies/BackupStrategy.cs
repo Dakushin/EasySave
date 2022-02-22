@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Diagnostics;
+using EasySave.view.wpf.core;
+using EasySave.properties;
 namespace EasySave.model.backupStrategies;
 
 public abstract class BackupStrategy
@@ -12,6 +14,7 @@ public abstract class BackupStrategy
     protected event EventHandler<long>? BytesCopied;
     protected BackupState _backupState;
     private bool _iscrypted;
+    public event EventHandler? ProcessPause;
 
     public bool Execute(Backup backup)
     {
@@ -201,32 +204,45 @@ public abstract class BackupStrategy
         FileLeftToDo = Fltd;
     }
 
+    public void ReTry(List<string> FileToCopy, string sourceFolderPaht, string targetFolderPAth)
+    {
+        DoAllCopy(FileToCopy, sourceFolderPaht, targetFolderPAth);
+    }
+
     protected void DoAllCopy(List<string> FileToCopy, string sourceFolderPath, string targetFolderPath)
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
-        FileLeftToDo = FileToCopy.Count;
-        var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck())
+        var i = FileLeftToDo = FileToCopy.Count - (FileToCopy.Count - FileLeftToDo);
+        var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
         if (nameofprocess == string.Empty)
         {
-            foreach (var sourceFilePath in FileToCopy)
+            for(; i < FileToCopy.Count; i++)
             {
                 if (IsCancelled) break;
-                _backupState.SetTotalFileSize(new FileInfo(sourceFilePath).Length);
-                var targetFilePath = GetPathWithDirectory(sourceFilePath, sourceFolderPath, targetFolderPath);
-                _backupState.SetSourceFilePath(sourceFilePath);
-                _backupState.SetTargetFilePath(targetFilePath);
+                _backupState.SetTotalFileSize(new FileInfo(FileToCopy[i]).Length);
+                var targetFilePath = GetPathWithDirectory(FileToCopy[i], sourceFolderPath, targetFolderPath);
+                _backupState.SetSourceFilePath(FileToCopy[i]);
+                _backupState.SetTargetFilePath(FileToCopy[i]);
                 long timetocrypt = 0;
                 Stopwatch sw = Stopwatch.StartNew();
-                if (_iscrypted && CheckToCrypt(sourceFilePath))
+                nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
+                if (nameofprocess == string.Empty)
                 {
-                    timetocrypt = Cryptage(sourceFilePath, targetFilePath);
-                } else
+                    if (_iscrypted && CheckToCrypt(FileToCopy[i]))
+                    {
+                        timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
+                    } else
+                    {
+                        CopyFile(FileToCopy[i], targetFilePath);
+                    }
+                }
+                else
                 {
-                    CopyFile(sourceFilePath, targetFilePath);
+                    Pause();
                 }
                 sw.Stop();
-                var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
-                                   new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+                var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
+                                   new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
                 Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
                 FileLeftToDo--;
                 _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
@@ -234,9 +250,10 @@ public abstract class BackupStrategy
             }
         } else
         {
-
+            throw new ProcessExecption(nameofprocess, this, sourceFolderPath, targetFolderPath, FileToCopy, 2);
         }
     }
+
 
     private bool CheckToCrypt(string file)
     {
