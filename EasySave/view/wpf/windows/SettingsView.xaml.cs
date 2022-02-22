@@ -1,13 +1,67 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using EasySave.model;
+using EasySave.view.wpf.core;
 using EasySave.viewmodel;
+using MaterialDesignThemes.Wpf;
 
 namespace EasySave.view.wpf.windows;
 
 public partial class SettingsView : UserControl
 {
+    private readonly SettingsViewModel _viewModel;
+
     public SettingsView()
     {
         InitializeComponent();
-        DataContext = new SettingsViewModel();
+        _viewModel = (SettingsViewModel) DataContext;
+    }
+
+    private void OnSelectXml(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ChangeLogFormat(new Xml());
+    }
+
+    private void OnSelectJson(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ChangeLogFormat(new Json());
+    }
+
+    private void OnRemovePriorityFileExtension(object sender, RoutedEventArgs e)
+    {
+        if (HighPriorityListBox.SelectedItem is string extension)
+        {
+            _viewModel.RemovePriorityFileExtension(extension);
+        }
+    }
+
+    private void OnRemoveEncryptedFileExtension(object sender, RoutedEventArgs e)
+    {
+        if (EncryptedListBox.SelectedItem is string extension)
+        {
+            _viewModel.RemoveEncryptedFileExtension(extension);
+        }
+    }
+
+    private void OnAddExtension(object sender, DialogClosingEventArgs e)
+    {
+        if (Equals(e.Parameter, true))
+        {
+            var textBox = sender.Equals(PriorityDialog) ? PriorityTextBox : EncryptedTextBox;
+            Action<string> action = sender.Equals(PriorityDialog) ? _viewModel.AddPriorityFileExtension : _viewModel.AddEncryptedFileExtension;
+            
+            if (!string.IsNullOrWhiteSpace(textBox.Text) && textBox.Text[0] == '.')
+            {
+                action(textBox.Text.Trim());
+            }
+            else
+            {
+                ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Add_File_Extension);
+            }
+        }
+        else
+        {
+            ViewModelBase.NotifyInfo(properties.Resources.Cancelled);
+        }
     }
 }

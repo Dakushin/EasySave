@@ -15,55 +15,197 @@
         <viewModel:SettingsViewModel />
     </UserControl.DataContext>
 
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromBottom}">
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="250" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="250" />
+                <RowDefinition Height="350" />
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="{localize:Static properties:Resources.Preferences}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Left"
-                   Margin="20, 0, 0, 0"
-                   Foreground="White"
-                   FontSize="30" />
+            <TextBlock Text="{localize:Static properties:Resources.Preferences}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="20, 0, 0, 0"
+                       Foreground="White"
+                       FontSize="30" />
 
-        <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
-                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="16">
-                    <materialDesign:PackIcon Kind="Language" Height="64" Width="64" />
-                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}" />
+            <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="16">
+                        <materialDesign:PackIcon Kind="Language" Height="64" Width="64" />
+                        <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}" />
+                    </StackPanel>
+
+                    <StackPanel Margin="16" HorizontalAlignment="Center">
+                        <localize:LanguageSelector AutogenerateLanguages="True" />
+                    </StackPanel>
                 </StackPanel>
+            </materialDesign:Card>
 
-                <StackPanel Margin="16" HorizontalAlignment="Center">
-                    <localize:LanguageSelector AutogenerateLanguages="True" />
+            <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="16">
+                        <materialDesign:PackIcon Kind="Xml" Height="64" Width="64" />
+                        <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Log_Format}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16">
+                        <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0"
+                                     Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Click="OnSelectJson"/>
+                        <RadioButton Content="../images/xml.png" Margin="10, 0"
+                                     Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Click="OnSelectXml"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
-        </materialDesign:Card>
-
-        <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
-                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="16">
-                    <materialDesign:PackIcon Kind="Xml" Height="64" Width="64" />
-                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Log_Format}" />
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="16">
-                    <RadioButton Content="../images/json.png" IsChecked="True" Margin="10, 0"
-                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectJSON}"/>
-                    <RadioButton Content="../images/xml.png" Margin="10, 0"
-                                 Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectXML}"/>
-                </StackPanel>
-            </StackPanel>
-        </materialDesign:Card>
-
-    </Grid>
+            </materialDesign:Card>
+            
+            
+            <materialDesign:DialogHost Grid.Row="2" Grid.Column="0" DialogClosing="OnAddExtension" x:Name="PriorityDialog">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel
+                        Margin="16">
+                        <TextBlock Text="{localize:Static properties:Resources.Add_New_File_Extension}" />
+                        <TextBox
+                            Margin="0 8 0 0"
+                            HorizontalAlignment="Stretch"
+                            materialDesign:HintAssist.Hint="{localize:Static properties:Resources.File_Extension_Placeholder}"
+                            x:Name="PriorityTextBox" />
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                            <Button
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                IsDefault="True"
+                                Margin="0 8 8 0"
+                                Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        True
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                            <Button
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                IsCancel="True"
+                                Margin="0 8 8 0"
+                                Content="{localize:Static properties:Resources.Cancel}"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        False
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+                
+                <materialDesign:Card VerticalAlignment="Center" HorizontalAlignment="Center"
+                                     materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                    <StackPanel Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PriorityHigh" Height="64" Width="64" />
+                            <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Priority_Files}" />
+                        </StackPanel>
+                    
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                    Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
+                                    Background="ForestGreen"
+                                    Margin="0, 0, 8, 0"/>
+                        
+                            <Button Click="OnRemovePriorityFileExtension"
+                                    Content="{localize:Static properties:Resources.Remove_Priority_Files_Extension}"
+                                    Background="IndianRed"
+                                    Margin="8, 0, 0, 0"/>
+                        </StackPanel>
+                    
+                        <StackPanel>
+                            <ListBox ItemsSource="{Binding PriorityFileExtensions}"
+                                     Height="100"
+                                     x:Name="HighPriorityListBox"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </materialDesign:DialogHost>
+            
+            <materialDesign:DialogHost Grid.Row="2" Grid.Column="1" DialogClosing="OnAddExtension">
+                <materialDesign:DialogHost.DialogContent>
+                    <StackPanel
+                        Margin="16">
+                        <TextBlock Text="{localize:Static properties:Resources.Add_New_File_Extension}" />
+                        <TextBox
+                            Margin="0 8 0 0"
+                            HorizontalAlignment="Stretch"
+                            materialDesign:HintAssist.Hint="{localize:Static properties:Resources.File_Extension_Placeholder}"
+                            x:Name="EncryptedTextBox" />
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                            <Button
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                IsDefault="True"
+                                Margin="0 8 8 0"
+                                Content="{localize:Static properties:Resources.Add_Encrypted_Files_Extension}"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        True
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                            <Button
+                                Style="{StaticResource MaterialDesignFlatButton}"
+                                IsCancel="True"
+                                Margin="0 8 8 0"
+                                Content="{localize:Static properties:Resources.Cancel}"
+                                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                <Button.CommandParameter>
+                                    <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        False
+                                    </system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:DialogHost.DialogContent>
+            
+                <materialDesign:Card VerticalAlignment="Center" HorizontalAlignment="Center"
+                                     materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                    <StackPanel Margin="16">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Encryption" Height="64" Width="64" />
+                            <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Encrypted_Files}" />
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                    Content="{localize:Static properties:Resources.Add_Encrypted_Files_Extension}"
+                                    Background="ForestGreen"
+                                    Margin="0, 0, 8, 0"/>
+                            
+                            <Button Click="OnRemoveEncryptedFileExtension"
+                                    Content="{localize:Static properties:Resources.Remove_Encrypted_Files_Extension}"
+                                    Background="IndianRed"
+                                    Margin="8, 0, 0, 0"/>
+                        </StackPanel>
+                        
+                        <StackPanel>
+                            <ListBox ItemsSource="{Binding EncryptedFileExtensions}"
+                                     Height="100"
+                                     x:Name="EncryptedListBox"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </materialDesign:DialogHost>
+        </Grid>
+    </materialDesign:TransitioningContent>
 </UserControl>

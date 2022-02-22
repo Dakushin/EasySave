@@ -281,4 +281,40 @@
     <data name="Ask_Informations_Create_Backup" xml:space="preserve">
     <value>Please, fill all the information when creating a backup</value>
   </data>
+    <data name="Encrypted" xml:space="preserve">
+      <value>Encrypted</value>
+    </data>
+    <data name="Priority_Files" xml:space="preserve">
+      <value>Prioritized files</value>
+    </data>
+    <data name="Encrypted_Files" xml:space="preserve">
+      <value>Encrypted files</value>
+    </data>
+    <data name="Add_Priority_Files_Extension" xml:space="preserve">
+      <value>Add</value>
+    </data>
+    <data name="Remove_Priority_Files_Extension" xml:space="preserve">
+      <value>Remove the selection</value>
+    </data>
+    <data name="Add_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Add</value>
+    </data>
+    <data name="Remove_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Remove the selection</value>
+    </data>
+    <data name="Add_New_File_Extension" xml:space="preserve">
+      <value>Add a new file extension</value>
+    </data>
+    <data name="File_Extension_Placeholder" xml:space="preserve">
+      <value>Extension (.pdf)</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+      <value>Cancel</value>
+    </data>
+    <data name="Ask_Informations_Add_File_Extension" xml:space="preserve">
+      <value>The extension must starts with a dot</value>
+    </data>
+    <data name="User_Doc_Link" xml:space="preserve">
+      <value>Open the user documentation in your web browser</value>
+    </data>
 </root>
