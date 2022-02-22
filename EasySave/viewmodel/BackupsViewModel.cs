@@ -15,7 +15,6 @@ public class BackupsViewModel : ViewModelBase
 {
     //PRIVATE VARIABLE
     //private List<Task> tasks;
-    private Thread thread;
     private readonly Model _model;
     private readonly View _view;
     private string _filterText;
@@ -51,17 +50,17 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
-        thread = new Thread(SelectedBackup.BackupStrategy.Resume);
+        SelectedBackup.BackupStrategy.Resume();
     }
 
     public void PauseSelectedBackup()
     {
-        thread = new Thread(SelectedBackup.BackupStrategy.Pause);
+        SelectedBackup.BackupStrategy.Pause();
     }
 
     public void CancelSelectedBackup()
     {
-        thread = new Thread(SelectedBackup.BackupStrategy.Cancel);
+        SelectedBackup.BackupStrategy.Cancel();
     }
 
     public void CreateBackup(string name, string sourcePath, string targetPath,
@@ -113,7 +112,6 @@ public class BackupsViewModel : ViewModelBase
         try
         {
             var task = Task.Factory.StartNew(() => backup.Execute());
-            //tasks.Add(task);
             var success = await task;
             
             if (success)

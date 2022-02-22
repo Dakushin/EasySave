@@ -1,12 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 
 namespace EasySave.model
 {
-    internal class Server
+    public class Server
     {
+        static public Socket serversocket;
+        Server _instance;
+        private Server()
+        { 
+        
+        }
+        public Server GetInstance()
+        {
+            if(_instance == null)
+            {
+                _instance = new Server();
+            }
+            return _instance;
+        }
+
+        private void OpenSocket()
+        {
+
+        }
+
+
     }
 }
