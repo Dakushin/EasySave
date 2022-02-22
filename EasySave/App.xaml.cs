@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
+using EasySave.model;
 
 namespace EasySave;
 
@@ -16,6 +17,8 @@ public partial class App : Application
         }
 
         Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr-FR");
+
+        Server.GetInstance();
 
         base.OnStartup(e);
     }
