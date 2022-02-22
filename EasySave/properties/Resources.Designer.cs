@@ -70,6 +70,24 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Add_Encrypted_Files_Extension {
+            get {
+                return ResourceManager.GetString("Add_Encrypted_Files_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        internal static string Add_Priority_Files_Extension {
+            get {
+                return ResourceManager.GetString("Add_Priority_Files_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Give the name of the backup : .
         /// </summary>
         internal static string Ask_Backup_Name {
@@ -259,6 +277,24 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encrypted.
+        /// </summary>
+        internal static string Encrypted {
+            get {
+                return ResourceManager.GetString("Encrypted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encrypted files.
+        /// </summary>
+        internal static string Encrypted_Files {
+            get {
+                return ResourceManager.GetString("Encrypted_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error : a backup with this name already exists.
         /// </summary>
         internal static string Error_Backup_Already_Exists {
@@ -426,6 +462,33 @@ namespace EasySave.properties {
         internal static string Preferences {
             get {
                 return ResourceManager.GetString("Preferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prioritized files.
+        /// </summary>
+        internal static string Priority_Files {
+            get {
+                return ResourceManager.GetString("Priority_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the selection.
+        /// </summary>
+        internal static string Remove_Encrypted_Files_Extension {
+            get {
+                return ResourceManager.GetString("Remove_Encrypted_Files_Extension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the selection.
+        /// </summary>
+        internal static string Remove_Priority_Files_Extension {
+            get {
+                return ResourceManager.GetString("Remove_Priority_Files_Extension", resourceCulture);
             }
         }
         

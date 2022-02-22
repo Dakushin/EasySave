@@ -33,7 +33,7 @@ public sealed class Model
         _saveWorkList.Add(new Backup("test", @"C:\Users\sacha\Desktop\test\1", @"C:\Users\sacha\Desktop\test\2",
             new Complete()));
         _saveWorkList.Add(new Backup("bonjour_monde", @"C:\Users\sacha\Desktop\test\1",
-            @"C:\Users\sacha\Desktop\test\2", new Complete()));
+            @"C:\Users\sacha\Desktop\test\2", new Complete(), true));
 
         TryRecupFromSaveStatePath();
     }

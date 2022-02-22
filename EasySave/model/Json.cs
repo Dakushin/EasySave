@@ -10,10 +10,20 @@ internal class Json : FileFormat
     {
         path = Checkpath(path, extention);
         var list = new List<T>();
-        if (File.Exists(path)) list = UnSerialize<T>(path);
-        list.Add(obj);
-        var s = JsonConvert.SerializeObject(list, Formatting.Indented);
-        File.WriteAllText(path, s);
+        
+        try
+        {
+            Lock.EnterWriteLock();
+
+            if (File.Exists(path)) list = UnSerialize<T>(path);
+            list.Add(obj);
+            var s = JsonConvert.SerializeObject(list, Formatting.Indented);
+            File.WriteAllText(path, s);
+        }
+        finally
+        {
+            Lock.ExitWriteLock();
+        }
     }
 
     public override List<T> UnSerialize<T>(string path) //Function generic that Deserialise an json file by item

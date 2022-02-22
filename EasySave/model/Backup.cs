@@ -15,13 +15,14 @@ public class Backup : INotifyPropertyChanged
     private bool _crypted;
 
     //CONSTRUCTOR
-    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy)
+    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy, bool crypted = false)
     {
         _name = name;
         _sourcePath = sourcePath;
         _targetPath = targetPath;
         _backupStrategy = backupStrategy;
         _progression = 0;
+        _crypted = crypted;
     }
 
     public BackupStrategy BackupStrategy

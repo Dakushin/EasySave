@@ -106,6 +106,10 @@
                         Content="{localize:Static properties:Resources.Create_Backup}"
                         Width="250"
                         Margin="15, 0" />
+                
+                <Button Width="300"
+                        Click="OnExecuteAllBackups"
+                        Content="{localize:Static properties:Resources.Execute_All_Backups}"></Button>
             </StackPanel>
 
             <DataGrid Grid.Row="1"
@@ -150,6 +154,17 @@
                                         <ComboBoxItem Content="Complete" Name="Complete" />
                                         <ComboBoxItem Content="Differential" Name="Differential" />
                                     </ComboBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Width="120" Header="{localize:Static properties:Resources.Encrypted}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <CheckBox IsChecked="{Binding Crypted, Mode=TwoWay}"
+                                        HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

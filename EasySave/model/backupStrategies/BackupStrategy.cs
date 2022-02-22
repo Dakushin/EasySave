@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Diagnostics;
+using System.Globalization;
+
 namespace EasySave.model.backupStrategies;
 
 public abstract class BackupStrategy
@@ -214,21 +216,14 @@ public abstract class BackupStrategy
             _backupState.SetTargetFilePath(targetFilePath);
 
             Stopwatch sw = Stopwatch.StartNew();
-            if (_iscrypted)
-            {
-                CopyFile(sourceFilePath, targetFilePath);
-            } else
-            {
-
-            }
+            CopyFile(sourceFilePath, targetFilePath);
             sw.Stop();
             var log = new Log(_backupState.Name, sourceFilePath, targetFilePath, string.Empty,
-                               new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), );
+                               new FileInfo(sourceFilePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(CultureInfo.InvariantCulture));
             Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
             FileLeftToDo--;
             _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
             UpdateSaveState(_backupState);
         }
     }
-
 }

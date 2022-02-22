@@ -24,7 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100" />
             <RowDefinition Height="250" />
-            <RowDefinition />
+            <RowDefinition Height="350"/>
         </Grid.RowDefinitions>
 
         <TextBlock Text="{localize:Static properties:Resources.Preferences}"
@@ -61,6 +61,60 @@
                                  Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectJSON}"/>
                     <RadioButton Content="../images/xml.png" Margin="10, 0"
                                  Style="{StaticResource ClickableRadioButton}" Width="64" Height="64" Command="{Binding OnSelectXML}"/>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
+        
+        <materialDesign:Card Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+            <StackPanel  Margin="16">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="PriorityHigh" Height="64" Width="64" />
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Priority_Files}" />
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OnAddPriorityFileExtension}"
+                            Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
+                            Background="ForestGreen"
+                            Margin="0, 0, 4, 0"/>
+                    
+                    <Button Command="{Binding OnRemovePriorityFileExtension}"
+                            Content="{localize:Static properties:Resources.Remove_Priority_Files_Extension}"
+                            Background="IndianRed"
+                            Margin="4, 0, 0, 0"/>
+                </StackPanel>
+                
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding HighPriorityFileExtensions}"
+                             Height="100"></ListBox>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
+        
+        <materialDesign:Card Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                             materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="300">
+            <StackPanel Margin="16">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Encryption" Height="64" Width="64" />
+                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Encrypted_Files}" />
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding OnAddEncryptedFileExtension}"
+                            Content="{localize:Static properties:Resources.Add_Encrypted_Files_Extension}"
+                            Background="ForestGreen"
+                            Margin="0, 0, 4, 0"/>
+                    
+                    <Button Command="{Binding OnRemoveEncryptedFileExtension}"
+                            Content="{localize:Static properties:Resources.Remove_Encrypted_Files_Extension}"
+                            Background="IndianRed"
+                            Margin="4, 0, 0, 0"/>
+                </StackPanel>
+                
+                <StackPanel>
+                    <ListBox ItemsSource="{Binding EncryptedFileExtensions}"
+                             Height="100"></ListBox>
                 </StackPanel>
             </StackPanel>
         </materialDesign:Card>

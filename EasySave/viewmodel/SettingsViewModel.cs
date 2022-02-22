@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using EasySave.translation;
 using EasySave.view.wpf.core;
 using EasySave.model;
@@ -7,12 +8,38 @@ namespace EasySave.viewmodel;
 
 public class SettingsViewModel : ViewModelBase
 {
+    private readonly ObservableCollection<string> _highPriorityFileExtensions;
+
+    public ObservableCollection<string> HighPriorityFileExtensions => _highPriorityFileExtensions;
+    
+    private readonly ObservableCollection<string> _encryptedFileExtensions;
+
+    public ObservableCollection<string> EncryptedFileExtensions => _encryptedFileExtensions;
+
     public SettingsViewModel()
     {
         OnSelectEnglish = new CommandHandler(() => ChangeLanguage(Language.English));
         OnSelectFrench = new CommandHandler(() => ChangeLanguage(Language.French));
         OnSelectXML = new CommandHandler(() => ChangeLogFormat(new Xml()));
         OnSelectJSON = new CommandHandler(() => ChangeLogFormat(new Json()));
+
+        _highPriorityFileExtensions = new ObservableCollection<string>(new[]
+        {
+            ".pdf",
+            ".txt",
+            ".docx",
+            ".pdf",
+            ".txt",
+            ".docx"
+        });
+        
+        _encryptedFileExtensions = new ObservableCollection<string>(new[]
+        {
+            ".pdf",
+            ".txt",
+            ".docx",
+            ".mspaint"
+        });
     }
 
     public CommandHandler OnSelectEnglish { get; set; }

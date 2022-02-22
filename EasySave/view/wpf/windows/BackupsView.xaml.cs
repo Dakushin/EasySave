@@ -105,4 +105,9 @@ public partial class BackupsView : UserControl
     {
         _viewModel.CancelSelectedBackup();
     }
+
+    private void OnExecuteAllBackups(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ExecAllBackup();
+    }
 }
