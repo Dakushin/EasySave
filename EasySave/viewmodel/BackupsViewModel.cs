@@ -57,7 +57,7 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
-        if (ProcessDetect)
+        if (!ProcessDetect)
         {
             SelectedBackup.BackupStrategy.Resume();
         }
@@ -146,16 +146,24 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ThreadCheckingWorkingSoftware()
     {
-        var software = await Task.Run(CheckProcesses);
-        if(software != null && !ProcessDetect) 
+        while (true)
         {
-            PauseSelectedBackup();
-            ProcessDetect = true;
-        } else
-        {
-            ProcessDetect = false;
+            var software = await Task.Run(CheckProcesses);
+            if (software != null && !ProcessDetect)
+            {
+                if (SelectedBackup != null)
+                {
+                    NotifyError(Resources.Error_WorkingProcess + $" {software}");
+                    PauseSelectedBackup();
+                }
+                ProcessDetect = true;
+            }
+            if(software == null)
+            {
+                ProcessDetect = false;
+            }
+
         }
-        ThreadCheckingWorkingSoftware();
     }
 
 
@@ -221,9 +229,7 @@ public class BackupsViewModel : ViewModelBase
 
     public static string CheckIfClose(string process)
     {
-        while (CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck()) == process)
-        { }
-        return string.Empty;
+        return CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck());
     }
 
     private static string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
