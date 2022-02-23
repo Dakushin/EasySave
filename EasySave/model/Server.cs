@@ -9,7 +9,20 @@ namespace EasySave.model;
 public class Server
 {
     private const int Port = 6000;
+    
+    // request methods
+    private const string RequestMethodGetAllBackups = "get_all_backups";
+    private const string RequestMethodExecuteAllBackups = "execute_all_backups";
+    private const string RequestMethodExecuteBackup = "execute_backup";
+    private const string RequestMethodResumeBackup = "resume_backup";
+    private const string RequestMethodPauseBackup = "pause_backup";
+    private const string RequestMethodStopBackup = "stop_backup";
 
+
+    // responses
+    private const string ResponseInvalidRequest = "invalid_request";
+
+    
     private static readonly Server Instance = new();
     
     private readonly Socket _serverSocket;
@@ -46,40 +59,120 @@ public class Server
     {
         var client = _serverSocket.EndAccept(asyncResult);
         
-        NotifyInUi($"{properties.Resources.Client_Connected}. {GetSocketEndPoint(client)}");
-        
-        client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
-        _clientsSockets.Add(client);
+        try {
+            NotifyInUi($"{properties.Resources.Client_Connected}. {GetSocketEndPoint(client)}");
+            
+            client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
+            _clientsSockets.Add(client);
 
-        _serverSocket.BeginAccept(AcceptCallback, null);
+            _serverSocket.BeginAccept(AcceptCallback, null);
+        }
+        catch (SocketException)
+        {
+            DisconnectClient(client);
+        }
     }
 
     private void ReceiveCallback(IAsyncResult asyncResult)
     {
         if (asyncResult.AsyncState is not Socket client) return;
-        
-        var received = client.EndReceive(asyncResult);
-        var dataBuffer = new byte[received];
-        Array.Copy(Buffer, dataBuffer, received);
 
-        var message = Encoding.ASCII.GetString(dataBuffer);
-        
-        var response = message switch
+        try
         {
-            "test" => Encoding.ASCII.GetBytes("todo"),
-            _ => Encoding.ASCII.GetBytes("invalid")
-        };
+            var received = client.EndReceive(asyncResult);
+            var dataBuffer = new byte[received];
+            Array.Copy(Buffer, dataBuffer, received);
 
-        client.BeginSend(response, 0, response.Length, SocketFlags.None, SendCallback, client);
+            var request = Encoding.ASCII.GetString(dataBuffer);
+        
+            var response = Encoding.ASCII.GetBytes(HandleRequest(request));
 
-        client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
+            client.BeginSend(response, 0, response.Length, SocketFlags.None, SendCallback, client);
+
+            client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
+        }
+        catch (SocketException)
+        {
+            DisconnectClient(client);
+        }
+    }
+
+    private static string HandleRequest(string request)
+    {
+        try
+        {
+            var split = request.Split(':');
+
+            var nbParameters = split.Length - 1; // the method doesn't count as a parameter
+            var method = split[0];
+            var parameters = new string[nbParameters];
+
+            for (var i = 0; i < nbParameters; i++)
+            {
+                parameters[i] = split[i + 1];
+            }
+        
+            var response = method switch
+            {
+                RequestMethodGetAllBackups => OnGetAllBackups(),
+                RequestMethodExecuteAllBackups => OnExecuteAllBackups(),
+                RequestMethodExecuteBackup => OnExecuteBackup(parameters[0]),
+                RequestMethodResumeBackup => OnResumeBackup(parameters[0]),
+                RequestMethodPauseBackup => OnPauseBackup(parameters[0]),
+                RequestMethodStopBackup => OnStopBackup(parameters[0]),
+                _ => ResponseInvalidRequest
+            };
+
+            return response;
+        }
+        catch (Exception)
+        {
+            return "Exception occured in the server while handling the request. Please check the parameters.";
+        }
+    }
+
+    private static string OnGetAllBackups()
+    {
+        return "OnGetAllBackups";
+    }
+    
+    private static string OnExecuteAllBackups()
+    {
+        return "OnExecuteAllBackups";
+    }
+    
+    private static string OnExecuteBackup(string backupName)
+    {
+        return "OnExecuteBackup";
+    }
+    
+    private static string OnResumeBackup(string backupName)
+    {
+        return "OnResumeBackup";
+    }
+    
+    private static string OnPauseBackup(string backupName)
+    {
+        return "OnPauseBackup";
+    }
+    
+    private static string OnStopBackup(string backupName)
+    {
+        return "OnStopBackup";
     }
 
     private void SendCallback(IAsyncResult asyncResult)
     {
         if (asyncResult.AsyncState is not Socket client) return;
 
-        client.EndSend(asyncResult);
+        try
+        {
+            client.EndSend(asyncResult);
+        }
+        catch (SocketException)
+        {
+            DisconnectClient(client);
+        }
     }
    
     private static IPAddress GetLocalIpAddress()
@@ -108,6 +201,15 @@ public class Server
         var socketPort = socketEndPoint?.Port;
 
         return $"Ip [{socketIp}] - Port [{socketPort}]";
+    }
+
+    private void DisconnectClient(Socket client)
+    {
+        NotifyInUi($"{properties.Resources.Client_Disconnected}. {GetSocketEndPoint(client)}");
+
+        _clientsSockets.Remove(client);
+        client.Shutdown(SocketShutdown.Both);
+        client.Disconnect(false);
     }
 }
 

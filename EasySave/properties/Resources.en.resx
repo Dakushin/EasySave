@@ -359,4 +359,7 @@
     <data name="Unit" xml:space="preserve">
       <value>unit</value>
     </data>
+    <data name="Client_Disconnected" xml:space="preserve">
+      <value>Client disconnected</value>
+    </data>
 </root>

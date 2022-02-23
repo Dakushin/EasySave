@@ -304,6 +304,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client disconnected.
+        /// </summary>
+        internal static string Client_Disconnected {
+            get {
+                return ResourceManager.GetString("Client_Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complete.
         /// </summary>
         internal static string Complete {
