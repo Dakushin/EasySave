@@ -14,7 +14,7 @@ public abstract class BackupStrategy
     protected event EventHandler<long>? BytesCopied;
     protected BackupState _backupState;
     private bool _iscrypted;
-    public event EventHandler? ProcessPause;
+    private bool doPriorityFile;
 
     public bool Execute(Backup backup)
     {
@@ -213,45 +213,31 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         var i = FileLeftToDo = FileToCopy.Count - (FileToCopy.Count - FileLeftToDo);
-        var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-        if (nameofprocess == string.Empty)
+        foreach(string fileSourcePath in FileToCopy)
         {
-            for(; i < FileToCopy.Count; i++)
+            if (IsCancelled) break;
+            _backupState.SetTotalFileSize(new FileInfo(fileSourcePath).Length);
+            var targetFilePath = GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath);
+            _backupState.SetSourceFilePath(fileSourcePath);
+            _backupState.SetTargetFilePath(fileSourcePath);
+            long timetocrypt = 0;
+            Stopwatch sw = Stopwatch.StartNew();
+            if (_iscrypted && CheckToCrypt(fileSourcePath))
             {
-                if (IsCancelled) break;
-                _backupState.SetTotalFileSize(new FileInfo(FileToCopy[i]).Length);
-                var targetFilePath = GetPathWithDirectory(FileToCopy[i], sourceFolderPath, targetFolderPath);
-                _backupState.SetSourceFilePath(FileToCopy[i]);
-                _backupState.SetTargetFilePath(FileToCopy[i]);
-                long timetocrypt = 0;
-                Stopwatch sw = Stopwatch.StartNew();
-                nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-                if (nameofprocess == string.Empty)
-                {
-                    if (_iscrypted && CheckToCrypt(FileToCopy[i]))
-                    {
-                        timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
-                    } else
-                    {
-                        CopyFile(FileToCopy[i], targetFilePath);
-                    }
-                }
-                else
-                {
-                    ProcessPause.Invoke(this, new EventArgs());
-                }
-                sw.Stop();
-                var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
-                                   new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
-                Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
-                FileLeftToDo--;
-                _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
-                UpdateSaveState(_backupState);
+                timetocrypt = Cryptage(fileSourcePath, targetFilePath);
+            } else
+            {
+                CopyFile(fileSourcePath, targetFilePath);
             }
-        } else
-        {
-            throw new ProcessExecption(nameofprocess, this, sourceFolderPath, targetFolderPath, FileToCopy, 2);
+            sw.Stop();
+            var log = new Log(_backupState.Name, fileSourcePath, targetFilePath, string.Empty,
+                               new FileInfo(fileSourcePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+            Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
+            FileLeftToDo--;
+            _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
+            UpdateSaveState(_backupState);
         }
+        
     }
 
 
@@ -274,15 +260,21 @@ public abstract class BackupStrategy
         return cryptosoft.ExitCode;
     }
 
-    private string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
+    private List<string> OrdonedPriorityFile(List<string> FileToCopy)
     {
-        foreach (var ProcessToCheck in listOfProcessToCheck)
+        List<string> list = new List<string>();
+        foreach (var file in FileToCopy)
         {
-            var processes = Process.GetProcessesByName(ProcessToCheck);
-            if (processes.Length > 0) return ProcessToCheck;
-        }
+            foreach (var extension in Model.GetInstance().GetListExtentionToCheck())
+            {
+                if (Path.GetExtension(file) == extension)
+                {
 
-        return string.Empty;
+                }
+            }
+        }
+        return null;
     }
+
 
 }

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
+using System.Diagnostics;
 using EasySave.model;
 using EasySave.model.backupStrategies;
 using EasySave.properties;
@@ -18,7 +19,8 @@ public class BackupsViewModel : ViewModelBase
     private readonly Model _model;
     private readonly View _view;
     private string _filterText;
-
+    private bool alreadyLaunch = false;
+    private bool ProcessDetect;
     //CONSTRUCTOR
     public BackupsViewModel(View v)
     {
@@ -50,7 +52,13 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
-        SelectedBackup.BackupStrategy.Resume();
+
+        ProcessDetect = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty ? false : true;
+        if (!ProcessDetect)
+        {
+            SelectedBackup.BackupStrategy.Resume();
+        }
+        ThreadCheckingWorkingSoftware();
     }
 
     public void PauseSelectedBackup()
@@ -107,45 +115,51 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ExecuteBackup(Backup backup)
     {
-
-        try
+        if (CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty)
         {
-            var task = Task.Factory.StartNew(() => backup.Execute());
-            var success = await task;
-            
+            ThreadCheckingWorkingSoftware();
+            backup.IsExecute = true;
+            var success = await Task.Run(backup.Execute);
+
             if (success)
                 NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
             else
                 NotifyError($"{backup.Name} {Resources.Cancelled}");
+            backup.IsExecute = false;
         }
-        catch(ProcessExecption pe)
+
+    }
+
+    private async void ThreadCheckingWorkingSoftware()
+    {
+        var software = string.Empty;
+        if (!alreadyLaunch)
         {
-            switch(pe.exception)
+            alreadyLaunch = true;
+            software = await Task.Run(CheckProcesses);
+            if (software != null && !ProcessDetect)
             {
-                case 1:
-                    {
-                        
-                        break;
-                    }
-                case 2: pe.backupStrategy.Cancel(); break;
+                if (SelectedBackup != null)
+                {
+                    NotifyError(Resources.Error_WorkingProcess + $" {software}");
+                    PauseAllBackup();
+                }
+                ProcessDetect = true;
+                alreadyLaunch = false;
             }
-            NotifyError(Resources.Error_WorkingProcess + pe.Name);
         }
-
     }
 
-    public void EventPause(object o, EventArgs args)
+    public void PauseAllBackup()
     {
-        PauseSelectedBackup();
+        foreach (Backup backup in Model.GetInstance().GetBackupList())
+        {
+            if (backup.IsExecute)
+            {
+                backup.BackupStrategy.Pause();
+            }
+        }
     }
-
-    private async void ReTry(List<string> list, string sourceFilePath, string targetFilePath)
-    {
-
-    }
-
-   
-
     private void GetAllFileFromDirectory(string[] directories, List<string> files) //return all file in a directory
     {
         foreach (var directory in directories)
@@ -195,6 +209,31 @@ public class BackupsViewModel : ViewModelBase
 
             return true;
         };
+    }
+
+    public static string CheckProcesses()
+    {
+        while (CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck()) == string.Empty)
+        { 
+            Thread.Sleep(1000);
+        }
+        return CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck());
+    }
+
+    public static string CheckIfClose(string process)
+    {
+        return CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck());
+    }
+
+    private static string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
+    {
+        foreach (var ProcessToCheck in listOfProcessToCheck)
+        {
+            var processes = Process.GetProcessesByName(ProcessToCheck);
+            if (processes.Length > 0) return ProcessToCheck;
+        }
+
+        return string.Empty;
     }
 
 }

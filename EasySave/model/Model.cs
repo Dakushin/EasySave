@@ -15,6 +15,7 @@ public sealed class Model
     private FileFormat _logFileFormat;
     private readonly List<string> _listExtentionToCheck;
     private readonly List<string> _listProcessToCheck;
+    private readonly ObservableCollection<string> _listProrityExtension;
 
     //CONSTRUCTOR
     private Model()
@@ -29,6 +30,7 @@ public sealed class Model
         _logFileFormat = new Json();
         _listProcessToCheck = new List<string> {"Calculator", "word", "notepad", "WINWORD", "chrome"};
         _listExtentionToCheck = new List<string> {".png", ".jpeg", ".jpg"};
+        _listProrityExtension = new ObservableCollection<string> { ".pdf", ".txt" };
 
         _saveWorkList.Add(new Backup("test", @"X:\x", @"X:\y",
             new Complete()));
@@ -121,5 +123,10 @@ public sealed class Model
     public List<string> GetListExtentionToCheck()
     {
         return _listExtentionToCheck;
+    }
+
+    public ObservableCollection<string> GetListPriorityExtension()
+    {
+        return _listProrityExtension;
     }
 }
