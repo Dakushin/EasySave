@@ -338,4 +338,25 @@
     <data name="Ask_Informations_Business_Process" xml:space="preserve">
       <value>Please, fill the business process name</value>
     </data>
+    <data name="Client_Connected" xml:space="preserve">
+      <value>Client connected</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+      <value>Complete</value>
+    </data>
+    <data name="Differential" xml:space="preserve">
+      <value>Differential</value>
+    </data>
+    <data name="Add_Business_Process" xml:space="preserve">
+      <value>Add a business process</value>
+    </data>
+    <data name="Maximum_File_Size" xml:space="preserve">
+      <value>Maximum file size</value>
+    </data>
+    <data name="Maximum_File_Size_Placeholder" xml:space="preserve">
+      <value>Max size</value>
+    </data>
+    <data name="Unit" xml:space="preserve">
+      <value>unit</value>
+    </data>
 </root>

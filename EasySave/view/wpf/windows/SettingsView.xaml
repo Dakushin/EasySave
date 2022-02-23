@@ -37,7 +37,7 @@
                        FontSize="30" />
 
             <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="500">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="16">
                         <materialDesign:PackIcon Kind="Language" Height="64" Width="64" />
@@ -51,7 +51,7 @@
             </materialDesign:Card>
 
             <materialDesign:Card Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="350">
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="500">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="16">
                         <materialDesign:PackIcon Kind="Xml" Height="64" Width="64" />
@@ -71,13 +71,13 @@
                                  VerticalAlignment="Center" 
                                  HorizontalAlignment="Center"
                                  materialDesign:ShadowAssist.ShadowDepth="Depth5"
-                                 Width="350">
+                                 Width="500">
                 <TabControl
                     TabStripPlacement="Bottom">
                     
                     <TabItem>
                         <TabItem.Header>
-                            <TextBlock Text="PRIORITY" Foreground="RoyalBlue"></TextBlock>
+                            <TextBlock Text="PRIORITY" Foreground="RoyalBlue"/>
                         </TabItem.Header>
                         
                         <materialDesign:DialogHost DialogClosing="OnAddExtension" x:Name="PriorityDialog">
@@ -150,7 +150,7 @@
                     
                     <TabItem>
                         <TabItem.Header>
-                            <TextBlock Text="ENCRYPTION" Foreground="RoyalBlue"></TextBlock>
+                            <TextBlock Text="ENCRYPTION" Foreground="RoyalBlue"/>
                         </TabItem.Header>
                         
                         <materialDesign:DialogHost DialogClosing="OnAddExtension">
@@ -222,82 +222,134 @@
                         </materialDesign:DialogHost>
                         
                     </TabItem>
+                    
+                    <TabItem>
+                        <TabItem.Header>
+                            <TextBlock Text="BUSINESS PROCESS" Foreground="RoyalBlue"/>
+                        </TabItem.Header>
+                        
+                        <materialDesign:DialogHost DialogClosing="OnAddBusinessProcess">
+                            <materialDesign:DialogHost.DialogContent>
+                                <StackPanel
+                                    Margin="16">
+                                    <TextBlock Text="{localize:Static properties:Resources.Add_Business_Process}" />
+                                    <TextBox
+                                        Margin="0 8 0 0"
+                                        HorizontalAlignment="Stretch"
+                                        materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Business_Process_Placeholder}"
+                                        x:Name="BusinessTextBox" />
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                        <Button
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            IsDefault="True"
+                                            Margin="0 8 8 0"
+                                            Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
+                                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                            <Button.CommandParameter>
+                                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                    True
+                                                </system:Boolean>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                        <Button
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            IsCancel="True"
+                                            Margin="0 8 8 0"
+                                            Content="{localize:Static properties:Resources.Cancel}"
+                                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                                            <Button.CommandParameter>
+                                                <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                    False
+                                                </system:Boolean>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:DialogHost.DialogContent>
+                            
+                            <StackPanel Margin="16">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="MicrosoftWord" Height="64" Width="64" />
+                                    <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Business_Process}" />
+                                </StackPanel>
+                            
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                            Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
+                                            Background="ForestGreen"
+                                            Margin="0, 0, 8, 0"/>
+                                
+                                    <Button Click="OnRemoveBusinessProcess"
+                                            Content="{localize:Static properties:Resources.Remove_Priority_Files_Extension}"
+                                            Background="IndianRed"
+                                            Margin="8, 0, 0, 0"/>
+                                </StackPanel>
+                            
+                                <StackPanel>
+                                    <ListBox ItemsSource="{Binding BusinessProcesses}"
+                                             Height="100"
+                                             x:Name="BusinessListBox"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </materialDesign:DialogHost>
+                        
+                    </TabItem>
                 </TabControl>
             </materialDesign:Card>
+            
+            
+            <materialDesign:Card Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                 materialDesign:ShadowAssist.ShadowDepth="Depth5" Width="500">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="16">
+                        <materialDesign:PackIcon Kind="Language" Height="64" Width="64" />
+                        <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Language}" />
+                    </StackPanel>
 
+                    <StackPanel Margin="16" HorizontalAlignment="Center">
+                        <localize:LanguageSelector AutogenerateLanguages="True" />
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+            
             <materialDesign:Card Grid.Row="2" Grid.Column="1"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center"
                                  materialDesign:ShadowAssist.ShadowDepth="Depth5"
-                                 Width="350"
+                                 Width="500"
                                  Height="270">
-            
-                <materialDesign:DialogHost DialogClosing="OnAddBusinessProcess">
-                    <materialDesign:DialogHost.DialogContent>
-                        <StackPanel
-                            Margin="16">
-                            <TextBlock Text="{localize:Static properties:Resources.Add_New_File_Extension}" />
-                            <TextBox
-                                Margin="0 8 0 0"
-                                HorizontalAlignment="Stretch"
-                                materialDesign:HintAssist.Hint="{localize:Static properties:Resources.File_Extension_Placeholder}"
-                                x:Name="BusinessTextBox" />
-                            <StackPanel
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Right">
-                                <Button
-                                    Style="{StaticResource MaterialDesignFlatButton}"
-                                    IsDefault="True"
-                                    Margin="0 8 8 0"
-                                    Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
-                                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
-                                    <Button.CommandParameter>
-                                        <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
-                                            True
-                                        </system:Boolean>
-                                    </Button.CommandParameter>
-                                </Button>
-                                <Button
-                                    Style="{StaticResource MaterialDesignFlatButton}"
-                                    IsCancel="True"
-                                    Margin="0 8 8 0"
-                                    Content="{localize:Static properties:Resources.Cancel}"
-                                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
-                                    <Button.CommandParameter>
-                                        <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
-                                            False
-                                        </system:Boolean>
-                                    </Button.CommandParameter>
-                                </Button>
-                            </StackPanel>
-                        </StackPanel>
-                    </materialDesign:DialogHost.DialogContent>
-                    
-                    <StackPanel Margin="16">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="MicrosoftWord" Height="64" Width="64" />
-                            <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Business_Process}" />
-                        </StackPanel>
-                    
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                                    Content="{localize:Static properties:Resources.Add_Priority_Files_Extension}"
-                                    Background="ForestGreen"
-                                    Margin="0, 0, 8, 0"/>
-                        
-                            <Button Click="OnRemoveBusinessProcess"
-                                    Content="{localize:Static properties:Resources.Remove_Priority_Files_Extension}"
-                                    Background="IndianRed"
-                                    Margin="8, 0, 0, 0"/>
-                        </StackPanel>
-                    
-                        <StackPanel>
-                            <ListBox ItemsSource="{Binding BusinessProcesses}"
-                                     Height="100"
-                                     x:Name="BusinessListBox"/>
-                        </StackPanel>
+                
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="16">
+                        <materialDesign:PackIcon Kind="File" Height="64" Width="64" />
+                        <TextBlock FontSize="24" Margin="15, 0" Text="{localize:Static properties:Resources.Maximum_File_Size}" />
                     </StackPanel>
-                </materialDesign:DialogHost>
+
+                    <StackPanel Margin="16" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBox FontSize="22"
+                                 materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Maximum_File_Size_Placeholder}"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 VerticalAlignment="Center" />
+                    
+                        <ComboBox
+                            Margin="15, 20, 0, 0"
+                            FontSize="22"
+                            materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Unit}">
+                            <ComboBoxItem
+                                Content="B" />
+                            <ComboBoxItem
+                                Content="Kb" />
+                            <ComboBoxItem
+                                Content="Mb" />
+                            <ComboBoxItem
+                                Content="Gb" />
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+                
+                
             </materialDesign:Card>
         </Grid>
         

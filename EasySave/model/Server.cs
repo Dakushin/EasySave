@@ -45,6 +45,9 @@ public class Server
     private void AcceptCallback(IAsyncResult asyncResult)
     {
         var client = _serverSocket.EndAccept(asyncResult);
+        
+        NotifyInUi($"{properties.Resources.Client_Connected}. {GetSocketEndPoint(client)}");
+        
         client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
         _clientsSockets.Add(client);
 
@@ -60,9 +63,7 @@ public class Server
         Array.Copy(Buffer, dataBuffer, received);
 
         var message = Encoding.ASCII.GetString(dataBuffer);
-
-        Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo($"Message received from client: {message}"));
-
+        
         var response = message switch
         {
             "test" => Encoding.ASCII.GetBytes("todo"),
@@ -70,8 +71,10 @@ public class Server
         };
 
         client.BeginSend(response, 0, response.Length, SocketFlags.None, SendCallback, client);
+
+        client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
     }
-    
+
     private void SendCallback(IAsyncResult asyncResult)
     {
         if (asyncResult.AsyncState is not Socket client) return;
@@ -91,6 +94,20 @@ public class Server
         }
         
         throw new Exception("No network adapters with an IPv4 address in the system!");
+    }
+    
+    private static void NotifyInUi(string message)
+    {
+        Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo(message));
+    }
+    
+    private static string GetSocketEndPoint(Socket socket)
+    {
+        var socketEndPoint = (socket.RemoteEndPoint ?? socket.LocalEndPoint) as IPEndPoint;
+        var socketIp = socketEndPoint?.Address.MapToIPv4();
+        var socketPort = socketEndPoint?.Port;
+
+        return $"Ip [{socketIp}] - Port [{socketPort}]";
     }
 }
 

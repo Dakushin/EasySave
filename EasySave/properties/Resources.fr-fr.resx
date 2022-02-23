@@ -338,4 +338,25 @@
     <data name="Ask_Informations_Business_Process" xml:space="preserve">
       <value>Veuillez renseigner le nom du processus métier</value>
     </data>
+    <data name="Client_Connected" xml:space="preserve">
+      <value>Client connecté</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+      <value>Complet</value>
+    </data>
+    <data name="Differential" xml:space="preserve">
+      <value>Différentiel</value>
+    </data>
+    <data name="Add_Business_Process" xml:space="preserve">
+      <value>Ajouter un processus métier</value>
+    </data>
+    <data name="Maximum_File_Size" xml:space="preserve">
+      <value>Taille de fichier maximum</value>
+    </data>
+    <data name="Maximum_File_Size_Placeholder" xml:space="preserve">
+      <value>Taille max</value>
+    </data>
+    <data name="Unit" xml:space="preserve">
+      <value>unité</value>
+    </data>
 </root>
