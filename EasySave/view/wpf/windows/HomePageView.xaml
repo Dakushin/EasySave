@@ -31,6 +31,7 @@
             <Image Source="/view/wpf/images/logo.png" Width="200" Height="200" Margin="0, 50" />
             
             <Button Click="Hyperlink_RequestNavigate" Content="{localize:Static properties:Resources.User_Doc_Link}" VerticalAlignment="Bottom" />
+            
         </StackPanel>
     </materialDesign:TransitioningContent>
 </UserControl>

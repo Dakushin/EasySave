@@ -178,6 +178,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, fill the business process name.
+        /// </summary>
+        internal static string Ask_Informations_Business_Process {
+            get {
+                return ResourceManager.GetString("Ask_Informations_Business_Process", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, fill all the information when creating a backup.
         /// </summary>
         internal static string Ask_Informations_Create_Backup {
@@ -228,6 +237,24 @@ namespace EasySave.properties {
         internal static string Backups {
             get {
                 return ResourceManager.GetString("Backups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business process.
+        /// </summary>
+        internal static string Business_Process {
+            get {
+                return ResourceManager.GetString("Business_Process", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business process (notepad).
+        /// </summary>
+        internal static string Business_Process_Placeholder {
+            get {
+                return ResourceManager.GetString("Business_Process_Placeholder", resourceCulture);
             }
         }
         
@@ -304,6 +331,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encrypt the backup.
+        /// </summary>
+        internal static string Encrypt_Backup {
+            get {
+                return ResourceManager.GetString("Encrypt_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encrypted.
         /// </summary>
         internal static string Encrypted {
@@ -318,6 +354,33 @@ namespace EasySave.properties {
         internal static string Encrypted_Files {
             get {
                 return ResourceManager.GetString("Encrypted_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the name.
+        /// </summary>
+        internal static string Enter_Name {
+            get {
+                return ResourceManager.GetString("Enter_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the source path.
+        /// </summary>
+        internal static string Enter_Source_Path {
+            get {
+                return ResourceManager.GetString("Enter_Source_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the target path.
+        /// </summary>
+        internal static string Enter_Target_Path {
+            get {
+                return ResourceManager.GetString("Enter_Target_Path", resourceCulture);
             }
         }
         

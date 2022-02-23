@@ -317,4 +317,25 @@
     <data name="User_Doc_Link" xml:space="preserve">
       <value>Open the user documentation in your web browser</value>
     </data>
+    <data name="Enter_Name" xml:space="preserve">
+      <value>Enter the name</value>
+    </data>
+    <data name="Enter_Source_Path" xml:space="preserve">
+      <value>Enter the source path</value>
+    </data>
+    <data name="Enter_Target_Path" xml:space="preserve">
+      <value>Enter the target path</value>
+    </data>
+    <data name="Encrypt_Backup" xml:space="preserve">
+      <value>Encrypt the backup</value>
+    </data>
+    <data name="Business_Process" xml:space="preserve">
+      <value>Business process</value>
+    </data>
+    <data name="Business_Process_Placeholder" xml:space="preserve">
+      <value>Business process (notepad)</value>
+    </data>
+    <data name="Ask_Informations_Business_Process" xml:space="preserve">
+      <value>Please, fill the business process name</value>
+    </data>
 </root>

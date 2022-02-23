@@ -64,4 +64,31 @@ public partial class SettingsView : UserControl
             ViewModelBase.NotifyInfo(properties.Resources.Cancelled);
         }
     }
+
+    private void OnAddBusinessProcess(object sender, DialogClosingEventArgs e)
+    {
+        if (Equals(e.Parameter, true))
+        {
+            if (!string.IsNullOrWhiteSpace(BusinessTextBox.Text))
+            {
+                _viewModel.AddBusinessProcess(BusinessTextBox.Text.Trim());
+            }
+            else
+            {
+                ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Business_Process);
+            }
+        }
+        else
+        {
+            ViewModelBase.NotifyInfo(properties.Resources.Cancelled);
+        }
+    }
+
+    private void OnRemoveBusinessProcess(object sender, RoutedEventArgs e)
+    {
+        if (BusinessListBox.SelectedItem is string process)
+        {
+            _viewModel.RemoveBusinessProcess(process);
+        }
+    }
 }

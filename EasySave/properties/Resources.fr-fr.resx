@@ -317,4 +317,25 @@
     <data name="User_Doc_Link" xml:space="preserve">
       <value>Ouvrir la documentation utilisateur dans le navigateur</value>
     </data>
+    <data name="Enter_Name" xml:space="preserve">
+      <value>Entrer le nom</value>
+    </data>
+    <data name="Enter_Source_Path" xml:space="preserve">
+      <value>Entrer le chemin source</value>
+    </data>
+    <data name="Enter_Target_Path" xml:space="preserve">
+      <value>Entrer le chemin cible</value>
+    </data>
+    <data name="Encrypt_Backup" xml:space="preserve">
+      <value>Chiffrer la sauvegarde</value>
+    </data>
+    <data name="Business_Process" xml:space="preserve">
+      <value>Processus métier</value>
+    </data>
+    <data name="Business_Process_Placeholder" xml:space="preserve">
+      <value>Processus métier (notepad)</value>
+    </data>
+    <data name="Ask_Informations_Business_Process" xml:space="preserve">
+      <value>Veuillez renseigner le nom du processus métier</value>
+    </data>
 </root>
