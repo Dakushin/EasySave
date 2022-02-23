@@ -6,7 +6,7 @@ namespace EasySave.viewmodel;
 
 public class SettingsViewModel : ViewModelBase
 {
-    public ObservableCollection<string> PriorityFileExtensions { get; }
+    public ObservableCollection<string> PriorityFileExtensions => _model.GetListPriorityExtension();
 
     public ObservableCollection<string> EncryptedFileExtensions { get; }
 
@@ -16,15 +16,6 @@ public class SettingsViewModel : ViewModelBase
     {
         _model = Model.GetInstance();
         
-        PriorityFileExtensions = new ObservableCollection<string>(new[]
-        {
-            ".pdf",
-            ".txt",
-            ".docx",
-            ".pdf",
-            ".txt",
-            ".docx"
-        });
         
         EncryptedFileExtensions = new ObservableCollection<string>(new[]
         {

@@ -14,7 +14,7 @@ public abstract class BackupStrategy
     protected event EventHandler<long>? BytesCopied;
     protected BackupState _backupState;
     private bool _iscrypted;
-    public event EventHandler? ProcessPause;
+    private bool doPriorityFile;
 
     public bool Execute(Backup backup)
     {
@@ -213,25 +213,25 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         var i = FileLeftToDo = FileToCopy.Count - (FileToCopy.Count - FileLeftToDo);
-        for (; i < FileToCopy.Count; i++)
+        foreach(string fileSourcePath in FileToCopy)
         {
             if (IsCancelled) break;
-            _backupState.SetTotalFileSize(new FileInfo(FileToCopy[i]).Length);
-            var targetFilePath = GetPathWithDirectory(FileToCopy[i], sourceFolderPath, targetFolderPath);
-            _backupState.SetSourceFilePath(FileToCopy[i]);
-            _backupState.SetTargetFilePath(FileToCopy[i]);
+            _backupState.SetTotalFileSize(new FileInfo(fileSourcePath).Length);
+            var targetFilePath = GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath);
+            _backupState.SetSourceFilePath(fileSourcePath);
+            _backupState.SetTargetFilePath(fileSourcePath);
             long timetocrypt = 0;
             Stopwatch sw = Stopwatch.StartNew();
-            if (_iscrypted && CheckToCrypt(FileToCopy[i]))
+            if (_iscrypted && CheckToCrypt(fileSourcePath))
             {
-                timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
+                timetocrypt = Cryptage(fileSourcePath, targetFilePath);
             } else
             {
-                CopyFile(FileToCopy[i], targetFilePath);
+                CopyFile(fileSourcePath, targetFilePath);
             }
             sw.Stop();
-            var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
-                               new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+            var log = new Log(_backupState.Name, fileSourcePath, targetFilePath, string.Empty,
+                               new FileInfo(fileSourcePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
             Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
             FileLeftToDo--;
             _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
@@ -258,6 +258,22 @@ public abstract class BackupStrategy
         cryptosoft.Start();
         cryptosoft.WaitForExit();
         return cryptosoft.ExitCode;
+    }
+
+    private List<string> OrdonedPriorityFile(List<string> FileToCopy)
+    {
+        List<string> list = new List<string>();
+        foreach (var file in FileToCopy)
+        {
+            foreach (var extension in Model.GetInstance().GetListExtentionToCheck())
+            {
+                if (Path.GetExtension(file) == extension)
+                {
+
+                }
+            }
+        }
+        return null;
     }
 
 
