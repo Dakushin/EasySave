@@ -13,6 +13,7 @@ public class Backup : INotifyPropertyChanged
     private string _sourcePath;
     private string _targetPath;
     private bool _crypted;
+    private bool _isExecute = false;
 
     //CONSTRUCTOR
     public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy, bool crypted = false)
@@ -56,6 +57,16 @@ public class Backup : INotifyPropertyChanged
         set
         {
             _sourcePath = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsExecute
+    {
+        get => _isExecute;
+        set
+        {
+            _isExecute = value;
             OnPropertyChanged();
         }
     }

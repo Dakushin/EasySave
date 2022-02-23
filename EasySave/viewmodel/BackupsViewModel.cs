@@ -27,11 +27,6 @@ public class BackupsViewModel : ViewModelBase
         
         _view = v;
         _model = Model.GetInstance();
-        if (!alreadyLaunch)
-        {
-            ThreadCheckingWorkingSoftware();
-            alreadyLaunch = true;
-        }
     }
 
     public BackupsViewModel() : this(null)
@@ -57,10 +52,13 @@ public class BackupsViewModel : ViewModelBase
 
     public void ResumeSelectedBackup()
     {
+
+        ProcessDetect = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty ? false : true;
         if (!ProcessDetect)
         {
             SelectedBackup.BackupStrategy.Resume();
         }
+        ThreadCheckingWorkingSoftware();
     }
 
     public void PauseSelectedBackup()
@@ -117,38 +115,28 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ExecuteBackup(Backup backup)
     {
-
-        try
+        if (CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty);
         {
-            var task = Task.Factory.StartNew(() => backup.Execute());
-            var success = await task;
-            
+            ThreadCheckingWorkingSoftware();
+            backup.IsExecute = true;
+            var success = await Task.Run(backup.Execute);
+
             if (success)
                 NotifySuccess($"{backup.Name} {Resources.Success_Execution}");
             else
                 NotifyError($"{backup.Name} {Resources.Cancelled}");
-        }
-        catch(ProcessExecption pe)
-        {
-            switch(pe.exception)
-            {
-                case 1:
-                    {
-                        
-                        break;
-                    }
-                case 2: pe.backupStrategy.Cancel(); break;
-            }
-            NotifyError(Resources.Error_WorkingProcess + pe.Name);
+            backup.IsExecute = false;
         }
 
     }
 
     private async void ThreadCheckingWorkingSoftware()
     {
-        while (true)
+        var software = string.Empty;
+        if (!alreadyLaunch)
         {
-            var software = await Task.Run(CheckProcesses);
+            alreadyLaunch = true;
+            software = await Task.Run(CheckProcesses);
             if (software != null && !ProcessDetect)
             {
                 if (SelectedBackup != null)
@@ -157,12 +145,8 @@ public class BackupsViewModel : ViewModelBase
                     PauseSelectedBackup();
                 }
                 ProcessDetect = true;
+                alreadyLaunch = false;
             }
-            if(software == null)
-            {
-                ProcessDetect = false;
-            }
-
         }
     }
 

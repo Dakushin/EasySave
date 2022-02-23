@@ -213,45 +213,31 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         var i = FileLeftToDo = FileToCopy.Count - (FileToCopy.Count - FileLeftToDo);
-        //var nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-        //if (nameofprocess == string.Empty)
-        //{
-            for(; i < FileToCopy.Count; i++)
+        for (; i < FileToCopy.Count; i++)
+        {
+            if (IsCancelled) break;
+            _backupState.SetTotalFileSize(new FileInfo(FileToCopy[i]).Length);
+            var targetFilePath = GetPathWithDirectory(FileToCopy[i], sourceFolderPath, targetFolderPath);
+            _backupState.SetSourceFilePath(FileToCopy[i]);
+            _backupState.SetTargetFilePath(FileToCopy[i]);
+            long timetocrypt = 0;
+            Stopwatch sw = Stopwatch.StartNew();
+            if (_iscrypted && CheckToCrypt(FileToCopy[i]))
             {
-                if (IsCancelled) break;
-                _backupState.SetTotalFileSize(new FileInfo(FileToCopy[i]).Length);
-                var targetFilePath = GetPathWithDirectory(FileToCopy[i], sourceFolderPath, targetFolderPath);
-                _backupState.SetSourceFilePath(FileToCopy[i]);
-                _backupState.SetTargetFilePath(FileToCopy[i]);
-                long timetocrypt = 0;
-                Stopwatch sw = Stopwatch.StartNew();
-                //nameofprocess = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
-                //if (nameofprocess == string.Empty)
-                //{
-                    if (_iscrypted && CheckToCrypt(FileToCopy[i]))
-                    {
-                        timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
-                    } else
-                    {
-                        CopyFile(FileToCopy[i], targetFilePath);
-                    }
-                //}
-                //else
-                //{
-                //    ProcessPause.Invoke(this, new EventArgs());
-                //}
-                sw.Stop();
-                var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
-                                   new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
-                Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
-                FileLeftToDo--;
-                _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
-                UpdateSaveState(_backupState);
+                timetocrypt = Cryptage(FileToCopy[i], targetFilePath);
+            } else
+            {
+                CopyFile(FileToCopy[i], targetFilePath);
             }
-        //} else
-        //{
-        //    throw new ProcessExecption(nameofprocess, this, sourceFolderPath, targetFolderPath, FileToCopy, 2);
-        //}
+            sw.Stop();
+            var log = new Log(_backupState.Name, FileToCopy[i], targetFilePath, string.Empty,
+                               new FileInfo(FileToCopy[i]).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+            Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
+            FileLeftToDo--;
+            _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
+            UpdateSaveState(_backupState);
+        }
+        
     }
 
 
