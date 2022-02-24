@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
-using EasySave.model.backupStrategies;
+using EasySaveSupervisor.model.backupStrategies;
 
-namespace EasySave.model;
+namespace EasySaveSupervisor.model;
 
 public sealed class Model
 {

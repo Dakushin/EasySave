@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="properties\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Gu.Wpf.Localization" Version="6.7.0" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.4.0-ci74" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="view\images\backups.png" />
+        <None Remove="view\images\logo.png" />
+        <None Remove="view\images\settings.png" />
+        <None Remove="view\fonts\Poppins-Regular.ttf" />
+        <None Remove="view\images\flag_en.png" />
+        <None Remove="view\images\flag_fr.png" />
+        <None Remove="view\images\homepage.png" />
+        <None Remove="view\images\json.png" />
+        <None Remove="view\images\xml.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="view\images\backups.png" />
+      <Resource Include="view\images\homepage.png" />
+      <Resource Include="view\images\json.png" />
+      <Resource Include="view\images\logo.png" />
+      <Resource Include="view\images\settings.png" />
+      <Resource Include="view\images\xml.png" />
+    </ItemGroup>
+
+</Project>

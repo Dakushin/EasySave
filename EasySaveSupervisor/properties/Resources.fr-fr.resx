@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Ask_Backup_Name" xml:space="preserve">
+    <value>Entrez le nom du travail de sauvegarde : </value>
+  </data>
+    <data name="Ask_Backup_Name_Delete" xml:space="preserve">
+    <value>Entrez le nom du travail à supprimer : </value>
+  </data>
+    <data name="Ask_Backup_Name_Rename" xml:space="preserve">
+    <value>Entrez le nom du travail à renommer : </value>
+  </data>
+    <data name="Ask_Backup_New_Name_Rename" xml:space="preserve">
+    <value>Entrez le nouveau nom du travail : </value>
+  </data>
+    <data name="Ask_Backup_Source_Path" xml:space="preserve">
+    <value>Entrez le chemin source du dossier à sauvegarder : </value>
+  </data>
+    <data name="Ask_Backup_Target_Path" xml:space="preserve">
+    <value>Entrez le chemin ciblé du dossier à sauvegarder : </value>
+  </data>
+    <data name="Ask_Backup_Type" xml:space="preserve">
+    <value>Entrez le type de la sauvegarde [d = differential / c = complete] : </value>
+  </data>
+    <data name="Ask_Valid_Input" xml:space="preserve">
+    <value>Veuillez entrer une valeur valide</value>
+  </data>
+    <data name="Change_Language" xml:space="preserve">
+    <value>Modifier la langue d'affichage</value>
+  </data>
+    <data name="Console_Ask_Valid_Choice" xml:space="preserve">
+    <value>Veuillez choisir un choix valide entre 1 et 8</value>
+  </data>
+    <data name="Create_Backup" xml:space="preserve">
+    <value>Créer un travail de sauvegarde</value>
+  </data>
+    <data name="Delete_Backup" xml:space="preserve">
+    <value>Supprimer un travail de sauvegarde</value>
+  </data>
+    <data name="Exit_App" xml:space="preserve">
+    <value>Quitter l'application</value>
+  </data>
+    <data name="Rename_Backup" xml:space="preserve">
+    <value>Renommer un travail de sauvegarde</value>
+  </data>
+    <data name="Ask_Language" xml:space="preserve">
+    <value>Choisissez le langage [fr/en] : </value>
+  </data>
+    <data name="Show_Backups" xml:space="preserve">
+    <value>Afficher tous les travaux de sauvegarde</value>
+  </data>
+    <data name="Execute_All_Backups" xml:space="preserve">
+    <value>Exécuter tous les travaux de sauvegarde</value>
+  </data>
+    <data name="Error_Too_Many_Backups" xml:space="preserve">
+    <value>Erreur : vous avez déjà 5 travaux de sauvegarde, supprimez en un et réesseyez</value>
+  </data>
+    <data name="Error_Backup_Not_Found" xml:space="preserve">
+    <value>Erreur : il n'y a pas de travail de sauvegarde avec ce nom</value>
+  </data>
+    <data name="Error_Backup_Already_Exists" xml:space="preserve">
+    <value>Erreur : un travail de sauvegarde porte déjà ce nom</value>
+  </data>
+    <data name="Error_Rename_Same_Name" xml:space="preserve">
+    <value>Erreur : le travail de sauvegarde porte déjà ce nom</value>
+  </data>
+    <data name="Type_Complete" xml:space="preserve">
+    <value>Type : complet</value>
+  </data>
+    <data name="Type_Differential" xml:space="preserve">
+    <value>Type : différentiel</value>
+  </data>
+    <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+    <data name="Source_Path" xml:space="preserve">
+    <value>Chemin source</value>
+  </data>
+    <data name="Target_Path" xml:space="preserve">
+    <value>Chemin ciblé</value>
+  </data>
+    <data name="Success" xml:space="preserve">
+    <value>Succès</value>
+  </data>
+    <data name="Info_No_Backup" xml:space="preserve">
+    <value>Aucun travail de sauvegarde trouvé</value>
+  </data>
+    <data name="Ask_Backup_Name_ToExecute" xml:space="preserve">
+    <value>Entre le nom du travail de sauvegarde que vous voulez lancer : </value>
+  </data>
+    <data name="Execute_Backup" xml:space="preserve">
+    <value>Executer un travail de sauvegarde</value>
+  </data>
+    <data name="Error_NoBackup" xml:space="preserve">
+    <value>Erreur : Il n'existe pas de travaux de sauvegrade</value>
+  </data>
+    <data name="Error_NoBackupOfThisName" xml:space="preserve">
+    <value>Erreur : Il n'existe pas de travaux de sauvegrade de ce nom</value>
+  </data>
+    <data name="Error_Wrong_SourcePath" xml:space="preserve">
+    <value>Erreur : Vous avez rentré un chemin source non valide</value>
+  </data>
+    <data name="Backups" xml:space="preserve">
+    <value>Sauvegardes</value>
+  </data>
+    <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+    <data name="Preferences" xml:space="preserve">
+    <value>Préférences</value>
+  </data>
+    <data name="Language" xml:space="preserve">
+    <value>Langage</value>
+  </data>
+    <data name="Search_Backup" xml:space="preserve">
+    <value>Rechercher un travail de sauvegarde</value>
+  </data>
+    <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+    <data name="Backup_Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+    <data name="Execute" xml:space="preserve">
+    <value>Exécuter</value>
+  </data>
+    <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+    <data name="Home_Page" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+    <data name="Log_Format" xml:space="preserve">
+    <value>Format de log</value>
+  </data>
+    <data name="Create" xml:space="preserve">
+    <value>Créer</value>
+  </data>
+    <data name="Error_WorkingProcess" xml:space="preserve">
+    <value>Erreur : Le processus suivant est actif, fermer le avant de relancer une exécution :</value>
+  </data>
+    <data name="Backup_Created" xml:space="preserve">
+    <value>Travail de sauvegarde crée</value>
+  </data>
+    <data name="Welcome_1" xml:space="preserve">
+    <value>Bonjour</value>
+  </data>
+    <data name="Welcome_2" xml:space="preserve">
+    <value>Bienvenue dans le superviseur EasySave 3.0</value>
+  </data>
+    <data name="Filter_Backup" xml:space="preserve">
+    <value>Rechercher un travail</value>
+  </data>
+    <data name="Cancelled" xml:space="preserve">
+    <value>annulé</value>
+  </data>
+    <data name="Success_Execution" xml:space="preserve">
+    <value>exécuté avec succès</value>
+  </data>
+    <data name="Ask_Informations_Create_Backup" xml:space="preserve">
+    <value>Veuillez renseigner toutes les informations lors de la création d'un travail de sauvegarde</value>
+  </data>
+    <data name="Encrypted" xml:space="preserve">
+      <value>Chiffré</value>
+    </data>
+    <data name="Priority_Files" xml:space="preserve">
+      <value>Fichiers prioritaires</value>
+    </data>
+    <data name="Encrypted_Files" xml:space="preserve">
+      <value>Fichiers chiffrés</value>
+    </data>
+    <data name="Add_Priority_Files_Extension" xml:space="preserve">
+      <value>Ajouter</value>
+    </data>
+    <data name="Remove_Priority_Files_Extension" xml:space="preserve">
+      <value>Supprimer la sélection</value>
+    </data>
+    <data name="Add_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Ajouter</value>
+    </data>
+    <data name="Remove_Encrypted_Files_Extension" xml:space="preserve">
+      <value>Supprimer la sélection</value>
+    </data>
+    <data name="Add_New_File_Extension" xml:space="preserve">
+      <value>Ajouter une nouvelle extension de fichiers</value>
+    </data>
+    <data name="File_Extension_Placeholder" xml:space="preserve">
+      <value>Extension (.pdf)</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+      <value>Annuler</value>
+    </data>
+    <data name="Ask_Informations_Add_File_Extension" xml:space="preserve">
+      <value>L'extension doit commencer par un point</value>
+    </data>
+    <data name="User_Doc_Link" xml:space="preserve">
+      <value>Ouvrir la documentation utilisateur dans le navigateur</value>
+    </data>
+    <data name="Enter_Name" xml:space="preserve">
+      <value>Entrer le nom</value>
+    </data>
+    <data name="Enter_Source_Path" xml:space="preserve">
+      <value>Entrer le chemin source</value>
+    </data>
+    <data name="Enter_Target_Path" xml:space="preserve">
+      <value>Entrer le chemin cible</value>
+    </data>
+    <data name="Encrypt_Backup" xml:space="preserve">
+      <value>Chiffrer la sauvegarde</value>
+    </data>
+    <data name="Business_Process" xml:space="preserve">
+      <value>Processus métier</value>
+    </data>
+    <data name="Business_Process_Placeholder" xml:space="preserve">
+      <value>Processus métier (notepad)</value>
+    </data>
+    <data name="Ask_Informations_Business_Process" xml:space="preserve">
+      <value>Veuillez renseigner le nom du processus métier</value>
+    </data>
+    <data name="Client_Connected" xml:space="preserve">
+      <value>Client connecté</value>
+    </data>
+    <data name="Complete" xml:space="preserve">
+      <value>Complet</value>
+    </data>
+    <data name="Differential" xml:space="preserve">
+      <value>Différentiel</value>
+    </data>
+    <data name="Add_Business_Process" xml:space="preserve">
+      <value>Ajouter un processus métier</value>
+    </data>
+    <data name="Maximum_File_Size" xml:space="preserve">
+      <value>Taille de fichier maximum</value>
+    </data>
+    <data name="Maximum_File_Size_Placeholder" xml:space="preserve">
+      <value>Taille max</value>
+    </data>
+    <data name="Unit" xml:space="preserve">
+      <value>unité</value>
+    </data>
+    <data name="Client_Disconnected" xml:space="preserve">
+      <value>Client déconnecté</value>
+    </data>
+</root>

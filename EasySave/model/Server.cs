@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using EasySave.view.wpf.core;
+using EasySave.viewmodel;
 
 namespace EasySave.model;
 
@@ -21,12 +22,20 @@ public class Server
 
     // responses
     private const string ResponseInvalidRequest = "invalid_request";
+    private const string ResponseInvalidBackupName = "invalid_backup_name";
+    private const string ResponseSuccessGetAllBackups = "success_get_all_backups";
+    private const string ResponseSuccessExecuteBackup = "success_execute_backup";
+    private const string ResponseSuccessExecuteAllBackup = "success_execute_all_backups";
+    private const string ResponseSuccessResumeBackup = "success_resume_backup";
+    private const string ResponseSuccessPauseBackup = "success_pause_backup";
+    private const string ResponseSuccessStopBackup = "success_stop_backup";
 
     
     private static readonly Server Instance = new();
     
     private readonly Socket _serverSocket;
     private readonly List<Socket> _clientsSockets;
+    private BackupsViewModel _backupsViewModel;
     private static readonly byte[] Buffer = new byte[1024];
 
     private Server()
@@ -97,7 +106,7 @@ public class Server
         }
     }
 
-    private static string HandleRequest(string request)
+    private string HandleRequest(string request)
     {
         try
         {
@@ -131,34 +140,70 @@ public class Server
         }
     }
 
-    private static string OnGetAllBackups()
+    private string OnGetAllBackups()
     {
-        return "OnGetAllBackups";
+        return _backupsViewModel.Backups.Aggregate(ResponseSuccessGetAllBackups, (acc, backup) =>
+            $"{acc}:{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
+        );
     }
     
-    private static string OnExecuteAllBackups()
+    private string OnExecuteAllBackups()
     {
-        return "OnExecuteAllBackups";
+        _backupsViewModel.ExecAllBackup();
+
+        return ResponseSuccessExecuteAllBackup;
     }
     
-    private static string OnExecuteBackup(string backupName)
+    private string OnExecuteBackup(string backupName)
     {
-        return "OnExecuteBackup";
+        var backup = Model.GetInstance().FindbyName(backupName);
+
+        if (backup != null)
+        {
+            _backupsViewModel.ExecuteBackup(backup);
+            return ResponseSuccessExecuteBackup;
+        }
+
+        return ResponseInvalidBackupName;
     }
     
-    private static string OnResumeBackup(string backupName)
+    private string OnResumeBackup(string backupName)
     {
-        return "OnResumeBackup";
+        var backup = Model.GetInstance().FindbyName(backupName);
+
+        if (backup != null)
+        {
+            _backupsViewModel.ResumeBackup(backup);
+            return ResponseSuccessResumeBackup;
+        }
+
+        return ResponseInvalidBackupName;
     }
     
-    private static string OnPauseBackup(string backupName)
+    private string OnPauseBackup(string backupName)
     {
-        return "OnPauseBackup";
+        var backup = Model.GetInstance().FindbyName(backupName);
+
+        if (backup != null)
+        {
+            _backupsViewModel.PauseBackup(backup);
+            return ResponseSuccessPauseBackup;
+        }
+
+        return ResponseInvalidBackupName;
     }
     
-    private static string OnStopBackup(string backupName)
+    private string OnStopBackup(string backupName)
     {
-        return "OnStopBackup";
+        var backup = Model.GetInstance().FindbyName(backupName);
+
+        if (backup != null)
+        {
+            _backupsViewModel.ExecuteBackup(backup);
+            return ResponseSuccessStopBackup;
+        }
+
+        return ResponseInvalidBackupName;
     }
 
     private void SendCallback(IAsyncResult asyncResult)
@@ -210,6 +255,11 @@ public class Server
         _clientsSockets.Remove(client);
         client.Shutdown(SocketShutdown.Both);
         client.Disconnect(false);
+    }
+
+    public void SetBackupsViewModel(BackupsViewModel backupsViewModel)
+    {
+        _backupsViewModel = backupsViewModel;
     }
 }
 
