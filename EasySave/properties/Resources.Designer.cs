@@ -70,6 +70,15 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a business process.
+        /// </summary>
+        internal static string Add_Business_Process {
+            get {
+                return ResourceManager.GetString("Add_Business_Process", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         internal static string Add_Encrypted_Files_Extension {
@@ -286,6 +295,33 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Client connected.
+        /// </summary>
+        internal static string Client_Connected {
+            get {
+                return ResourceManager.GetString("Client_Connected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client disconnected.
+        /// </summary>
+        internal static string Client_Disconnected {
+            get {
+                return ResourceManager.GetString("Client_Disconnected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete.
+        /// </summary>
+        internal static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, enter a valid choice between 1 and 8.
         /// </summary>
         internal static string Console_Ask_Valid_Choice {
@@ -327,6 +363,15 @@ namespace EasySave.properties {
         internal static string Delete_Backup {
             get {
                 return ResourceManager.GetString("Delete_Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Differential.
+        /// </summary>
+        internal static string Differential {
+            get {
+                return ResourceManager.GetString("Differential", resourceCulture);
             }
         }
         
@@ -547,6 +592,24 @@ namespace EasySave.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum file size.
+        /// </summary>
+        internal static string Maximum_File_Size {
+            get {
+                return ResourceManager.GetString("Maximum_File_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max size.
+        /// </summary>
+        internal static string Maximum_File_Size_Placeholder {
+            get {
+                return ResourceManager.GetString("Maximum_File_Size_Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string Name {
@@ -678,6 +741,15 @@ namespace EasySave.properties {
         internal static string Type_Differential {
             get {
                 return ResourceManager.GetString("Type_Differential", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unit.
+        /// </summary>
+        internal static string Unit {
+            get {
+                return ResourceManager.GetString("Unit", resourceCulture);
             }
         }
         

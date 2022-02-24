@@ -61,8 +61,8 @@
                 <ComboBox materialDesign:HintAssist.Hint="Type"
                           Margin="0 12 0 18"
                           x:Name="BackupType">
-                    <ComboBoxItem Content="Complete" Name="Complete" />
-                    <ComboBoxItem Content="Differential" Name="Differential" />
+                    <ComboBoxItem Content="{localize:Static properties:Resources.Complete}" Name="Complete" />
+                    <ComboBoxItem Content="{localize:Static properties:Resources.Differential}" Name="Differential" />
                 </ComboBox>
                 
                 <StackPanel Orientation="Horizontal">

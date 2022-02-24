@@ -46,7 +46,10 @@ public class SettingsViewModel : ViewModelBase
     
     public void AddPriorityFileExtension(string extension)
     {
-        PriorityFileExtensions.Add(extension);
+        if (!PriorityFileExtensions.Contains(extension))
+        {
+            PriorityFileExtensions.Add(extension);
+        }
     }
     
     public void RemoveEncryptedFileExtension(string extension)
@@ -56,7 +59,10 @@ public class SettingsViewModel : ViewModelBase
 
     public void AddEncryptedFileExtension(string extension)
     {
-        EncryptedFileExtensions.Add(extension);
+        if (!EncryptedFileExtensions.Contains(extension))
+        {
+            EncryptedFileExtensions.Add(extension);
+        }
     }
 
     public void RemoveBusinessProcess(string process)
@@ -66,6 +72,9 @@ public class SettingsViewModel : ViewModelBase
 
     public void AddBusinessProcess(string process)
     {
-        BusinessProcesses.Add(process);
+        if (!BusinessProcesses.Contains(process))
+        {
+            BusinessProcesses.Add(process);
+        }
     }
 }
