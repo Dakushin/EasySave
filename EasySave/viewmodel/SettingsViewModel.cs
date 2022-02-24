@@ -9,6 +9,8 @@ public class SettingsViewModel : ViewModelBase
     public ObservableCollection<string> PriorityFileExtensions => _model.GetListPriorityExtension();
 
     public ObservableCollection<string> EncryptedFileExtensions { get; }
+    
+    public ObservableCollection<string> BusinessProcesses { get; }
 
     private readonly Model _model;
 
@@ -23,6 +25,12 @@ public class SettingsViewModel : ViewModelBase
             ".txt",
             ".docx",
             ".mspaint"
+        });
+
+        BusinessProcesses = new ObservableCollection<string>(new[]
+        {
+            "notepad",
+            "calc"
         });
     }
 
@@ -49,5 +57,15 @@ public class SettingsViewModel : ViewModelBase
     public void AddEncryptedFileExtension(string extension)
     {
         EncryptedFileExtensions.Add(extension);
+    }
+
+    public void RemoveBusinessProcess(string process)
+    {
+        BusinessProcesses.Remove(process);
+    }
+
+    public void AddBusinessProcess(string process)
+    {
+        BusinessProcesses.Add(process);
     }
 }
