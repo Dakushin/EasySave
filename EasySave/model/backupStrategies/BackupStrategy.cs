@@ -6,8 +6,7 @@ public abstract class BackupStrategy
 {
     protected readonly object PauseLock = new();
     private static readonly ReaderWriterLockSlim UpdateLock = new();
-    private static readonly ReaderWriterLockSlim LockSave = new();
-    private bool _isPaused;
+    private bool isPaused;
     protected bool IsCancelled;
     protected long TotalBytesToCopy;
     protected int FileLeftToDo = 0;
@@ -52,21 +51,21 @@ public abstract class BackupStrategy
 
     public void Pause()
     {
-        if (!_isPaused)
+        if (!isPaused)
         {
             Threadthatdopause = Thread.CurrentThread.ManagedThreadId;
-            _isPaused = true;
+            isPaused = true;
             Monitor.Enter(PauseLock);
         }
     }
 
     public void Resume()
     {
-        if (_isPaused)
+        if (isPaused)
         {
             if (Threadthatdopause == Thread.CurrentThread.ManagedThreadId)
             {
-                _isPaused = false;
+                isPaused = false;
                 Monitor.Exit(PauseLock);
             }
         }
@@ -74,7 +73,7 @@ public abstract class BackupStrategy
 
     public void Cancel()
     {
-        if (_isPaused) // cancel even is the task is paused
+        if (isPaused) // cancel even is the task is paused
             Resume();
 
         IsCancelled = true;
