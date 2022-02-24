@@ -1,35 +1,27 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
-using System.Diagnostics;
-using EasySave.model;
-using EasySave.model.backupStrategies;
-using EasySave.properties;
-using EasySave.translation;
-using EasySave.view;
-using EasySave.view.wpf.core;
+using EasySaveSupervisor.model;
+using EasySaveSupervisor.model.backupStrategies;
+using EasySaveSupervisor.properties;
+using EasySaveSupervisor.view.core;
 
-namespace EasySave.viewmodel;
+namespace EasySaveSupervisor.viewmodel;
 
 public class BackupsViewModel : ViewModelBase
 {
     //PRIVATE VARIABLE
     //private List<Task> tasks;
     private readonly Model _model;
-    private readonly View _view;
     private string _filterText;
     private bool alreadyLaunch = false;
     private bool ProcessDetect;
     //CONSTRUCTOR
-    public BackupsViewModel(View v)
+    public BackupsViewModel()
     {
-        _view = v;
         _model = Model.GetInstance();
-    }
-
-    public BackupsViewModel() : this(null)
-    {
     }
 
     public ObservableCollection<Backup> Backups => _model.GetBackupList();
@@ -239,7 +231,7 @@ public class BackupsViewModel : ViewModelBase
 
     public static string CheckIfClose(string process)
     {
-        return CheckIfWorkProcessIsOpen(model.Model.GetInstance().GetListProcessToCheck());
+        return CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
     }
 
     private static string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on

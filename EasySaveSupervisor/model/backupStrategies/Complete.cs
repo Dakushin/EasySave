@@ -1,4 +1,4 @@
-﻿namespace EasySave.model.backupStrategies;
+﻿namespace EasySaveSupervisor.model.backupStrategies;
 
 public class Complete : BackupStrategy
 {

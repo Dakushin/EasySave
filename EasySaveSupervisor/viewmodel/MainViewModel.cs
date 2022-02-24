@@ -1,22 +1,22 @@
-﻿using EasySave.model;
-using EasySave.view.wpf.core;
+﻿using EasySaveSupervisor.model;
+using EasySaveSupervisor.view.core;
 
-namespace EasySave.viewmodel;
+namespace EasySaveSupervisor.viewmodel;
 
 public class MainViewModel : ViewModelBase
 {
     private readonly BackupsViewModel _backupsViewModel;
     private readonly HomePageViewModel _homePageViewModel;
-
     private readonly SettingsViewModel _settingsViewModel;
+
     private ViewModelBase _currentViewModel;
 
     public MainViewModel()
     {
-        _settingsViewModel = new SettingsViewModel();
         _backupsViewModel = new BackupsViewModel();
-        Server.GetInstance().SetBackupsViewModel(_backupsViewModel);
+        Client.GetInstance().SetBackupsViewModel(_backupsViewModel);
         _homePageViewModel = new HomePageViewModel();
+        _settingsViewModel = new SettingsViewModel();
 
         OnNavigateToHomePage = new CommandHandler(NavigateToHomePageView);
         OnNavigateToBackups = new CommandHandler(NavigateToBackupsView);

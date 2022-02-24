@@ -1,0 +1,33 @@
+﻿<Application x:Class="EasySaveSupervisor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModel="clr-namespace:EasySaveSupervisor.viewmodel"
+             xmlns:view="clr-namespace:EasySaveSupervisor.view.windows"
+             xmlns:windows="clr-namespace:EasySaveSupervisor.view.windows"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="view/windows/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Indigo" SecondaryColor="Blue" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="view/theme/MenuButtonTheme.xaml" />
+                <ResourceDictionary Source="view/theme/ClickableRadioButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:BackupsViewModel}">
+                <view:BackupsView />
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
+                <windows:SettingsView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:HomePageViewModel}">
+                <view:HomePageView />
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

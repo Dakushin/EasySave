@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="EasySaveSupervisor.view.windows.HomePageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:localize="http://gu.se/Localization"
+             xmlns:properties="clr-namespace:EasySaveSupervisor.properties"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodel="clr-namespace:EasySaveSupervisor.viewmodel"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="#272537">
+
+    <UserControl.DataContext>
+        <viewmodel:HomePageViewModel />
+    </UserControl.DataContext>
+
+    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromTop}">
+        <StackPanel HorizontalAlignment="Center">
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                           Text="{localize:Static properties:Resources.Welcome_1}" />
+                <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" Margin="10, 0, 0, 0"
+                           Text="{Binding Username}" />
+            </StackPanel>
+
+            <TextBlock Margin="16" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                       Text="{localize:Static properties:Resources.Welcome_2}" />
+            
+            <Image Source="/view/images/logo.png" Width="200" Height="200" Margin="0, 50" />
+            
+            <Button Click="Hyperlink_RequestNavigate" Content="{localize:Static properties:Resources.User_Doc_Link}" VerticalAlignment="Bottom" />
+            
+        </StackPanel>
+    </materialDesign:TransitioningContent>
+</UserControl>
