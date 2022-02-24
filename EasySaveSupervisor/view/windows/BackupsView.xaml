@@ -12,7 +12,7 @@
              mc:Ignorable="d"
              d:DesignWidth="1000" d:DesignHeight="725"
              Background="#272537">
-    
+
     <UserControl.DataContext>
         <viewmodel:BackupsViewModel />
     </UserControl.DataContext>
@@ -64,10 +64,10 @@
                     <ComboBoxItem Content="{localize:Static properties:Resources.Complete}" Name="Complete" />
                     <ComboBoxItem Content="{localize:Static properties:Resources.Differential}" Name="Differential" />
                 </ComboBox>
-                
+
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{localize:Static properties:Resources.Encrypt_Backup}"/>
-                    <CheckBox Margin="16, 0" x:Name="BackupEncrypted"/>
+                    <TextBlock Text="{localize:Static properties:Resources.Encrypt_Backup}" />
+                    <CheckBox Margin="16, 0" x:Name="BackupEncrypted" />
                 </StackPanel>
 
                 <StackPanel
@@ -116,10 +116,10 @@
                         Content="{localize:Static properties:Resources.Create_Backup}"
                         Width="250"
                         Margin="15, 0" />
-                
+
                 <Button Width="300"
                         Click="OnExecuteAllBackups"
-                        Content="{localize:Static properties:Resources.Execute_All_Backups}"></Button>
+                        Content="{localize:Static properties:Resources.Execute_All_Backups}" />
             </StackPanel>
 
             <DataGrid Grid.Row="1"
@@ -168,13 +168,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    
+
                     <DataGridTemplateColumn Width="120" Header="{localize:Static properties:Resources.Encrypted}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <CheckBox IsChecked="{Binding Crypted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                        HorizontalAlignment="Center"/>
+                                    <CheckBox
+                                        IsChecked="{Binding Crypted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        HorizontalAlignment="Center" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

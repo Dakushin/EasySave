@@ -48,7 +48,7 @@ public class Log
 
     public void SetFileSize(int fileSize)
     {
-        this.FileSize = fileSize;
+        FileSize = fileSize;
     }
 
     public float GetFileTransferTime()
@@ -58,7 +58,7 @@ public class Log
 
     public void SetFileTransferTime(long fileTransferTime)
     {
-        this.FileTransferTime = fileTransferTime;
+        FileTransferTime = fileTransferTime;
     }
 
     public string GetTime()

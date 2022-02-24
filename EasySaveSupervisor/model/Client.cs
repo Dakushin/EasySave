@@ -10,7 +10,7 @@ namespace EasySaveSupervisor.model;
 public class Client
 {
     private const int Port = 6000;
-    
+
     // request methods
     private const string RequestMethodGetAllBackups = "get_all_backups";
     private const string RequestMethodExecuteAllBackups = "execute_all_backups";
@@ -32,8 +32,8 @@ public class Client
 
     private static readonly Client Instance = new();
     private readonly Socket _clientSocket;
-    private BackupsViewModel _backupsViewModel; 
-    
+    private BackupsViewModel _backupsViewModel;
+
     private Client()
     {
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -54,7 +54,7 @@ public class Client
     {
         _backupsViewModel = backupsViewModel;
     }
-    
+
     private void SendLoop()
     {
         while (true)
@@ -72,9 +72,9 @@ public class Client
             var receivedBuffer = new byte[1024];
             var received = _clientSocket.Receive(receivedBuffer);
             var data = new byte[received];
-            
+
             Array.Copy(receivedBuffer, data, received);
-            
+
             NotifyInUi($"Received: {Encoding.ASCII.GetString(data)}");
         }
     }
@@ -82,9 +82,8 @@ public class Client
     private void LoopConnect()
     {
         var attempts = 0;
-        
+
         while (!_clientSocket.Connected)
-        {
             try
             {
                 attempts++;
@@ -94,25 +93,20 @@ public class Client
             {
                 NotifyInUi($"Connection attempts : {attempts}");
             }
-        }
-        
+
         NotifyInUi("Connected");
     }
-    
+
     private static IPAddress GetLocalIpAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
         foreach (var ip in host.AddressList)
-        {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
                 return ip;
-            }
-        }
-        
+
         throw new Exception("No network adapters with an IPv4 address in the system!");
     }
-    
+
     private static void NotifyInUi(string message)
     {
         Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo(message));

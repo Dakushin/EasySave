@@ -19,7 +19,7 @@
             <DataTemplate DataType="{x:Type viewModel:BackupsViewModel}">
                 <view:BackupsView />
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type viewModel:SettingsViewModel}">
                 <windows:SettingsView />
             </DataTemplate>

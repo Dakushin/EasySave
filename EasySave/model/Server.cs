@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
+using EasySave.properties;
 using EasySave.view.wpf.core;
 using EasySave.viewmodel;
 
@@ -10,7 +11,7 @@ namespace EasySave.model;
 public class Server
 {
     private const int Port = 6000;
-    
+
     // request methods
     private const string RequestMethodGetAllBackups = "get_all_backups";
     private const string RequestMethodExecuteAllBackups = "execute_all_backups";
@@ -30,18 +31,18 @@ public class Server
     private const string ResponseSuccessPauseBackup = "success_pause_backup";
     private const string ResponseSuccessStopBackup = "success_stop_backup";
 
-    
+
     private static readonly Server Instance = new();
-    
-    private readonly Socket _serverSocket;
-    private readonly List<Socket> _clientsSockets;
-    private BackupsViewModel _backupsViewModel;
     private static readonly byte[] Buffer = new byte[1024];
+    private readonly List<Socket> _clientsSockets;
+
+    private readonly Socket _serverSocket;
+    private BackupsViewModel _backupsViewModel;
 
     private Server()
     {
         _clientsSockets = new List<Socket>();
-        
+
         _serverSocket = SetupServer();
         _serverSocket.BeginAccept(AcceptCallback, null);
     }
@@ -55,9 +56,9 @@ public class Server
     {
         var ipAddress = GetLocalIpAddress();
         var localEndPoint = new IPEndPoint(ipAddress, Port);
-        
+
         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-      
+
         socket.Bind(localEndPoint);
         socket.Listen(3);
 
@@ -67,10 +68,11 @@ public class Server
     private void AcceptCallback(IAsyncResult asyncResult)
     {
         var client = _serverSocket.EndAccept(asyncResult);
-        
-        try {
-            NotifyInUi($"{properties.Resources.Client_Connected}. {GetSocketEndPoint(client)}");
-            
+
+        try
+        {
+            NotifyInUi($"{Resources.Client_Connected}. {GetSocketEndPoint(client)}");
+
             client.BeginReceive(Buffer, 0, Buffer.Length, SocketFlags.None, ReceiveCallback, client);
             _clientsSockets.Add(client);
 
@@ -93,7 +95,7 @@ public class Server
             Array.Copy(Buffer, dataBuffer, received);
 
             var request = Encoding.ASCII.GetString(dataBuffer);
-        
+
             var response = Encoding.ASCII.GetBytes(HandleRequest(request));
 
             client.BeginSend(response, 0, response.Length, SocketFlags.None, SendCallback, client);
@@ -116,11 +118,8 @@ public class Server
             var method = split[0];
             var parameters = new string[nbParameters];
 
-            for (var i = 0; i < nbParameters; i++)
-            {
-                parameters[i] = split[i + 1];
-            }
-        
+            for (var i = 0; i < nbParameters; i++) parameters[i] = split[i + 1];
+
             var response = method switch
             {
                 RequestMethodGetAllBackups => OnGetAllBackups(),
@@ -146,14 +145,14 @@ public class Server
             $"{acc}:{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
         );
     }
-    
+
     private string OnExecuteAllBackups()
     {
         _backupsViewModel.ExecAllBackup();
 
         return ResponseSuccessExecuteAllBackup;
     }
-    
+
     private string OnExecuteBackup(string backupName)
     {
         var backup = Model.GetInstance().FindbyName(backupName);
@@ -166,7 +165,7 @@ public class Server
 
         return ResponseInvalidBackupName;
     }
-    
+
     private string OnResumeBackup(string backupName)
     {
         var backup = Model.GetInstance().FindbyName(backupName);
@@ -179,7 +178,7 @@ public class Server
 
         return ResponseInvalidBackupName;
     }
-    
+
     private string OnPauseBackup(string backupName)
     {
         var backup = Model.GetInstance().FindbyName(backupName);
@@ -192,7 +191,7 @@ public class Server
 
         return ResponseInvalidBackupName;
     }
-    
+
     private string OnStopBackup(string backupName)
     {
         var backup = Model.GetInstance().FindbyName(backupName);
@@ -219,26 +218,22 @@ public class Server
             DisconnectClient(client);
         }
     }
-   
+
     private static IPAddress GetLocalIpAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
         foreach (var ip in host.AddressList)
-        {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
                 return ip;
-            }
-        }
-        
+
         throw new Exception("No network adapters with an IPv4 address in the system!");
     }
-    
+
     private static void NotifyInUi(string message)
     {
         Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo(message));
     }
-    
+
     private static string GetSocketEndPoint(Socket socket)
     {
         var socketEndPoint = (socket.RemoteEndPoint ?? socket.LocalEndPoint) as IPEndPoint;
@@ -250,7 +245,7 @@ public class Server
 
     private void DisconnectClient(Socket client)
     {
-        NotifyInUi($"{properties.Resources.Client_Disconnected}. {GetSocketEndPoint(client)}");
+        NotifyInUi($"{Resources.Client_Disconnected}. {GetSocketEndPoint(client)}");
 
         _clientsSockets.Remove(client);
         client.Shutdown(SocketShutdown.Both);
@@ -262,4 +257,3 @@ public class Server
         _backupsViewModel = backupsViewModel;
     }
 }
-

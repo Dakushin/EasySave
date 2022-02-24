@@ -7,15 +7,15 @@ namespace EasySave.model;
 public sealed class Model
 {
     private static readonly Model _instance = new();
+    private readonly ObservableCollection<string> _listExtentionToCheck;
+    private readonly ObservableCollection<string> _listProcessToCheck;
+    private readonly ObservableCollection<string> _listPriorityExtension;
 
     //Private variable
     private readonly string _logPath;
     private readonly string _saveStatePath;
     private readonly ObservableCollection<Backup> _saveWorkList;
     private FileFormat _logFileFormat;
-    private readonly List<string> _listExtentionToCheck;
-    private readonly List<string> _listProcessToCheck;
-    private readonly ObservableCollection<string> _listProrityExtension;
 
     //CONSTRUCTOR
     private Model()
@@ -23,19 +23,20 @@ public sealed class Model
         if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave"))
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                       "\\EasySave");
-        _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log-" + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+        _logPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\log-" +
+                   DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
         _saveStatePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                          "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<Backup>();
         _logFileFormat = new Json();
-        _listProcessToCheck = new List<string> {"Calculator", "word", "notepad", "WINWORD", "chrome"};
-        _listExtentionToCheck = new List<string> {".png", ".jpeg", ".jpg"};
-        _listProrityExtension = new ObservableCollection<string> { ".pdf", ".txt" };
+        _listProcessToCheck = new ObservableCollection<string> {"word", "notepad", "WINWORD"};
+        _listExtentionToCheck = new ObservableCollection<string> {".png", ".jpeg", ".jpg"};
+        _listPriorityExtension = new ObservableCollection<string> {".pdf", ".txt"};
 
         _saveWorkList.Add(new Backup(
             "test",
-            @"C:\Users\sacha\Desktop\test\1",
-            @"C:\Users\sacha\Desktop\test\2",
+            @"X:\x3",
+            @"X:\y3",
             new Complete())
         );
 
@@ -117,18 +118,17 @@ public sealed class Model
         _logFileFormat = x;
     }
 
-    public List<string> GetListProcessToCheck()
+    public ObservableCollection<string> GetListProcessToCheck()
     {
         return _listProcessToCheck;
     }
-
-    public List<string> GetListExtentionToCheck()
+    public ObservableCollection<string> GetListExtentionToCheck()
     {
         return _listExtentionToCheck;
     }
 
     public ObservableCollection<string> GetListPriorityExtension()
     {
-        return _listProrityExtension;
+        return _listPriorityExtension;
     }
 }

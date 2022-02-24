@@ -1,17 +1,19 @@
 ﻿using System.Diagnostics;
 using System.IO;
+
 namespace EasySave.model.backupStrategies;
 
 public abstract class BackupStrategy
 {
-    protected readonly object PauseLock = new();
     private static readonly ReaderWriterLockSlim UpdateLock = new();
     private bool isPaused;
     protected bool IsCancelled;
     protected long TotalBytesToCopy;
     protected int FileLeftToDo = 0;
     protected event EventHandler<long>? BytesCopied;
+    protected readonly object PauseLock = new();
     protected BackupState _backupState;
+    private static bool DoToHighFile = false;
     private bool _iscrypted;
     private bool doPriorityFile;
     private int Threadthatdopause;
@@ -37,10 +39,7 @@ public abstract class BackupStrategy
         ExecuteInternally(sourceFolderPath, targetFolderPath);
 
         var cancelled = IsCancelled;
-        if (!cancelled)
-        {
-            EndBackup(_backupState);
-        }
+        if (!cancelled) EndBackup(_backupState);
         ResetState(backup);
         return !cancelled;
     }
@@ -63,6 +62,7 @@ public abstract class BackupStrategy
     {
         if (isPaused)
         {
+
             if (Threadthatdopause == Thread.CurrentThread.ManagedThreadId)
             {
                 isPaused = false;
@@ -92,12 +92,13 @@ public abstract class BackupStrategy
         var directoryInfo = new DirectoryInfo(folderPath);
         return directoryInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(fileInfo => fileInfo.Length);
     }
+
     protected void CopyFile(string sourceFilePath, string targetFilePath)
     {
         var buffer = new byte[1024 * 1024]; // 1MB buffer
         try
         {
-            using (var source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read)) 
+            using (var source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
             {
                 CreateDirectoryIfNotExist(targetFilePath);
                 using (var target = new FileStream(targetFilePath, FileMode.Create, FileAccess.Write))
@@ -105,15 +106,12 @@ public abstract class BackupStrategy
                     int currentBlockSize;
 
                     while ((currentBlockSize = source.Read(buffer, 0, buffer.Length)) > 0 && !IsCancelled)
-                    {
                         lock (PauseLock)
                         {
                             BytesCopied(this, currentBlockSize);
 
                             target.Write(buffer, 0, currentBlockSize);
-                 
                         }
-                    }
                 }
             }
         }
@@ -125,19 +123,14 @@ public abstract class BackupStrategy
 
     protected List<string> GetAllFileFromDirectory(string sourcePathDirectoy, bool firstdirectory)
     {
-
         var files = new List<string>();
-        if(firstdirectory)
-        {
-            files.AddRange(Directory.GetFiles(sourcePathDirectoy));
-        }
+        if (firstdirectory) files.AddRange(Directory.GetFiles(sourcePathDirectoy));
         foreach (var directory in Directory.GetDirectories(sourcePathDirectoy))
         {
             var list = Directory.GetDirectories(directory);
             if (list.Length > 0) files.AddRange(GetAllFileFromDirectory(directory, false));
-
         }
-        
+
         return files;
     }
 
@@ -145,10 +138,7 @@ public abstract class BackupStrategy
     {
         var lastfile = targetFilePath.Split(Path.DirectorySeparatorChar);
         var newtargetpath = targetFilePath.Replace(Path.DirectorySeparatorChar + lastfile[lastfile.Length - 1], null);
-        if (!Directory.Exists(newtargetpath))
-        {
-            Directory.CreateDirectory(Path.GetFullPath(newtargetpath));
-        }
+        if (!Directory.Exists(newtargetpath)) Directory.CreateDirectory(Path.GetFullPath(newtargetpath));
     }
 
     private void EndBackup(BackupState backupState) //Update SaveState to END
@@ -190,13 +180,15 @@ public abstract class BackupStrategy
             {
                 Json.SaveInFormat(Model.GetInstance().GetSaveStatePath(), backupState);
             }
+
             UpdateLock.ExitWriteLock();
         }
     }
 
     protected string GetPathWithDirectory(string sourceFilePath, string sourceFolderPath, string targetFolderPath)
     {
-        return Path.Combine(targetFolderPath, sourceFilePath.Replace(sourceFolderPath + Path.DirectorySeparatorChar, null));
+        return Path.Combine(targetFolderPath,
+            sourceFilePath.Replace(sourceFolderPath + Path.DirectorySeparatorChar, null));
     }
 
     public void SetFileLeftToDo(int Fltd)
@@ -208,50 +200,56 @@ public abstract class BackupStrategy
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
         FileToCopy = OrdonedPriorityFile(FileToCopy);
-        foreach(string fileSourcePath in FileToCopy)
+        List<string> ToHighFile = new List<string>();
+        foreach (var fileSourcePath in FileToCopy)
         {
             if (IsCancelled) break;
-            
-            if (IsPriotityFile(fileSourcePath))
+
+            if (IsPriorityFile(fileSourcePath))
             {
                 doPriorityFile = true;
                 PauseAllOtherThread();
-            } else
+            }
+            else
             {
                 doPriorityFile = false;
                 ResumeAllThread();
             }
-            _backupState.SetTotalFileSize(new FileInfo(fileSourcePath).Length);
-            var targetFilePath = GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath);
-            _backupState.SetSourceFilePath(fileSourcePath);
-            _backupState.SetTargetFilePath(fileSourcePath);
-            long timetocrypt = 0;
-            Stopwatch sw = Stopwatch.StartNew();
-            if (_iscrypted && CheckToCrypt(fileSourcePath))
+            if (new FileInfo(fileSourcePath).Length >= 10000 && !doPriorityFile)
             {
-                timetocrypt = Cryptage(fileSourcePath, targetFilePath);
-            } else
-            {
-                CopyFile(fileSourcePath, targetFilePath);
+                if (!DoToHighFile)
+                {
+                    DoToHighFile = true;
+                    if (ToHighFile.Count > 0)
+                    {
+                        ToHighFile.Add(fileSourcePath);
+                        DoCopy(ToHighFile.First(), GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath));
+                        ToHighFile.RemoveAt(0);
+                        
+                    }
+                    else
+                    {
+                        DoCopy(fileSourcePath, GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath));
+                    }
+                    DoToHighFile = false;
+                }
+                else
+                {
+                    ToHighFile.Add(fileSourcePath);
+                }
             }
-            sw.Stop();
-            if (UpdateLock.TryEnterWriteLock(1000))
+            else
             {
-                var log = new Log(_backupState.Name, fileSourcePath, targetFilePath, string.Empty,
-                                   new FileInfo(fileSourcePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
-                Model.GetInstance().GetLogFileFormat().SaveInFormat<Log>(Model.GetInstance().GetLogPath(), log);
-                UpdateLock.ExitWriteLock();
+                DoCopy(fileSourcePath, GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath));
             }
-            FileLeftToDo--;
-            _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
-            UpdateSaveState(_backupState);
+            
         }
-        if(doPriorityFile == true)
+
+        if (doPriorityFile)
         {
             doPriorityFile = false;
             ResumeAllThread();
         }
-
     }
 
 
@@ -277,69 +275,66 @@ public abstract class BackupStrategy
 
     private List<string> OrdonedPriorityFile(List<string> FileToCopy)
     {
-        List<string> priotitylist = new List<string>();
-        List<string> list = new List<string>();
+        var priotitylist = new List<string>();
+        var list = new List<string>();
         foreach (var file in FileToCopy)
-        {
-           if(IsPriotityFile(file))
-           {
+            if (IsPriorityFile(file))
                 priotitylist.Add(file);
-           }
             else
-            {
                 list.Add(file);
-            }
-        }
         priotitylist.AddRange(list);
         return priotitylist;
     }
 
-    private bool IsPriotityFile(string file)
+    private bool IsPriorityFile(string file)
     {
         foreach (var extension in Model.GetInstance().GetListPriorityExtension())
-        {
             if (Path.GetExtension(file) == extension)
-            {
                 return true;
-            }
-        }
         return false;
     }
 
     private void PauseAllOtherThread()
     {
-        foreach(Backup backup in Model.GetInstance().GetBackupList() )
-        {
-            if(backup.IsExecute && !backup.BackupStrategy.GetDoPriorityFile())
-            {
+        foreach (var backup in Model.GetInstance().GetBackupList())
+            if (backup.IsExecute && !backup.BackupStrategy.doPriorityFile)
                 backup.BackupStrategy.Pause();
-            }
-        }
     }
 
     private void ResumeAllThread()
     {
-        bool resumeall = false;
-        foreach(Backup backup in Model.GetInstance().GetBackupList())
-        {
-            if(!backup.BackupStrategy.GetDoPriorityFile())
-            {
+        var resumeall = false;
+        foreach (var backup in Model.GetInstance().GetBackupList())
+            if (!backup.BackupStrategy.doPriorityFile)
                 resumeall = true;
-            }
-        }
-        if(resumeall)
-        {
-            foreach (Backup backup in Model.GetInstance().GetBackupList())
-            {
+        if (resumeall)
+            foreach (var backup in Model.GetInstance().GetBackupList())
                 backup.BackupStrategy.Resume();
-            }
-        }
     }
 
-    private bool GetDoPriorityFile()
+    private void DoCopy(string fileSourcePath, string targetFilePath)
     {
-        return doPriorityFile;
-    }
+        _backupState.SetTotalFileSize(new FileInfo(fileSourcePath).Length);
+        _backupState.SetSourceFilePath(fileSourcePath);
+        _backupState.SetTargetFilePath(fileSourcePath);
+        long timetocrypt = 0;
+        var sw = Stopwatch.StartNew();
+        if (_iscrypted && CheckToCrypt(fileSourcePath))
+            timetocrypt = Cryptage(fileSourcePath, targetFilePath);
+        else
+            CopyFile(fileSourcePath, targetFilePath);
+        sw.Stop();
+        if (UpdateLock.TryEnterWriteLock(1000))
+        {
+            var log = new Log(_backupState.Name, fileSourcePath, targetFilePath, string.Empty,
+                new FileInfo(fileSourcePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
+            Model.GetInstance().GetLogFileFormat().SaveInFormat(Model.GetInstance().GetLogPath(), log);
+            UpdateLock.ExitWriteLock();
+        }
 
+        FileLeftToDo--;
+        _backupState.SetTotalFilesLeftToDo(FileLeftToDo);
+        UpdateSaveState(_backupState);
+    }
 
 }

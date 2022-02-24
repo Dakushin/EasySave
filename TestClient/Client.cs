@@ -8,9 +8,9 @@ public class Client
 {
     private const int Port = 6000;
 
-    private static Socket _clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    
-    static void Main()
+    private static readonly Socket _clientSocket = new(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+    private static void Main()
     {
         LoopConnect();
         SendLoop();
@@ -34,9 +34,9 @@ public class Client
             var receivedBuffer = new byte[1024];
             var received = _clientSocket.Receive(receivedBuffer);
             var data = new byte[received];
-            
+
             Array.Copy(receivedBuffer, data, received);
-            
+
             Console.WriteLine($"Received: {Encoding.ASCII.GetString(data)}");
         }
     }
@@ -44,9 +44,8 @@ public class Client
     private static void LoopConnect()
     {
         var attempts = 0;
-        
+
         while (!_clientSocket.Connected)
-        {
             try
             {
                 attempts++;
@@ -57,22 +56,17 @@ public class Client
                 Console.Clear();
                 Console.WriteLine($"Connection attempts : {attempts}");
             }
-        }
-        
+
         Console.WriteLine("Connected");
     }
-    
+
     private static IPAddress GetLocalIpAddress()
     {
         var host = Dns.GetHostEntry(Dns.GetHostName());
         foreach (var ip in host.AddressList)
-        {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
                 return ip;
-            }
-        }
-        
+
         throw new Exception("No network adapters with an IPv4 address in the system!");
     }
 }

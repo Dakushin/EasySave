@@ -29,18 +29,12 @@ public partial class SettingsView : UserControl
 
     private void OnRemovePriorityFileExtension(object sender, RoutedEventArgs e)
     {
-        if (HighPriorityListBox.SelectedItem is string extension)
-        {
-            _viewModel.RemovePriorityFileExtension(extension);
-        }
+        if (HighPriorityListBox.SelectedItem is string extension) _viewModel.RemovePriorityFileExtension(extension);
     }
 
     private void OnRemoveEncryptedFileExtension(object sender, RoutedEventArgs e)
     {
-        if (EncryptedListBox.SelectedItem is string extension)
-        {
-            _viewModel.RemoveEncryptedFileExtension(extension);
-        }
+        if (EncryptedListBox.SelectedItem is string extension) _viewModel.RemoveEncryptedFileExtension(extension);
     }
 
     private void OnAddExtension(object sender, DialogClosingEventArgs e)
@@ -48,16 +42,14 @@ public partial class SettingsView : UserControl
         if (Equals(e.Parameter, true))
         {
             var textBox = sender.Equals(PriorityDialog) ? PriorityTextBox : EncryptedTextBox;
-            Action<string> action = sender.Equals(PriorityDialog) ? _viewModel.AddPriorityFileExtension : _viewModel.AddEncryptedFileExtension;
-            
+            Action<string> action = sender.Equals(PriorityDialog)
+                ? _viewModel.AddPriorityFileExtension
+                : _viewModel.AddEncryptedFileExtension;
+
             if (!string.IsNullOrWhiteSpace(textBox.Text) && textBox.Text[0] == '.')
-            {
                 action(textBox.Text.Trim());
-            }
             else
-            {
                 ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Add_File_Extension);
-            }
         }
         else
         {
@@ -70,13 +62,9 @@ public partial class SettingsView : UserControl
         if (Equals(e.Parameter, true))
         {
             if (!string.IsNullOrWhiteSpace(BusinessTextBox.Text))
-            {
                 _viewModel.AddBusinessProcess(BusinessTextBox.Text.Trim());
-            }
             else
-            {
                 ViewModelBase.NotifyError(properties.Resources.Ask_Informations_Business_Process);
-            }
         }
         else
         {
@@ -86,9 +74,6 @@ public partial class SettingsView : UserControl
 
     private void OnRemoveBusinessProcess(object sender, RoutedEventArgs e)
     {
-        if (BusinessListBox.SelectedItem is string process)
-        {
-            _viewModel.RemoveBusinessProcess(process);
-        }
+        if (BusinessListBox.SelectedItem is string process) _viewModel.RemoveBusinessProcess(process);
     }
 }

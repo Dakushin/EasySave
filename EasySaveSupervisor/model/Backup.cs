@@ -8,15 +8,16 @@ public class Backup : INotifyPropertyChanged
 {
     //Private member data
     private BackupStrategy _backupStrategy;
+    private bool _crypted;
+    private bool _isExecute;
     private string _name;
     private int _progression;
     private string _sourcePath;
     private string _targetPath;
-    private bool _crypted;
-    private bool _isExecute = false;
 
     //CONSTRUCTOR
-    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy, bool crypted = false)
+    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy,
+        bool crypted = false)
     {
         _name = name;
         _sourcePath = sourcePath;
@@ -116,7 +117,6 @@ public class Backup : INotifyPropertyChanged
             _crypted = value;
             OnPropertyChanged();
         }
-
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
