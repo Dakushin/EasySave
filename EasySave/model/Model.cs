@@ -12,6 +12,7 @@ public sealed class Model
     private readonly ObservableCollection<string> _listPriorityExtension;
 
     //Private variable
+    public int fileSize { get; set; }
     private readonly string _logPath;
     private readonly string _saveStatePath;
     private readonly ObservableCollection<Backup> _saveWorkList;
@@ -35,8 +36,22 @@ public sealed class Model
 
         _saveWorkList.Add(new Backup(
             "test",
-            @"X:\x3",
-            @"X:\y3",
+            @"X:\x",
+            @"X:\y",
+            new Complete())
+        );
+
+        _saveWorkList.Add(new Backup(
+            "test1",
+            @"X:\x1",
+            @"X:\y1",
+            new Complete())
+        );
+
+        _saveWorkList.Add(new Backup(
+            "test2",
+            @"X:\x2",
+            @"X:\y2",
             new Complete())
         );
 

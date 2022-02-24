@@ -12,6 +12,7 @@ public abstract class BackupStrategy
     protected int FileLeftToDo = 0;
     protected event EventHandler<long>? BytesCopied;
     protected readonly object PauseLock = new();
+    private readonly object HighFileLock = new();
     protected BackupState _backupState;
     private static bool DoToHighFile = false;
     private bool _iscrypted;
@@ -215,7 +216,7 @@ public abstract class BackupStrategy
                 doPriorityFile = false;
                 ResumeAllThread();
             }
-            if (new FileInfo(fileSourcePath).Length >= 10000 && !doPriorityFile)
+            if (new FileInfo(fileSourcePath).Length >= Model.GetInstance().fileSize && !doPriorityFile)
             {
                 if (!DoToHighFile)
                 {
@@ -243,6 +244,13 @@ public abstract class BackupStrategy
                 DoCopy(fileSourcePath, GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath));
             }
             
+        }
+        foreach(string fileSourcePath in ToHighFile)
+        {
+            lock (HighFileLock)
+            {
+                DoCopy(fileSourcePath, GetPathWithDirectory(fileSourcePath, sourceFolderPath, targetFolderPath));
+            }
         }
 
         if (doPriorityFile)

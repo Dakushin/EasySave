@@ -7,8 +7,7 @@ namespace EasySave.viewmodel;
 public class SettingsViewModel : ViewModelBase
 {
     private readonly Model _model;
-    private int _maximumFileSize = 5;
-    private int _remplaceParLeGetteurDeTonModel;
+    private int _maximumFileSize;
     private string _sizeUnit = "Kb";
     
     public int MaximumFileSize
@@ -26,7 +25,7 @@ public class SettingsViewModel : ViewModelBase
                 "Gb" => 1024 * 1024 * 1024
             };
 
-            _remplaceParLeGetteurDeTonModel = _maximumFileSize * unit;
+            _model.fileSize = _maximumFileSize * unit;
             OnPropertyChanged();
         }
     }
@@ -45,6 +44,7 @@ public class SettingsViewModel : ViewModelBase
     public SettingsViewModel()
     {
         _model = Model.GetInstance();
+        MaximumFileSize = 5;
     }
 
     public ObservableCollection<string> PriorityFileExtensions => _model.GetListPriorityExtension();
