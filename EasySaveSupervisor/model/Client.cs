@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
+using EasySaveSupervisor.properties;
 using EasySaveSupervisor.view.core;
 using EasySaveSupervisor.viewmodel;
 
@@ -33,7 +34,7 @@ public class Client
     private const char Separator = '$';
 
     private static readonly Client Instance = new();
-    private readonly Socket _clientSocket;
+    private Socket _clientSocket;
     private BackupsViewModel _backupsViewModel;
 
     private Client()
@@ -42,12 +43,17 @@ public class Client
 
         Task.Run(() =>
         {
-            LoopConnect();
-
             while (true)
             {
-                Application.Current.Dispatcher.Invoke(() =>_backupsViewModel.GetAllBackups());
-                Thread.Sleep(1000);
+                LoopConnect();
+
+                while (_clientSocket.Connected)
+                {
+                    Application.Current.Dispatcher.Invoke(() => _backupsViewModel.GetAllBackups());
+                    Thread.Sleep(2500);
+                }
+                
+                _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
         });
     }
@@ -88,7 +94,6 @@ public class Client
             return backups;
         }
 
-        NotifyInUi("ERREUR !!!");
         return Array.Empty<Backup>();
     }
 
@@ -129,20 +134,30 @@ public class Client
 
     private string SendRequest(string request, params string[] parameters)
     {
-        request = parameters.Aggregate(request, (acc, parameter) => 
-            $"{acc}{Separator}{parameter}"
-        );
-            
-        var buffer = Encoding.ASCII.GetBytes(request);
-        _clientSocket.Send(buffer);
+        try
+        {
+            request = parameters.Aggregate(request, (acc, parameter) =>
+                $"{acc}{Separator}{parameter}"
+            );
 
-        var receivedBuffer = new byte[1024];
-        var received = _clientSocket.Receive(receivedBuffer);
-        var data = new byte[received];
+            var buffer = Encoding.ASCII.GetBytes(request);
+            _clientSocket.Send(buffer);
 
-        Array.Copy(receivedBuffer, data, received);
+            var receivedBuffer = new byte[1024];
+            var received = _clientSocket.Receive(receivedBuffer);
+            var data = new byte[received];
 
-        return Encoding.ASCII.GetString(data);
+            Array.Copy(receivedBuffer, data, received);
+
+            return Encoding.ASCII.GetString(data);
+        }
+        catch (SocketException)
+        {
+            var res = $"{Resources.Client_Disconnected}. {GetSocketEndPoint(_clientSocket)}";
+            _clientSocket.Shutdown(SocketShutdown.Both);
+            _clientSocket.Disconnect(false);
+            return res;
+        }
     }
 
     private void LoopConnect()
@@ -173,6 +188,7 @@ public class Client
         var serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         client.EnableBroadcast = true;
+        client.Client.ReceiveTimeout = 4000;
         client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
 
         client.Receive(ref serverEndPoint);
@@ -186,5 +202,14 @@ public class Client
     private static void NotifyInUi(string message)
     {
         Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo(message));
+    }
+    
+    private static string GetSocketEndPoint(Socket socket)
+    {
+        var socketEndPoint = (socket.RemoteEndPoint ?? socket.LocalEndPoint) as IPEndPoint;
+        var socketIp = socketEndPoint?.Address.MapToIPv4();
+        var socketPort = socketEndPoint?.Port;
+
+        return $"Ip [{socketIp}] - Port [{socketPort}]";
     }
 }
