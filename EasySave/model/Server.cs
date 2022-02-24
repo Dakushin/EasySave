@@ -31,6 +31,8 @@ public class Server
     private const string ResponseSuccessPauseBackup = "success_pause_backup";
     private const string ResponseSuccessStopBackup = "success_stop_backup";
 
+    private const char Separator = '$';
+
 
     private static readonly Server Instance = new();
     private static readonly byte[] Buffer = new byte[1024];
@@ -43,6 +45,8 @@ public class Server
     {
         _clientsSockets = new List<Socket>();
 
+        Task.Run(ScanForRequestServerIp);
+
         _serverSocket = SetupServer();
         _serverSocket.BeginAccept(AcceptCallback, null);
     }
@@ -50,6 +54,19 @@ public class Server
     public static Server GetInstance()
     {
         return Instance;
+    }
+
+    private static void ScanForRequestServerIp()
+    {
+        var udpClient = new UdpClient(8888);
+        var response = Encoding.ASCII.GetBytes("ip");
+
+        while (true)
+        {
+            var clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            udpClient.Receive(ref clientEndPoint);
+            udpClient.Send(response, response.Length, clientEndPoint);
+        }
     }
 
     private Socket SetupServer()
@@ -112,7 +129,7 @@ public class Server
     {
         try
         {
-            var split = request.Split(':');
+            var split = request.Split(Separator);
 
             var nbParameters = split.Length - 1; // the method doesn't count as a parameter
             var method = split[0];
@@ -142,7 +159,7 @@ public class Server
     private string OnGetAllBackups()
     {
         return _backupsViewModel.Backups.Aggregate(ResponseSuccessGetAllBackups, (acc, backup) =>
-            $"{acc}:{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
+            $"{acc}{Separator}{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
         );
     }
 
@@ -198,7 +215,7 @@ public class Server
 
         if (backup != null)
         {
-            _backupsViewModel.ExecuteBackup(backup);
+            _backupsViewModel.CancelBackup(backup);
             return ResponseSuccessStopBackup;
         }
 
@@ -221,12 +238,16 @@ public class Server
 
     private static IPAddress GetLocalIpAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip;
+        using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+        
+        socket.Connect("8.8.8.8", 65530);
 
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        if (socket.LocalEndPoint is not IPEndPoint endPoint)
+        {
+            throw new Exception("Couldn't resolve the local network IP address");
+        }
+        
+        return endPoint.Address;
     }
 
     private static void NotifyInUi(string message)

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Windows;
+using EasySaveSupervisor.properties;
 using EasySaveSupervisor.view.core;
 using EasySaveSupervisor.viewmodel;
 
@@ -21,17 +22,12 @@ public class Client
 
 
     // responses
-    private const string ResponseInvalidRequest = "invalid_request";
-    private const string ResponseInvalidBackupName = "invalid_backup_name";
     private const string ResponseSuccessGetAllBackups = "success_get_all_backups";
-    private const string ResponseSuccessExecuteBackup = "success_execute_backup";
-    private const string ResponseSuccessExecuteAllBackup = "success_execute_all_backups";
-    private const string ResponseSuccessResumeBackup = "success_resume_backup";
-    private const string ResponseSuccessPauseBackup = "success_pause_backup";
-    private const string ResponseSuccessStopBackup = "success_stop_backup";
+    
+    private const char Separator = '$';
 
     private static readonly Client Instance = new();
-    private readonly Socket _clientSocket;
+    private Socket _clientSocket;
     private BackupsViewModel _backupsViewModel;
 
     private Client()
@@ -40,8 +36,18 @@ public class Client
 
         Task.Run(() =>
         {
-            LoopConnect();
-            SendLoop();
+            while (true)
+            {
+                LoopConnect();
+
+                while (_clientSocket.Connected)
+                {
+                    Application.Current.Dispatcher.Invoke(() => _backupsViewModel.GetAllBackups());
+                    Thread.Sleep(2500);
+                }
+                
+                _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            }
         });
     }
 
@@ -55,16 +61,77 @@ public class Client
         _backupsViewModel = backupsViewModel;
     }
 
-    private void SendLoop()
+    public Backup[] GetAllBackups()
     {
-        while (true)
+        var response = SendRequest(RequestMethodGetAllBackups);
+
+        var split = response.Split(Separator);
+        if (split[0].Equals(ResponseSuccessGetAllBackups))
         {
-            string? request;
-            do
+            var backups = new Backup[split.Length - 1];
+            
+            for (int i = 1; i < split.Length; i++)
             {
-                NotifyInUi("Enter a request: ");
-                request = Console.ReadLine();
-            } while (string.IsNullOrEmpty(request));
+                var backupInformation = split[i].Split("-");
+
+                backups[i - 1] = new Backup(
+                    backupInformation[0],
+                    backupInformation[1],
+                    backupInformation[2],
+                    backupInformation[3],
+                    bool.Parse(backupInformation[4]),
+                    int.Parse(backupInformation[5])
+                );
+            }
+
+            return backups;
+        }
+
+        return Array.Empty<Backup>();
+    }
+
+    public void ExecuteAllBackups()
+    {
+        var response = SendRequest(RequestMethodExecuteAllBackups);
+        
+        NotifyInUi(response);
+    }
+    
+    public void ExecuteBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodExecuteBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void ResumeBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodResumeBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void PauseBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodPauseBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void CancelBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodStopBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+
+    private string SendRequest(string request, params string[] parameters)
+    {
+        try
+        {
+            request = parameters.Aggregate(request, (acc, parameter) =>
+                $"{acc}{Separator}{parameter}"
+            );
 
             var buffer = Encoding.ASCII.GetBytes(request);
             _clientSocket.Send(buffer);
@@ -75,7 +142,14 @@ public class Client
 
             Array.Copy(receivedBuffer, data, received);
 
-            NotifyInUi($"Received: {Encoding.ASCII.GetString(data)}");
+            return Encoding.ASCII.GetString(data);
+        }
+        catch (SocketException)
+        {
+            var res = $"{Resources.Client_Disconnected}. {GetSocketEndPoint(_clientSocket)}";
+            _clientSocket.Shutdown(SocketShutdown.Both);
+            _clientSocket.Disconnect(false);
+            return res;
         }
     }
 
@@ -87,9 +161,9 @@ public class Client
             try
             {
                 attempts++;
-                _clientSocket.Connect(GetLocalIpAddress(), Port);
+                _clientSocket.Connect(GetServerIpAddress(), Port);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 NotifyInUi($"Connection attempts : {attempts}");
             }
@@ -97,18 +171,38 @@ public class Client
         NotifyInUi("Connected");
     }
 
-    private static IPAddress GetLocalIpAddress()
+    /**
+     * Find the server ipv4 address by network discovering
+     */
+    private static IPAddress GetServerIpAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip;
+        var client = new UdpClient();
+        var request = Encoding.ASCII.GetBytes("get_ip");
+        var serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        client.EnableBroadcast = true;
+        client.Client.ReceiveTimeout = 4000;
+        client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
+
+        client.Receive(ref serverEndPoint);
+
+        var serverIp = serverEndPoint.Address;
+        client.Close();
+
+        return serverIp;
     }
 
     private static void NotifyInUi(string message)
     {
         Application.Current.Dispatcher.Invoke(() => ViewModelBase.NotifyInfo(message));
+    }
+    
+    private static string GetSocketEndPoint(Socket socket)
+    {
+        var socketEndPoint = (socket.RemoteEndPoint ?? socket.LocalEndPoint) as IPEndPoint;
+        var socketIp = socketEndPoint?.Address.MapToIPv4();
+        var socketPort = socketEndPoint?.Port;
+
+        return $"Ip [{socketIp}] - Port [{socketPort}]";
     }
 }

@@ -1,53 +1,36 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using EasySaveSupervisor.model.backupStrategies;
 
 namespace EasySaveSupervisor.model;
 
 public class Backup : INotifyPropertyChanged
 {
     //Private member data
-    private BackupStrategy _backupStrategy;
+    private string _backupStrategy;
     private bool _crypted;
-    private bool _isExecute;
     private string _name;
     private int _progression;
     private string _sourcePath;
     private string _targetPath;
 
     //CONSTRUCTOR
-    public Backup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy,
-        bool crypted = false)
+    public Backup(string name, string sourcePath, string targetPath, string backupStrategy,
+        bool crypted, int progression)
     {
         _name = name;
         _sourcePath = sourcePath;
         _targetPath = targetPath;
         _backupStrategy = backupStrategy;
-        _progression = 0;
+        _progression = progression;
         _crypted = crypted;
     }
 
-    public BackupStrategy BackupStrategy
+    public string BackupStrategyName
     {
         get => _backupStrategy;
         set
         {
             _backupStrategy = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public string BackupStrategyName
-    {
-        get => _backupStrategy.GetName();
-        set
-        {
-            _backupStrategy = value switch
-            {
-                "Complete" => new Complete(),
-                "Differential" => new Differential(),
-                _ => throw new ArgumentException("the backup strategy must be either \"complete\" or \"differential\"")
-            };
             OnPropertyChanged();
         }
     }
@@ -58,16 +41,6 @@ public class Backup : INotifyPropertyChanged
         set
         {
             _sourcePath = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsExecute
-    {
-        get => _isExecute;
-        set
-        {
-            _isExecute = value;
             OnPropertyChanged();
         }
     }
@@ -119,12 +92,12 @@ public class Backup : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public bool Execute()
+    public override bool Equals(object? obj)
     {
-        return _backupStrategy.Execute(this);
+        return obj is Backup otherBackup && _name.Equals(otherBackup._name);
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

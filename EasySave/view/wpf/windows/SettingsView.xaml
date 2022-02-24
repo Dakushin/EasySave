@@ -338,12 +338,14 @@
                         <TextBox FontSize="22"
                                  materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Maximum_File_Size_Placeholder}"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                 VerticalAlignment="Center" />
+                                 VerticalAlignment="Center"
+                                 Text="{Binding MaximumFileSize}"/>
 
-                        <ComboBox
+                        <ComboBox Text="{Binding SizeUnit, UpdateSourceTrigger=PropertyChanged}"
                             Margin="15, 20, 0, 0"
                             FontSize="22"
-                            materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Unit}">
+                            materialDesign:HintAssist.Hint="{localize:Static properties:Resources.Unit}"
+                            SelectedIndex="1">
                             <ComboBoxItem
                                 Content="B" />
                             <ComboBoxItem
