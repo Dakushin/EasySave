@@ -215,7 +215,7 @@ public class Server
 
         if (backup != null)
         {
-            _backupsViewModel.ExecuteBackup(backup);
+            _backupsViewModel.CancelBackup(backup);
             return ResponseSuccessStopBackup;
         }
 
