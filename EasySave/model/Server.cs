@@ -31,6 +31,8 @@ public class Server
     private const string ResponseSuccessPauseBackup = "success_pause_backup";
     private const string ResponseSuccessStopBackup = "success_stop_backup";
 
+    private const char Separator = '$';
+
 
     private static readonly Server Instance = new();
     private static readonly byte[] Buffer = new byte[1024];
@@ -112,7 +114,7 @@ public class Server
     {
         try
         {
-            var split = request.Split(':');
+            var split = request.Split(Separator);
 
             var nbParameters = split.Length - 1; // the method doesn't count as a parameter
             var method = split[0];
@@ -142,7 +144,7 @@ public class Server
     private string OnGetAllBackups()
     {
         return _backupsViewModel.Backups.Aggregate(ResponseSuccessGetAllBackups, (acc, backup) =>
-            $"{acc}:{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
+            $"{acc}{Separator}{backup.Name}-{backup.SourcePath}-{backup.TargetPath}-{backup.BackupStrategyName}-{backup.Crypted}-{backup.Progression}"
         );
     }
 

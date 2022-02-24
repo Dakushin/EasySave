@@ -29,6 +29,8 @@ public class Client
     private const string ResponseSuccessResumeBackup = "success_resume_backup";
     private const string ResponseSuccessPauseBackup = "success_pause_backup";
     private const string ResponseSuccessStopBackup = "success_stop_backup";
+    
+    private const char Separator = '$';
 
     private static readonly Client Instance = new();
     private readonly Socket _clientSocket;
@@ -41,7 +43,12 @@ public class Client
         Task.Run(() =>
         {
             LoopConnect();
-            SendLoop();
+
+            while (true)
+            {
+                Application.Current.Dispatcher.Invoke(() =>_backupsViewModel.GetAllBackups());
+                Thread.Sleep(1000);
+            }
         });
     }
 
@@ -55,28 +62,87 @@ public class Client
         _backupsViewModel = backupsViewModel;
     }
 
-    private void SendLoop()
+    public Backup[] GetAllBackups()
     {
-        while (true)
+        var response = SendRequest(RequestMethodGetAllBackups);
+
+        var split = response.Split(Separator);
+        if (split[0].Equals(ResponseSuccessGetAllBackups))
         {
-            string? request;
-            do
+            var backups = new Backup[split.Length - 1];
+            
+            for (int i = 1; i < split.Length; i++)
             {
-                NotifyInUi("Enter a request: ");
-                request = Console.ReadLine();
-            } while (string.IsNullOrEmpty(request));
+                var backupInformation = split[i].Split("-");
 
-            var buffer = Encoding.ASCII.GetBytes(request);
-            _clientSocket.Send(buffer);
+                backups[i - 1] = new Backup(
+                    backupInformation[0],
+                    backupInformation[1],
+                    backupInformation[2],
+                    backupInformation[3],
+                    bool.Parse(backupInformation[4]),
+                    int.Parse(backupInformation[5])
+                );
+            }
 
-            var receivedBuffer = new byte[1024];
-            var received = _clientSocket.Receive(receivedBuffer);
-            var data = new byte[received];
-
-            Array.Copy(receivedBuffer, data, received);
-
-            NotifyInUi($"Received: {Encoding.ASCII.GetString(data)}");
+            return backups;
         }
+
+        NotifyInUi("ERREUR !!!");
+        return Array.Empty<Backup>();
+    }
+
+    public void ExecuteAllBackups()
+    {
+        var response = SendRequest(RequestMethodExecuteAllBackups);
+        
+        NotifyInUi(response);
+    }
+    
+    public void ExecuteBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodExecuteBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void ResumeBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodResumeBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void PauseBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodPauseBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+    
+    public void CancelBackup(Backup backup)
+    {
+        var response = SendRequest(RequestMethodStopBackup, backup.Name);
+        
+        NotifyInUi(response);
+    }
+
+    private string SendRequest(string request, params string[] parameters)
+    {
+        request = parameters.Aggregate(request, (acc, parameter) => 
+            $"{acc}{Separator}{parameter}"
+        );
+            
+        var buffer = Encoding.ASCII.GetBytes(request);
+        _clientSocket.Send(buffer);
+
+        var receivedBuffer = new byte[1024];
+        var received = _clientSocket.Receive(receivedBuffer);
+        var data = new byte[received];
+
+        Array.Copy(receivedBuffer, data, received);
+
+        return Encoding.ASCII.GetString(data);
     }
 
     private void LoopConnect()
@@ -99,12 +165,19 @@ public class Client
 
     private static IPAddress GetLocalIpAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip;
-
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+        {
+            socket.Connect("8.8.8.8", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            return endPoint.Address;
+        }
+        //
+        // var host = Dns.GetHostEntry(Dns.GetHostName());
+        // foreach (var ip in host.AddressList)
+        //     if (ip.AddressFamily == AddressFamily.InterNetwork)
+        //         return ip;
+        //
+        // throw new Exception("No network adapters with an IPv4 address in the system!");
     }
 
     private static void NotifyInUi(string message)
