@@ -8,7 +8,6 @@ public class Differential : BackupStrategy
     {
         var filesToCopy = GetFilesToCopy(sourceFolderPath, targetFolderPath);
         DoAllCopy(filesToCopy, sourceFolderPath, targetFolderPath);
-
     }
 
     private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)

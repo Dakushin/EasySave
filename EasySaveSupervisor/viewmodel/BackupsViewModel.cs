@@ -16,8 +16,10 @@ public class BackupsViewModel : ViewModelBase
     //private List<Task> tasks;
     private readonly Model _model;
     private string _filterText;
-    private bool alreadyLaunch = false;
+    private bool alreadyLaunch;
+
     private bool ProcessDetect;
+
     //CONSTRUCTOR
     public BackupsViewModel()
     {
@@ -45,14 +47,13 @@ public class BackupsViewModel : ViewModelBase
     {
         ResumeBackup(SelectedBackup);
     }
-    
+
     public void ResumeBackup(Backup backup)
     {
-        ProcessDetect = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty ? false : true;
-        if (!ProcessDetect)
-        {
-            backup.BackupStrategy.Resume();
-        }
+        ProcessDetect = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty
+            ? false
+            : true;
+        if (!ProcessDetect) backup.BackupStrategy.Resume();
         ThreadCheckingWorkingSoftware();
     }
 
@@ -70,13 +71,14 @@ public class BackupsViewModel : ViewModelBase
     {
         backup.BackupStrategy.Pause();
     }
-    
+
     public void CancelBackup(Backup backup)
     {
         backup.BackupStrategy.Cancel();
     }
 
-    public void CreateBackup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy, bool isEncrypted)
+    public void CreateBackup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy,
+        bool isEncrypted)
     {
         if (_model.GetBackupList().Count < 5) //check if we have more than 5 backups
         {
@@ -153,6 +155,7 @@ public class BackupsViewModel : ViewModelBase
                     NotifyError(Resources.Error_WorkingProcess + $" {software}");
                     PauseAllBackup();
                 }
+
                 ProcessDetect = true;
                 alreadyLaunch = false;
             }
@@ -161,14 +164,11 @@ public class BackupsViewModel : ViewModelBase
 
     public void PauseAllBackup()
     {
-        foreach (Backup backup in Model.GetInstance().GetBackupList())
-        {
+        foreach (var backup in Model.GetInstance().GetBackupList())
             if (backup.IsExecute)
-            {
                 backup.BackupStrategy.Pause();
-            }
-        }
     }
+
     private void GetAllFileFromDirectory(string[] directories, List<string> files) //return all file in a directory
     {
         foreach (var directory in directories)
@@ -223,9 +223,7 @@ public class BackupsViewModel : ViewModelBase
     public static string CheckProcesses()
     {
         while (CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty)
-        { 
             Thread.Sleep(1000);
-        }
         return CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
     }
 
@@ -234,7 +232,8 @@ public class BackupsViewModel : ViewModelBase
         return CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
     }
 
-    private static string CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
+    private static string
+        CheckIfWorkProcessIsOpen(List<string> listOfProcessToCheck) //Function for check if job Process is on
     {
         foreach (var ProcessToCheck in listOfProcessToCheck)
         {
@@ -244,5 +243,4 @@ public class BackupsViewModel : ViewModelBase
 
         return string.Empty;
     }
-
 }

@@ -1,24 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using EasySave.view.wpf.core;
 using EasySave.model;
+using EasySave.view.wpf.core;
 
 namespace EasySave.viewmodel;
 
 public class SettingsViewModel : ViewModelBase
 {
-    public ObservableCollection<string> PriorityFileExtensions => _model.GetListPriorityExtension();
-
-    public ObservableCollection<string> EncryptedFileExtensions { get; }
-    
-    public ObservableCollection<string> BusinessProcesses { get; }
-
     private readonly Model _model;
 
     public SettingsViewModel()
     {
         _model = Model.GetInstance();
-        
-        
+
+
         EncryptedFileExtensions = new ObservableCollection<string>(new[]
         {
             ".pdf",
@@ -34,6 +28,12 @@ public class SettingsViewModel : ViewModelBase
         });
     }
 
+    public ObservableCollection<string> PriorityFileExtensions => _model.GetListPriorityExtension();
+
+    public ObservableCollection<string> EncryptedFileExtensions { get; }
+
+    public ObservableCollection<string> BusinessProcesses { get; }
+
     public void ChangeLogFormat(FileFormat fileFormat)
     {
         _model.SetLogFileFormat(fileFormat);
@@ -43,15 +43,12 @@ public class SettingsViewModel : ViewModelBase
     {
         PriorityFileExtensions.Remove(extension);
     }
-    
+
     public void AddPriorityFileExtension(string extension)
     {
-        if (!PriorityFileExtensions.Contains(extension))
-        {
-            PriorityFileExtensions.Add(extension);
-        }
+        if (!PriorityFileExtensions.Contains(extension)) PriorityFileExtensions.Add(extension);
     }
-    
+
     public void RemoveEncryptedFileExtension(string extension)
     {
         EncryptedFileExtensions.Remove(extension);
@@ -59,10 +56,7 @@ public class SettingsViewModel : ViewModelBase
 
     public void AddEncryptedFileExtension(string extension)
     {
-        if (!EncryptedFileExtensions.Contains(extension))
-        {
-            EncryptedFileExtensions.Add(extension);
-        }
+        if (!EncryptedFileExtensions.Contains(extension)) EncryptedFileExtensions.Add(extension);
     }
 
     public void RemoveBusinessProcess(string process)
@@ -72,9 +66,6 @@ public class SettingsViewModel : ViewModelBase
 
     public void AddBusinessProcess(string process)
     {
-        if (!BusinessProcesses.Contains(process))
-        {
-            BusinessProcesses.Add(process);
-        }
+        if (!BusinessProcesses.Contains(process)) BusinessProcesses.Add(process);
     }
 }
