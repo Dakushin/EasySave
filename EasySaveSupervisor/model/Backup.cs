@@ -92,6 +92,11 @@ public class Backup : INotifyPropertyChanged
         }
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is Backup otherBackup && _name.Equals(otherBackup._name);
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

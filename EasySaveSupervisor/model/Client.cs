@@ -22,14 +22,7 @@ public class Client
 
 
     // responses
-    private const string ResponseInvalidRequest = "invalid_request";
-    private const string ResponseInvalidBackupName = "invalid_backup_name";
     private const string ResponseSuccessGetAllBackups = "success_get_all_backups";
-    private const string ResponseSuccessExecuteBackup = "success_execute_backup";
-    private const string ResponseSuccessExecuteAllBackup = "success_execute_all_backups";
-    private const string ResponseSuccessResumeBackup = "success_resume_backup";
-    private const string ResponseSuccessPauseBackup = "success_pause_backup";
-    private const string ResponseSuccessStopBackup = "success_stop_backup";
     
     private const char Separator = '$';
 
