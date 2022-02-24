@@ -45,6 +45,8 @@ public class Server
     {
         _clientsSockets = new List<Socket>();
 
+        Task.Run(ScanForRequestServerIp);
+
         _serverSocket = SetupServer();
         _serverSocket.BeginAccept(AcceptCallback, null);
     }
@@ -52,6 +54,19 @@ public class Server
     public static Server GetInstance()
     {
         return Instance;
+    }
+
+    private static void ScanForRequestServerIp()
+    {
+        var udpClient = new UdpClient(8888);
+        var response = Encoding.ASCII.GetBytes("ip");
+
+        while (true)
+        {
+            var clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            udpClient.Receive(ref clientEndPoint);
+            udpClient.Send(response, response.Length, clientEndPoint);
+        }
     }
 
     private Socket SetupServer()
@@ -223,12 +238,16 @@ public class Server
 
     private static IPAddress GetLocalIpAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip;
+        using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
+        
+        socket.Connect("8.8.8.8", 65530);
 
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        if (socket.LocalEndPoint is not IPEndPoint endPoint)
+        {
+            throw new Exception("Couldn't resolve the local network IP address");
+        }
+        
+        return endPoint.Address;
     }
 
     private static void NotifyInUi(string message)

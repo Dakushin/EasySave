@@ -153,9 +153,9 @@ public class Client
             try
             {
                 attempts++;
-                _clientSocket.Connect(GetLocalIpAddress(), Port);
+                _clientSocket.Connect(GetServerIpAddress(), Port);
             }
-            catch (SocketException e)
+            catch (SocketException)
             {
                 NotifyInUi($"Connection attempts : {attempts}");
             }
@@ -163,21 +163,24 @@ public class Client
         NotifyInUi("Connected");
     }
 
-    private static IPAddress GetLocalIpAddress()
+    /**
+     * Find the server ipv4 address by network discovering
+     */
+    private static IPAddress GetServerIpAddress()
     {
-        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
-        {
-            socket.Connect("8.8.8.8", 65530);
-            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-            return endPoint.Address;
-        }
-        //
-        // var host = Dns.GetHostEntry(Dns.GetHostName());
-        // foreach (var ip in host.AddressList)
-        //     if (ip.AddressFamily == AddressFamily.InterNetwork)
-        //         return ip;
-        //
-        // throw new Exception("No network adapters with an IPv4 address in the system!");
+        var client = new UdpClient();
+        var request = Encoding.ASCII.GetBytes("get_ip");
+        var serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+        client.EnableBroadcast = true;
+        client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
+
+        client.Receive(ref serverEndPoint);
+
+        var serverIp = serverEndPoint.Address;
+        client.Close();
+
+        return serverIp;
     }
 
     private static void NotifyInUi(string message)
