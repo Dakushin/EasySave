@@ -115,7 +115,8 @@ public class BackupsViewModel : ViewModelBase
 
     private async void ExecuteBackup(Backup backup)
     {
-        if (CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty)
+        var soft = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
+        if (soft == string.Empty)
         {
             ThreadCheckingWorkingSoftware();
             backup.IsExecute = true;
@@ -127,7 +128,10 @@ public class BackupsViewModel : ViewModelBase
                 NotifyError($"{backup.Name} {Resources.Cancelled}");
             backup.IsExecute = false;
         }
-
+        else
+        {
+            NotifyError(Resources.Error_WorkingProcess + $" {soft}");
+        }
     }
 
     private async void ThreadCheckingWorkingSoftware()
