@@ -322,6 +322,24 @@ namespace EasySaveSupervisor.properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected.
+        /// </summary>
+        internal static string Connected {
+            get {
+                return ResourceManager.GetString("Connected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection attempts.
+        /// </summary>
+        internal static string Connection_Attempt {
+            get {
+                return ResourceManager.GetString("Connection_Attempt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, enter a valid choice between 1 and 8.
         /// </summary>
         internal static string Console_Ask_Valid_Choice {
