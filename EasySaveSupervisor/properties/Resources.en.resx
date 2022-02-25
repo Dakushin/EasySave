@@ -363,4 +363,10 @@
     <data name="Client_Disconnected" xml:space="preserve">
       <value>Client disconnected</value>
     </data>
+    <data name="Connected" xml:space="preserve">
+      <value>Connected</value>
+    </data>
+    <data name="Connection_Attempt" xml:space="preserve">
+      <value>Connection attempts</value>
+    </data>
 </root>

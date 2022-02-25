@@ -92,37 +92,27 @@ public class Client
 
     public void ExecuteAllBackups()
     {
-        var response = SendRequest(RequestMethodExecuteAllBackups);
-        
-        NotifyInUi(response);
+        SendRequest(RequestMethodExecuteAllBackups);
     }
     
     public void ExecuteBackup(Backup backup)
     {
-        var response = SendRequest(RequestMethodExecuteBackup, backup.Name);
-        
-        NotifyInUi(response);
+        SendRequest(RequestMethodExecuteBackup, backup.Name);
     }
     
     public void ResumeBackup(Backup backup)
     {
-        var response = SendRequest(RequestMethodResumeBackup, backup.Name);
-        
-        NotifyInUi(response);
+        SendRequest(RequestMethodResumeBackup, backup.Name);
     }
     
     public void PauseBackup(Backup backup)
     {
-        var response = SendRequest(RequestMethodPauseBackup, backup.Name);
-        
-        NotifyInUi(response);
+        SendRequest(RequestMethodPauseBackup, backup.Name);
     }
     
     public void CancelBackup(Backup backup)
     {
-        var response = SendRequest(RequestMethodStopBackup, backup.Name);
-        
-        NotifyInUi(response);
+        SendRequest(RequestMethodStopBackup, backup.Name);
     }
 
     private string SendRequest(string request, params string[] parameters)
@@ -165,10 +155,10 @@ public class Client
             }
             catch (SocketException)
             {
-                NotifyInUi($"Connection attempts : {attempts}");
+                NotifyInUi($"{Resources.Connection_Attempt} : {attempts}");
             }
 
-        NotifyInUi("Connected");
+        NotifyInUi(Resources.Connected);
     }
 
     /**
