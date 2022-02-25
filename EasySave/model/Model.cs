@@ -30,31 +30,9 @@ public sealed class Model
                          "\\EasySave\\state.json";
         _saveWorkList = new ObservableCollection<Backup>();
         _logFileFormat = new Json();
-        _listProcessToCheck = new ObservableCollection<string> {"word", "notepad", "WINWORD"};
-        _listExtentionToCheck = new ObservableCollection<string> {".png", ".jpeg", ".jpg"};
-        _listPriorityExtension = new ObservableCollection<string> {".pdf", ".txt"};
-
-        _saveWorkList.Add(new Backup(
-            "test",
-            @"X:\x",
-            @"X:\y",
-            new Complete())
-        );
-
-        _saveWorkList.Add(new Backup(
-            "test1",
-            @"X:\x1",
-            @"X:\y1",
-            new Complete())
-        );
-
-        _saveWorkList.Add(new Backup(
-            "test2",
-            @"X:\x2",
-            @"X:\y2",
-            new Complete())
-        );
-
+        _listProcessToCheck = new ObservableCollection<string>();
+        _listExtentionToCheck = new ObservableCollection<string>();
+        _listPriorityExtension = new ObservableCollection<string>();
         TryRecupFromSaveStatePath();
     }
 
