@@ -332,7 +332,7 @@ public abstract class BackupStrategy
         else
             CopyFile(fileSourcePath, targetFilePath);
         sw.Stop();
-        if (UpdateLock.TryEnterWriteLock(1000))
+        if (UpdateLock.TryEnterWriteLock(100))
         {
             var log = new Log(_backupState.Name, fileSourcePath, targetFilePath, string.Empty,
                 new FileInfo(fileSourcePath).Length, sw.ElapsedMilliseconds, DateTime.Now.ToString(), timetocrypt);
