@@ -35,7 +35,7 @@ public sealed class Model
         _listPriorityExtension = new ObservableCollection<string>();
         TryRecupFromSaveStatePath();
     }
-
+    
     public void TryRecupFromSaveStatePath() //Function to fetch savework unfinish from the savestate file
     {
         if (!File.Exists(GetSaveStatePath())) return;

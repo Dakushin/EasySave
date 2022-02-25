@@ -43,7 +43,7 @@ public class Client
                 while (_clientSocket.Connected)
                 {
                     Application.Current.Dispatcher.Invoke(() => _backupsViewModel.GetAllBackups());
-                    Thread.Sleep(2500);
+                    Thread.Sleep(1000);
                 }
                 
                 _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -171,7 +171,7 @@ public class Client
         var serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         client.EnableBroadcast = true;
-        client.Client.ReceiveTimeout = 4000;
+        client.Client.ReceiveTimeout = 3000;
         client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
 
         client.Receive(ref serverEndPoint);
