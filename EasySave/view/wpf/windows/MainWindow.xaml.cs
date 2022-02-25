@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace EasySave.view.wpf.windows;
 
+/**
+ * The main container view, in which all other view will be placed in.
+ */
 public partial class MainWindow : Window
 {
     public MainWindow()

@@ -5,6 +5,9 @@ using Gu.Localization;
 
 namespace EasySave.view.wpf.windows;
 
+/**
+ * A view which displays the homepage.
+ */
 public partial class HomePageView : UserControl
 {
     public HomePageView()
@@ -12,6 +15,10 @@ public partial class HomePageView : UserControl
         InitializeComponent();
     }
 
+    /**
+     * Executed when the user click on the 'show user doc' link.
+     * Starts the web browser.
+     */
     private void Hyperlink_RequestNavigate(object sender, RoutedEventArgs e)
     {
         var currentCulture = Translator.CurrentCulture;

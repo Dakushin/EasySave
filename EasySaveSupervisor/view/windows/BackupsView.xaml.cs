@@ -4,6 +4,9 @@ using EasySaveSupervisor.viewmodel;
 
 namespace EasySaveSupervisor.view.windows;
 
+/**
+ * A view which displays all the backups.
+ */
 public partial class BackupsView : UserControl
 {
     private readonly BackupsViewModel _viewModel;

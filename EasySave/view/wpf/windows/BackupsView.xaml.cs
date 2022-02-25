@@ -10,6 +10,9 @@ using Microsoft.Win32;
 
 namespace EasySave.view.wpf.windows;
 
+/**
+ * A view which displays all the backups.
+ */
 public partial class BackupsView : UserControl
 {
     private readonly BackupsViewModel _viewModel;
@@ -31,6 +34,9 @@ public partial class BackupsView : UserControl
         _viewModel.ExecuteSelectedBackup();
     }
 
+    /**
+     * Open the windows explorer to let the user choose a folder.
+     */
     private void OnChooseFolder(object sender, MouseButtonEventArgs e)
     {
         var folderBrowser = new OpenFileDialog

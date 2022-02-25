@@ -4,6 +4,9 @@ using System.Windows.Data;
 
 namespace EasySave.view.wpf.core;
 
+/**
+ * Convert a progression (from 0 to 100%) to a visibility object. Used in WPF xaml.
+ */
 public class ProgressionToVisibilityConverter : IValueConverter
 {
     public Visibility TrueValue { get; set; }
