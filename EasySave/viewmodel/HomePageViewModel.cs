@@ -4,5 +4,5 @@ namespace EasySave.viewmodel;
 
 public class HomePageViewModel : ViewModelBase
 {
-    public string Username { get; } = Environment.UserName;
+    public string Username { get; } = Environment.UserName; //public variable that get the name of the user in the OS
 }

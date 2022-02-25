@@ -34,6 +34,7 @@ public class BackupsViewModel : ViewModelBase
     {
     }
 
+    //GETTER From Model
     public ObservableCollection<Backup> Backups => _model.GetBackupList();
 
     public Backup SelectedBackup { get; set; }
@@ -41,22 +42,22 @@ public class BackupsViewModel : ViewModelBase
     //PUBLIC EVENT
     public event EventHandler<string> OnProgressUpdate;
 
-    public void ExecuteSelectedBackup()
+    public void ExecuteSelectedBackup() //Execute the selected backup on app
     {
         ExecuteBackup(SelectedBackup);
     }
 
-    public void DeleteSelectedBackup()
+    public void DeleteSelectedBackup() //Delete the selected backup on app
     {
         DeleteBackup(SelectedBackup.Name);
     }
 
-    public void ResumeSelectedBackup()
+    public void ResumeSelectedBackup()  //Resume the selected backup on app
     {
         ResumeBackup(SelectedBackup);
     }
 
-    public void ResumeBackup(Backup backup)
+    public void ResumeBackup(Backup backup) //Resume Backup If not other restrictive process is running
     {
         ProcessDetect = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty
             ? false
@@ -65,28 +66,28 @@ public class BackupsViewModel : ViewModelBase
         ThreadCheckingWorkingSoftware();
     }
 
-    public void PauseSelectedBackup()
+    public void PauseSelectedBackup() //Pause the selected backup on app
     {
         PauseBackup(SelectedBackup);
     }
 
-    public void CancelSelectedBackup()
+    public void CancelSelectedBackup() //Cancel the selected backup on app
     {
         CancelBackup(SelectedBackup);
     }
 
-    public void PauseBackup(Backup backup)
+    public void PauseBackup(Backup backup) //Pause the backup pass as a parameter
     {
         backup.BackupStrategy.Pause();
     }
 
-    public void CancelBackup(Backup backup)
+    public void CancelBackup(Backup backup) //Cancel the backup pass as a parameter
     {
         backup.BackupStrategy.Cancel();
     }
 
     public void CreateBackup(string name, string sourcePath, string targetPath, BackupStrategy backupStrategy,
-        bool isEncrypted)
+        bool isEncrypted) //Create a backup and put in model
     {
         if (_model.GetBackupList().Count < 5) //check if we have more than 5 backups
         {
@@ -128,7 +129,7 @@ public class BackupsViewModel : ViewModelBase
         }
     }
 
-    public async void ExecuteBackup(Backup backup)
+    public async void ExecuteBackup(Backup backup) //Execute the backup pass as a parameter
     {
         var soft = CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
         if (soft == string.Empty)
@@ -149,7 +150,7 @@ public class BackupsViewModel : ViewModelBase
         }
     }
 
-    private async void ThreadCheckingWorkingSoftware()
+    private async void ThreadCheckingWorkingSoftware() //Async fonction that lauch a thread to check if restrective process is launch
     {
         var software = string.Empty;
         if (!alreadyLaunch)
@@ -170,7 +171,7 @@ public class BackupsViewModel : ViewModelBase
         }
     }
 
-    public void PauseAllBackup()
+    public void PauseAllBackup() //Pause all backup
     {
         foreach (var backup in Model.GetInstance().GetBackupList())
             if (backup.IsExecute)
@@ -197,14 +198,14 @@ public class BackupsViewModel : ViewModelBase
         NotifySuccess(Resources.Success);
     }
 
-    public void ChangeFileFormat(FileFormat fileFormat)
+    public void ChangeFileFormat(FileFormat fileFormat) //Function to change the save file format of log
     {
         _model.SetLogFileFormat(fileFormat);
         NotifySuccess(Resources.Success);
     }
 
 
-    public void Filter(string filterText)
+    public void Filter(string filterText) //Change the filter
     {
         _filterText = filterText;
 
@@ -217,13 +218,13 @@ public class BackupsViewModel : ViewModelBase
         };
     }
 
-    public static string CheckProcesses()
+    public static string CheckProcesses() //loop that check if process is running
     {
         while (CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck()) == string.Empty)
             Thread.Sleep(1000);
         return CheckIfWorkProcessIsOpen(Model.GetInstance().GetListProcessToCheck());
     }
-    private static string CheckIfWorkProcessIsOpen(ObservableCollection<string> listOfProcessToCheck) //Function for check if job Process is on
+    private static string CheckIfWorkProcessIsOpen(ObservableCollection<string> listOfProcessToCheck) //Function for check if a restrictive Process is running
     {
         foreach (var ProcessToCheck in listOfProcessToCheck)
         {

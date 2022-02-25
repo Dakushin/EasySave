@@ -2,7 +2,7 @@
 
 public class Complete : BackupStrategy
 {
-    protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath)
+    protected override void ExecuteInternally(string sourceFolderPath, string targetFolderPath) //Get all file
     {
         TotalBytesToCopy = GetDirectorySize(sourceFolderPath);
         var filesToCopy = GetAllFileFromDirectory(sourceFolderPath, true);

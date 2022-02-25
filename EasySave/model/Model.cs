@@ -6,12 +6,12 @@ namespace EasySave.model;
 
 public sealed class Model
 {
+    //Private variable
     private static readonly Model _instance = new();
     private readonly ObservableCollection<string> _listExtentionToCheck;
     private readonly ObservableCollection<string> _listProcessToCheck;
     private readonly ObservableCollection<string> _listPriorityExtension;
 
-    //Private variable
     public int fileSize { get; set; }
     private readonly string _logPath;
     private readonly string _saveStatePath;
@@ -71,12 +71,13 @@ public sealed class Model
             }
     }
 
+    //GETTER AND SETTER
     public static Model GetInstance()
     {
         return _instance;
     }
 
-    //GETTER AND SETTER
+ 
     public string GetLogPath()
     {
         return _logPath;

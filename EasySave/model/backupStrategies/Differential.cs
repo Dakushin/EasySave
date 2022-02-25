@@ -10,7 +10,7 @@ public class Differential : BackupStrategy
         DoAllCopy(filesToCopy, sourceFolderPath, targetFolderPath);
     }
 
-    private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath)
+    private List<string> GetFilesToCopy(string sourceFolderPath, string targetFolderPath) //Check if file doesn't already existe in the target folder path
     {
         var filesToCopy = new List<string>();
         foreach (var sourceFilePath in GetAllFileFromDirectory(sourceFolderPath, true))

@@ -8,7 +8,7 @@ public abstract class FileFormat
     public abstract void SaveInFormat<T>(string path, T obj);
     public abstract List<T> UnSerialize<T>(string path);
 
-    protected string Checkpath(string path, string extention)
+    protected string Checkpath(string path, string extention) //function to check the path of the file format or add it it missing
     {
         if (Path.GetExtension(path) != extention)
         {

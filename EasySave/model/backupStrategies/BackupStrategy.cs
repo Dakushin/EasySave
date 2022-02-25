@@ -5,6 +5,7 @@ namespace EasySave.model.backupStrategies;
 
 public abstract class BackupStrategy
 {
+    //Private variable
     private static readonly ReaderWriterLockSlim UpdateLock = new();
     private bool isPaused;
     protected bool IsCancelled;
@@ -19,6 +20,11 @@ public abstract class BackupStrategy
     private bool doPriorityFile;
     private int Threadthatdopause;
 
+    /// <summary>
+    /// Function that execute the copy-past of all file in the source directory into the target directory
+    /// </summary>
+    /// <param name="backup"></param>
+    /// <returns></returns>
     public bool Execute(Backup backup)
     {
         var sourceFolderPath = backup.SourcePath;
@@ -45,10 +51,19 @@ public abstract class BackupStrategy
         return !cancelled;
     }
 
+    /// <summary>
+    /// Abstract function that get file in function of the type of backup
+    /// </summary>
+    /// <param name="sourceFolderPath"></param>
+    /// <param name="targetFolderPath"></param>
     protected abstract void ExecuteInternally(string sourceFolderPath, string targetFolderPath);
 
+    //Getter of the name of type
     public abstract string GetName();
 
+    /// <summary>
+    /// Function that put the lock on, a thread will pause if he can't enter in the lock
+    /// </summary>
     public void Pause()
     {
         if (!isPaused)
@@ -58,7 +73,9 @@ public abstract class BackupStrategy
             Monitor.Enter(PauseLock);
         }
     }
-
+    /// <summary>
+    /// Resume the lock
+    /// </summary>
     public void Resume()
     {
         if (isPaused)
@@ -72,6 +89,9 @@ public abstract class BackupStrategy
         }
     }
 
+    /// <summary>
+    /// Cancel the backup
+    /// </summary>
     public void Cancel()
     {
         if (isPaused) // cancel even is the task is paused
@@ -79,7 +99,11 @@ public abstract class BackupStrategy
 
         IsCancelled = true;
     }
-
+    *
+    /// <summary>
+    /// Reset Progression of the copy
+    /// </summary>
+    /// <param name="backup"></param>
     protected void ResetState(Backup backup)
     {
         backup.Progression = 0;
@@ -88,12 +112,22 @@ public abstract class BackupStrategy
         Resume();
     }
 
+    /// <summary>
+    /// Get the size of the directory
+    /// </summary>
+    /// <param name="folderPath"></param>
+    /// <returns></returns>
     protected static long GetDirectorySize(string folderPath)
     {
         var directoryInfo = new DirectoryInfo(folderPath);
         return directoryInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(fileInfo => fileInfo.Length);
     }
 
+    /// <summary>
+    /// Function that copy the file byte per byte
+    /// </summary>
+    /// <param name="sourceFilePath"></param>
+    /// <param name="targetFilePath"></param>
     protected void CopyFile(string sourceFilePath, string targetFilePath)
     {
         var buffer = new byte[1024 * 1024]; // 1MB buffer
@@ -122,6 +156,12 @@ public abstract class BackupStrategy
         }
     }
 
+    /// <summary>
+    /// Function that get all file in a directory including file in a directory inclued in the folder
+    /// </summary>
+    /// <param name="sourcePathDirectoy"></param>
+    /// <param name="firstdirectory"></param>
+    /// <returns></returns>
     protected List<string> GetAllFileFromDirectory(string sourcePathDirectoy, bool firstdirectory)
     {
         var files = new List<string>();
@@ -135,6 +175,11 @@ public abstract class BackupStrategy
         return files;
     }
 
+
+    /// <summary>
+    /// Create a directory if the target folder doesn't existe
+    /// </summary>
+    /// <param name="targetFilePath"></param>
     private void CreateDirectoryIfNotExist(string targetFilePath)
     {
         var lastfile = targetFilePath.Split(Path.DirectorySeparatorChar);
@@ -142,6 +187,10 @@ public abstract class BackupStrategy
         if (!Directory.Exists(newtargetpath)) Directory.CreateDirectory(Path.GetFullPath(newtargetpath));
     }
 
+    /// <summary>
+    /// Tell to the backup state that the execute backup is finish
+    /// </summary>
+    /// <param name="backupState"></param>
     private void EndBackup(BackupState backupState) //Update SaveState to END
     {
         backupState.SetSourceFilePath("");
@@ -153,6 +202,10 @@ public abstract class BackupStrategy
         UpdateSaveState(backupState);
     }
 
+    /// <summary>
+    /// Update the backup state file 
+    /// </summary>
+    /// <param name="backupState"></param>
     private void UpdateSaveState(BackupState backupState) //Update the Save state file
     {
         List<BackupState> states = null;
@@ -186,17 +239,31 @@ public abstract class BackupStrategy
         }
     }
 
+    /// <summary>
+    /// Create a path from the target folder path
+    /// </summary>
+    /// <param name="sourceFilePath"></param>
+    /// <param name="sourceFolderPath"></param>
+    /// <param name="targetFolderPath"></param>
+    /// <returns></returns>
     protected string GetPathWithDirectory(string sourceFilePath, string sourceFolderPath, string targetFolderPath)
     {
         return Path.Combine(targetFolderPath,
             sourceFilePath.Replace(sourceFolderPath + Path.DirectorySeparatorChar, null));
     }
 
+    //Setter
     public void SetFileLeftToDo(int Fltd)
     {
         FileLeftToDo = Fltd;
     }
 
+    /// <summary>
+    /// DoTheCopy of all file
+    /// </summary>
+    /// <param name="FileToCopy"></param>
+    /// <param name="sourceFolderPath"></param>
+    /// <param name="targetFolderPath"></param>
     protected void DoAllCopy(List<string> FileToCopy, string sourceFolderPath, string targetFolderPath)
     {
         _backupState.SetTotalFilesToCopy(FileToCopy.Count);
@@ -260,7 +327,11 @@ public abstract class BackupStrategy
         }
     }
 
-
+    /// <summary>
+    /// Check if it's a file to crypt or not
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
     private bool CheckToCrypt(string file)
     {
         foreach (var ext in Model.GetInstance().GetListExtentionToCheck())
@@ -269,6 +340,12 @@ public abstract class BackupStrategy
         return true;
     }
 
+    /// <summary>
+    /// Do the cryptage with cryptosoft
+    /// </summary>
+    /// <param name="sourcePath"></param>
+    /// <param name="targetPath"></param>
+    /// <returns></returns>
     private int Cryptage(string sourcePath, string targetPath)
     {
         var cryptosoft = new Process();
@@ -281,6 +358,11 @@ public abstract class BackupStrategy
         return cryptosoft.ExitCode;
     }
 
+    /// <summary>
+    /// Ordone all priotiry file in the file to copy list
+    /// </summary>
+    /// <param name="FileToCopy"></param>
+    /// <returns></returns>
     private List<string> OrdonedPriorityFile(List<string> FileToCopy)
     {
         var priotitylist = new List<string>();
@@ -294,6 +376,11 @@ public abstract class BackupStrategy
         return priotitylist;
     }
 
+    /// <summary>
+    /// Chekc if it's a priority file
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
     private bool IsPriorityFile(string file)
     {
         foreach (var extension in Model.GetInstance().GetListPriorityExtension())
@@ -302,13 +389,18 @@ public abstract class BackupStrategy
         return false;
     }
 
+    /// <summary>
+    /// Pause all other thread that don't do a priority file
+    /// </summary>
     private void PauseAllOtherThread()
     {
         foreach (var backup in Model.GetInstance().GetBackupList())
             if (backup.IsExecute && !backup.BackupStrategy.doPriorityFile)
                 backup.BackupStrategy.Pause();
     }
-
+    /// <summary>
+    /// Resume all other thread that don't do a priority file
+    /// </summary>
     private void ResumeAllThread()
     {
         var resumeall = false;
@@ -320,6 +412,11 @@ public abstract class BackupStrategy
                 backup.BackupStrategy.Resume();
     }
 
+    /// <summary>
+    /// Do the copy with all log and state update
+    /// </summary>
+    /// <param name="fileSourcePath"></param>
+    /// <param name="targetFilePath"></param>
     private void DoCopy(string fileSourcePath, string targetFilePath)
     {
         _backupState.SetTotalFileSize(new FileInfo(fileSourcePath).Length);

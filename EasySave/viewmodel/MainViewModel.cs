@@ -5,12 +5,14 @@ namespace EasySave.viewmodel;
 
 public class MainViewModel : ViewModelBase
 {
+    //PRIVATE VARIABLE
     private readonly BackupsViewModel _backupsViewModel;
     private readonly HomePageViewModel _homePageViewModel;
 
     private readonly SettingsViewModel _settingsViewModel;
     private ViewModelBase _currentViewModel;
 
+    //CONSTRUCTOR
     public MainViewModel()
     {
         _settingsViewModel = new SettingsViewModel();
@@ -25,11 +27,12 @@ public class MainViewModel : ViewModelBase
         _currentViewModel = _homePageViewModel;
     }
 
+    //COMMAND HANDLER TO NAVIGATE IN THE APP
     public CommandHandler OnNavigateToBackups { get; set; }
     public CommandHandler OnNavigateToSettings { get; set; }
     public CommandHandler OnNavigateToHomePage { get; set; }
 
-    public ViewModelBase CurrentViewModel
+    public ViewModelBase CurrentViewModel //PUBLIC VARIABLE that get the current viewmodel
     {
         get => _currentViewModel;
         set
@@ -39,17 +42,17 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    private void NavigateToHomePageView()
+    private void NavigateToHomePageView() //Function to go on homepage
     {
         CurrentViewModel = _homePageViewModel;
     }
 
-    private void NavigateToBackupsView()
+    private void NavigateToBackupsView() //Function to go on BackupView
     {
         CurrentViewModel = _backupsViewModel;
     }
 
-    private void NavigateToSettingsView()
+    private void NavigateToSettingsView()  //Function to go on Settings
     {
         CurrentViewModel = _settingsViewModel;
     }

@@ -6,10 +6,12 @@ namespace EasySave.viewmodel;
 
 public class SettingsViewModel : ViewModelBase
 {
+    //PRIVATE VARIABLE
     private readonly Model _model;
     private int _maximumFileSize;
     private string _sizeUnit = "Kb";
     
+    //PUBLIC VARIABLE
     public int MaximumFileSize
     {
         get => _maximumFileSize;
@@ -53,21 +55,23 @@ public class SettingsViewModel : ViewModelBase
 
     public ObservableCollection<string> BusinessProcesses => _model.GetListProcessToCheck();
 
+    //function for change log format on setting view
     public void ChangeLogFormat(FileFormat fileFormat)
     {
         _model.SetLogFileFormat(fileFormat);
     }
 
-    public void RemovePriorityFileExtension(string extension)
+    public void RemovePriorityFileExtension(string extension) //function to remove a priority file extension in the model
     {
         PriorityFileExtensions.Remove(extension);
     }
 
-    public void AddPriorityFileExtension(string extension)
+    public void AddPriorityFileExtension(string extension) //function to add priority file extension in the model
     {
         if (!PriorityFileExtensions.Contains(extension)) PriorityFileExtensions.Add(extension);
     }
 
+    //Function to remove and add an encrypted file extension
     public void RemoveEncryptedFileExtension(string extension)
     {
         EncryptedFileExtensions.Remove(extension);
@@ -78,6 +82,7 @@ public class SettingsViewModel : ViewModelBase
         if (!EncryptedFileExtensions.Contains(extension)) EncryptedFileExtensions.Add(extension);
     }
 
+    //Function to remove and add an business process
     public void RemoveBusinessProcess(string process)
     {
         BusinessProcesses.Remove(process);

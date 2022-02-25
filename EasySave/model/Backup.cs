@@ -27,6 +27,7 @@ public class Backup : INotifyPropertyChanged
         _crypted = crypted;
     }
 
+    //Public variable for WPF
     public BackupStrategy BackupStrategy
     {
         get => _backupStrategy;
@@ -119,8 +120,10 @@ public class Backup : INotifyPropertyChanged
         }
     }
 
+    //EVENT
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    //function to execute on backup stretegy in function of the type of backup
     public bool Execute()
     {
         return _backupStrategy.Execute(this);
