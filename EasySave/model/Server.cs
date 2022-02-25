@@ -8,11 +8,15 @@ using EasySave.viewmodel;
 
 namespace EasySave.model;
 
+/**
+ * A singleton server which uses a socket and process the requests in an async way.
+ * Allows multiple clients simultaneously.
+ */
 public class Server
 {
     private const int Port = 6000;
 
-    // request methods
+    // client requests
     private const string RequestMethodGetAllBackups = "get_all_backups";
     private const string RequestMethodExecuteAllBackups = "execute_all_backups";
     private const string RequestMethodExecuteBackup = "execute_backup";
@@ -21,7 +25,7 @@ public class Server
     private const string RequestMethodStopBackup = "stop_backup";
 
 
-    // responses
+    // server responses
     private const string ResponseInvalidRequest = "invalid_request";
     private const string ResponseInvalidBackupName = "invalid_backup_name";
     private const string ResponseSuccessGetAllBackups = "success_get_all_backups";
@@ -31,11 +35,23 @@ public class Server
     private const string ResponseSuccessPauseBackup = "success_pause_backup";
     private const string ResponseSuccessStopBackup = "success_stop_backup";
 
+    /**
+     * separator for the custom messaging protocol
+     * nevertheless we should have used an existing protocol link json.
+     *
+     * here is the protocol : method$param1$param2$param_n
+     *
+     * for instance : 'execute_backup$hello_backup'. Or 'get_all_backups'.
+     */
     private const char Separator = '$';
 
 
     private static readonly Server Instance = new();
+    
+    // reads all requests in this buffer
     private static readonly byte[] Buffer = new byte[1024];
+    
+    // stores all clients sockets, not used for now 
     private readonly List<Socket> _clientsSockets;
 
     private readonly Socket _serverSocket;
@@ -56,6 +72,12 @@ public class Server
         return Instance;
     }
 
+    /**
+     * Udp socket which scan for client's requests to get the server IP, using network discovery and udp broadcast.
+     *
+     * Ie. Whenever a client is not connected to a server, it tries to get a server ip address by sending a message
+     * to the broadcast address. So the server can respond to it with his IP address.
+     */
     private static void ScanForRequestServerIp()
     {
         var udpClient = new UdpClient(8888);
@@ -69,6 +91,9 @@ public class Server
         }
     }
 
+    /**
+     * Setup the server and binds it to the local network ip endpoint.
+     */
     private Socket SetupServer()
     {
         var ipAddress = GetLocalIpAddress();
@@ -82,6 +107,9 @@ public class Server
         return socket;
     }
 
+    /**
+     * Asynchronously accepts a new client.
+     */
     private void AcceptCallback(IAsyncResult asyncResult)
     {
         var client = _serverSocket.EndAccept(asyncResult);
@@ -101,6 +129,9 @@ public class Server
         }
     }
 
+    /**
+     * Asynchronously accepts a client request.
+     */
     private void ReceiveCallback(IAsyncResult asyncResult)
     {
         if (asyncResult.AsyncState is not Socket client) return;
@@ -125,6 +156,9 @@ public class Server
         }
     }
 
+    /**
+     * Handles a client request.
+     */
     private string HandleRequest(string request)
     {
         try
@@ -236,6 +270,10 @@ public class Server
         }
     }
 
+    /**
+     * Get the local network ip endpoint using a better approach than Dns.GetHostEntry(Dns.GetHostName());
+     * Indeed, Dns.GetHostEntry(Dns.GetHostName()) gives all the ipv4 addresses, including VM's virtual addresses.
+     */
     private static IPAddress GetLocalIpAddress()
     {
         using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0);
