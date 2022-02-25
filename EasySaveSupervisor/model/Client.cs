@@ -8,11 +8,14 @@ using EasySaveSupervisor.viewmodel;
 
 namespace EasySaveSupervisor.model;
 
+/**
+ * A singleton client which uses a socket to send request to the server.
+ */
 public class Client
 {
     private const int Port = 6000;
 
-    // request methods
+    // client requests
     private const string RequestMethodGetAllBackups = "get_all_backups";
     private const string RequestMethodExecuteAllBackups = "execute_all_backups";
     private const string RequestMethodExecuteBackup = "execute_backup";
@@ -21,15 +24,27 @@ public class Client
     private const string RequestMethodStopBackup = "stop_backup";
 
 
-    // responses
+    // server responses
     private const string ResponseSuccessGetAllBackups = "success_get_all_backups";
     
+    /**
+     * separator for the custom messaging protocol
+     * nevertheless we should have used an existing protocol link json.
+     *
+     * here is the protocol : method$param1$param2$param_n
+     *
+     * for instance : 'execute_backup$hello_backup'. Or 'get_all_backups'.
+     */
     private const char Separator = '$';
 
     private static readonly Client Instance = new();
     private Socket _clientSocket;
     private BackupsViewModel _backupsViewModel;
 
+    /**
+     * Starts the client socket in a new thread.
+     * Looks for a server whenever it is disconnected, otherwise communicates with it. 
+     */
     private Client()
     {
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -43,7 +58,7 @@ public class Client
                 while (_clientSocket.Connected)
                 {
                     Application.Current.Dispatcher.Invoke(() => _backupsViewModel.GetAllBackups());
-                    Thread.Sleep(2500);
+                    Thread.Sleep(1000);
                 }
                 
                 _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -162,7 +177,7 @@ public class Client
     }
 
     /**
-     * Find the server ipv4 address by network discovering
+     * Find the server ipv4 address by network discovering using UDP broadcast address.
      */
     private static IPAddress GetServerIpAddress()
     {
@@ -171,7 +186,7 @@ public class Client
         var serverEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
         client.EnableBroadcast = true;
-        client.Client.ReceiveTimeout = 4000;
+        client.Client.ReceiveTimeout = 3000;
         client.Send(request, request.Length, new IPEndPoint(IPAddress.Broadcast, 8888));
 
         client.Receive(ref serverEndPoint);

@@ -2,6 +2,9 @@
 
 namespace EasySaveSupervisor.view.core;
 
+/**
+ * Handle actions from WPF components
+ */
 public class CommandHandler : ICommand
 {
     private readonly Func<bool>? _canExecute;

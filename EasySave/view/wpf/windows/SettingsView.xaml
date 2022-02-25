@@ -80,7 +80,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <TextBlock Text="PRIORITY" Foreground="RoyalBlue" />
+                            <TextBlock Text="PRIORITY" Foreground="WhiteSmoke" />
                         </TabItem.Header>
 
                         <materialDesign:DialogHost DialogClosing="OnAddExtension" x:Name="PriorityDialog">
@@ -154,7 +154,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <TextBlock Text="ENCRYPTION" Foreground="RoyalBlue" />
+                            <TextBlock Text="ENCRYPTION" Foreground="WhiteSmoke" />
                         </TabItem.Header>
 
                         <materialDesign:DialogHost DialogClosing="OnAddExtension">
@@ -230,7 +230,7 @@
 
                     <TabItem>
                         <TabItem.Header>
-                            <TextBlock Text="BUSINESS PROCESS" Foreground="RoyalBlue" />
+                            <TextBlock Text="BUSINESS PROCESS" Foreground="WhiteSmoke" />
                         </TabItem.Header>
 
                         <materialDesign:DialogHost DialogClosing="OnAddBusinessProcess">

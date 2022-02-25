@@ -7,6 +7,9 @@ using MaterialDesignThemes.Wpf;
 
 namespace EasySave.view.wpf.windows;
 
+/**
+ * A view which displays the settings.
+ */
 public partial class SettingsView : UserControl
 {
     private readonly SettingsViewModel _viewModel;
